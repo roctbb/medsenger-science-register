@@ -1,0 +1,17 @@
+.btn-primary {
+    background-image: none;
+    background-color: #24a8b4;
+    border: 1px solid white;
+    color: white;
+}
+
+.btn-primary:active, .btn-primary:hover, .btn-primary:focus, .btn-primary:disabled {
+    background-image: none;
+    background-color: #24a8b4 !important;
+    border-color: white;
+    color: white;
+}
+
+.btn-primary:active {
+    border: 1px solid #006c88 !important;
+}
