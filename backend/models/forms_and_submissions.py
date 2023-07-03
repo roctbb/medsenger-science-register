@@ -1,5 +1,5 @@
-from alchemy import db, backref
-from relation_tables import *
+from .alchemy import db, backref
+from .relation_tables import *
 from backend.helpers import *
 
 
@@ -22,7 +22,7 @@ class FormGroup(db.Model):
     description = db.Column(db.Text, nullable=True)
 
     project_id = db.Column(db.Integer, db.ForeignKey('project.id', ondelete="CASCADE"), nullable=True)
-    forms = db.relationship('Form', secondary=form_group, backref='groups', lazy=False)
+    forms = db.relationship('Form', secondary=form_in_groups, backref='groups', lazy=False)
     submissions = db.relationship('FormGroupSubmission', backref=backref('group', uselist=False), lazy=True)
 
     def as_dict(self):
