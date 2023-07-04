@@ -63,8 +63,6 @@ export default {
     },
     async mounted() {
         this.subscribeForEvents()
-
-        console.log(this.$route)
     }
 }
 </script>
