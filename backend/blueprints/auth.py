@@ -20,5 +20,5 @@ def check_credentials():
 @auth_blueprint.route('/user', methods=['get'])
 @creates_response
 @requires_user
-def check_credentials(user):
+def get_user(user):
     return user.as_dict()

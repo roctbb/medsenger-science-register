@@ -12,7 +12,7 @@ class AccountActions extends api_utils.ActionGroup {
         let result;
 
         try {
-            result = await this.client.get('/auth', query);
+            result = await this.client.postJson('/auth', {}, query);
         } catch (e) {
             console.log(e)
             throw new Error("Ошибка соединения с сервером.")

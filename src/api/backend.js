@@ -1,7 +1,7 @@
-import HttpClient from "@/helpers/http_client";
-import AccountActions from "@/utils/medsenger_api/action_groups/account";
+import HttpClient from "@/utils/http_client";
+import AccountActions from "@/api/action_groups/account";
 
-class MedsengerApiClient {
+class ApiClient {
     constructor(host, token, role) {
         let client = new HttpClient(host + '/api')
 
@@ -23,4 +23,4 @@ class MedsengerApiClient {
     }
 }
 
-export default MedsengerApiClient
+export default ApiClient

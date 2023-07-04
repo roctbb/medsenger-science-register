@@ -1,18 +1,18 @@
 <template>
     <div v-if="isLoaded">
-
+        <login-screen v-if="screen==='login'"/>
     </div>
 </template>
 
 <script>
-import LoginScreen from '@/components/screens/LoginScreen.vue'
-import RoleChooserScreen from "@/components/screens/RoleChooserScreen.vue";
-import MessengerScreen from "@/components/screens/MessengerScreen.vue";
+
+
+import LoginScreen from "@/components/LoginScreen.vue";
 
 export default {
     name: 'App',
     components: {
-
+        LoginScreen
     },
     data() {
         return {

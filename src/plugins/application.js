@@ -1,4 +1,4 @@
-import MedsengerApiClient from "@/utils/medsenger_api/medsenger_api";
+import ApiClient from "@/api/backend";
 import mitt from "mitt";
 import StateManager from "@/managers/state";
 import State from "@/models/state";
@@ -24,4 +24,4 @@ const applicationPlugin = {
     }
 }
 
-export default medsengerApplicationPlugin;
+export default applicationPlugin;

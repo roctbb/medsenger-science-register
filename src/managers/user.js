@@ -11,8 +11,7 @@ class UserManager extends Manager {
 
     async updatePassword(password) {
         this.state.user = await this.api.account.changePassword({
-            password: password,
-            password_confirmation: password
+            password: password
         })
     }
 }
