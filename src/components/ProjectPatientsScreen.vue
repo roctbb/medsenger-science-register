@@ -21,7 +21,7 @@
                 <div class="card">
                     <div class="card-body" @click="openPatient(patient)">
                         <h5 class="card-title">{{ patient.name }}</h5>
-                        <p class="text-muted">{{ formatDate(patient.birthday) }}</p>
+                        <p class="text-muted my-0">{{ formatDate(patient.birthday) }}</p>
                     </div>
                 </div>
             </div>
