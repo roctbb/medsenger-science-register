@@ -55,6 +55,7 @@ class Clinic(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
     projects = db.relationship('Project', secondary=project_clinic, backref='clinics', lazy=False)
+    doctors = db.relationship('User', backref=backref('clinic', uselist=False), lazy=False)
 
     def as_dict(self):
         return {

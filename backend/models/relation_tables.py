@@ -1,10 +1,5 @@
 from .alchemy import *
 
-user_clinic = db.Table('user_clinic',
-                       db.Column('user_id', db.Integer, db.ForeignKey('user.id', ondelete="CASCADE")),
-                       db.Column('clinic_id', db.Integer, db.ForeignKey('clinic.id', ondelete="CASCADE"))
-                       )
-
 project_clinic = db.Table('project_clinic',
                           db.Column('project_id', db.Integer, db.ForeignKey('project.id', ondelete="CASCADE")),
                           db.Column('clinic_id', db.Integer, db.ForeignKey('clinic.id', ondelete="CASCADE"))
