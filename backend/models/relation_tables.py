@@ -1,4 +1,4 @@
-from .alchemy import db
+from .alchemy import *
 
 user_clinic = db.Table('user_clinic',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.id', ondelete="CASCADE")),

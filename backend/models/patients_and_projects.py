@@ -1,8 +1,7 @@
 import enum
 
-from .alchemy import db, backref
+from .alchemy import *
 from .relation_tables import *
-from backend.helpers import *
 
 
 class Sex(enum.Enum):

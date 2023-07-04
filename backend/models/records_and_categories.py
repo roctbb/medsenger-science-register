@@ -1,4 +1,4 @@
-from .alchemy import db, backref
+from .alchemy import *
 from backend.helpers import *
 import enum
 
