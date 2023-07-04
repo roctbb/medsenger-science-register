@@ -9,6 +9,12 @@
         <div v-show="screen==='project-patients'">
             <project-patients-screen/>
         </div>
+        <div v-show="screen==='add-patient'">
+            <add-patient-screen/>
+        </div>
+        <div v-show="screen==='patient'">
+            <patient-screen />
+        </div>
     </div>
 </template>
 
@@ -18,13 +24,17 @@
 import LoginScreen from "@/components/LoginScreen.vue";
 import ProjectsScreen from "@/components/ProjectsScreen.vue";
 import ProjectPatientsScreen from "@/components/ProjectPatientsScreen.vue";
+import AddPatientScreen from "@/components/AddPatientScreen.vue";
+import PatientScreen from "@/components/PatientScreen.vue";
 
 export default {
     name: 'App',
     components: {
+        PatientScreen,
         LoginScreen,
         ProjectsScreen,
-        ProjectPatientsScreen
+        ProjectPatientsScreen,
+        AddPatientScreen
     },
     data() {
         return {

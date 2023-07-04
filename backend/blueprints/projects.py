@@ -18,3 +18,21 @@ def get_patients(user, project_id):
     project = find_project_by_id_for_user(user, project_id)
 
     return as_dict(project.patients)
+
+
+@projects_blueprint.route('/project/<int:project_id>/patients', methods=['post'])
+@creates_response
+@requires_user
+def add_patient(user, project_id):
+    project = find_project_by_id_for_user(user, project_id)
+
+    data = request.json
+
+    try:
+        patient = create_patient(data.get('name'), data.get('sex'), data.get('birthday'))
+    except AlreadyExists:
+        patient = find_patient_by_credentials(data.get('name'), data.get('sex'), data.get('birthday'))
+
+    assign_to_project(patient, project)
+
+    return patient.as_dict()

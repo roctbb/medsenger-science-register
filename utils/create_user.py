@@ -1,5 +1,5 @@
 from backend.methods import *
-from backend import app
+from backend.server import app
 
 try:
     email = input("email:")
