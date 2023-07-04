@@ -11,10 +11,10 @@ def check_credentials():
 
     user, token = authorize_by_credentials(data.get('email'), data.get('password'))
 
-    return {
-        "user": user.as_dict(),
-        "api_token": token.as_dict()
-    }
+    user_description = user.as_dict()
+    user_description.update(token.as_dict())
+
+    return user_description
 
 
 @auth_blueprint.route('/user', methods=['get'])

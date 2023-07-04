@@ -3,6 +3,7 @@ class User {
         this.email = description.email
         this.name = description.name
         this.api_token = description.api_token
+        this.clinic = description.clinic
     }
 
 }

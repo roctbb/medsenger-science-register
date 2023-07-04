@@ -4,7 +4,7 @@ from .alchemy import *
 from .relation_tables import *
 
 
-class Sex(enum.Enum):
+class Sex(str, enum.Enum):
     MALE = 'male'
     FEMALE = 'female'
 

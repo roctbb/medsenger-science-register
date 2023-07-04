@@ -39,6 +39,6 @@ class UserToken(db.Model):
 
     def as_dict(self):
         return {
-            "token": self.token,
+            "api_token": self.token,
             "expire_on": self.expire_on.isoformat(),
         }

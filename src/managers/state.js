@@ -34,8 +34,8 @@ class StateManager extends Manager {
         if (this.state.token) {
             try {
                 this.api.setToken(this.state.token)
-                this.user = await this.api.account.check()
-                this.eventbus.emit('change-screen', 'patients')
+                this.user = await this.api.account.get()
+                this.eventbus.emit('change-screen', 'projects')
             } catch (e) {
                 console.log(e)
                 this.eventbus.emit('change-screen', 'login')

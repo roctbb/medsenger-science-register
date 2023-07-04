@@ -3,7 +3,7 @@ from backend.helpers import *
 import enum
 
 
-class RecordType(enum.Enum):
+class RecordType(str, enum.Enum):
     INTEGER = 'integer'
     FLOAT = 'float'
     STRING = 'string'

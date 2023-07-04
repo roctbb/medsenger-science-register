@@ -5,16 +5,18 @@
         {{ error }}
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" aria-describedby="emailHelp" v-model="email">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Пароль</label>
-        <input type="password" class="form-control" v-model="password">
-    </div>
+    <form>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" aria-describedby="emailHelp" v-model="email">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Пароль</label>
+            <input type="password" class="form-control" v-model="password">
+        </div>
 
-    <button type="submit" @click="makeLogin" class="btn btn-primary">Войти</button>
+        <button type="submit" @click="makeLogin" class="btn btn-primary">Войти</button>
+    </form>
 </template>
 
 <script>
@@ -31,9 +33,10 @@ export default {
         }
     },
     methods: {
-        makeLogin: function () {
+        makeLogin: async function (e) {
+            e.preventDefault();
             try {
-                this.managers.auth.makeLogin(this.email, this.password)
+                await this.managers.auth.makeLogin(this.email, this.password)
             } catch (e) {
                 this.error = e.message
             }

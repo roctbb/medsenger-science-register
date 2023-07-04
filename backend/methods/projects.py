@@ -16,4 +16,6 @@ def find_project_by_id_for_user(user, project_id):
 
 
 def get_projects_for_user(user):
+    if not user.clinic:
+        return []
     return user.clinic.projects

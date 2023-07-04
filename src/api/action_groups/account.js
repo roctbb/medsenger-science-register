@@ -31,7 +31,7 @@ class AccountActions extends api_utils.ActionGroup {
     }
 
     // returns User with token
-    async get_user() {
+    async get() {
 
         let query = {
             api_token: this.token

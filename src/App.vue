@@ -1,6 +1,14 @@
 <template>
     <div v-if="isLoaded">
-        <login-screen v-if="screen==='login'"/>
+        <div v-show="screen==='login'">
+            <login-screen/>
+        </div>
+        <div v-show="screen==='projects'">
+            <projects-screen/>
+        </div>
+        <div v-show="screen==='project-patients'">
+            <project-patients-screen/>
+        </div>
     </div>
 </template>
 
@@ -8,11 +16,15 @@
 
 
 import LoginScreen from "@/components/LoginScreen.vue";
+import ProjectsScreen from "@/components/ProjectsScreen.vue";
+import ProjectPatientsScreen from "@/components/ProjectPatientsScreen.vue";
 
 export default {
     name: 'App',
     components: {
-        LoginScreen
+        LoginScreen,
+        ProjectsScreen,
+        ProjectPatientsScreen
     },
     data() {
         return {
