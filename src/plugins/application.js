@@ -7,7 +7,7 @@ import UserManager from "@/managers/user";
 import {reactive} from "vue";
 
 
-const ApplicationPlugin = {
+const applicationPlugin = {
     install(app) {
         let stateModel = reactive(new State())
         let event_bus = mitt()

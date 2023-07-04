@@ -7,12 +7,14 @@ import {faCircleXmark} from '@fortawesome/free-regular-svg-icons'
 import {faInfo} from '@fortawesome/free-solid-svg-icons'
 import App from './App.vue'
 import helpersPlugin from "@/plugins/helpers";
+import applicationPlugin from "@/plugins/application";
 
 library.add(faCircleXmark, faInfo)
 
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(helpersPlugin)
+app.use(applicationPlugin)
 
 app.mount('#app')
 
