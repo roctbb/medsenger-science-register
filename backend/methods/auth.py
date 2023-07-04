@@ -8,6 +8,9 @@ from secrets import token_hex
 
 
 def authorize_by_credentials(email, password):
+    if not email or not password:
+        raise InsufficientData
+
     user = find_user_by_email(email)
 
     if not user:
@@ -50,3 +53,14 @@ def create_token(user):
 
     db.session.add(token)
     return token
+
+
+def requires_user(func):
+    def wrapper(*args, **kwargs):
+        token = request.args.get('api_token')
+        user = find_user_by_token(token)
+        result = func(user, *args, **kwargs)
+        return result
+
+    wrapper.__name__ = func.__name__
+    return wrapper

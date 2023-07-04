@@ -1,7 +1,7 @@
 function checkForErrors(response, errors) {
-    if (response.state == 'failed') {
+    if (response.state === 'error') {
         errors.forEach((error) => {
-            if (response.error.includes(error[0])) {
+            if (response.error === error[0]) {
                 throw new Error(error[1])
             }
         })
@@ -11,14 +11,9 @@ function checkForErrors(response, errors) {
 }
 
 class ActionGroup {
-    constructor(http_client, token, role) {
+    constructor(http_client, token) {
         this.client = http_client
         this.token = token
-        this.role = role
-    }
-
-    setRole(role) {
-        this.role = role
     }
 
     setToken(token) {

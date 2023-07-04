@@ -15,3 +15,10 @@ def check_credentials():
         "user": user.as_dict(),
         "api_token": token.as_dict()
     }
+
+
+@auth_blueprint.route('/user', methods=['get'])
+@creates_response
+@requires_user
+def check_credentials(user):
+    return user.as_dict()

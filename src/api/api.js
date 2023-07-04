@@ -3,7 +3,7 @@ import AccountActions from "@/utils/medsenger_api/action_groups/account";
 
 class MedsengerApiClient {
     constructor(host, token, role) {
-        let client = new HttpClient(host + '/api/client')
+        let client = new HttpClient(host + '/api')
 
         this.account = new AccountActions(client, token, role)
 
