@@ -1,5 +1,5 @@
 <template>
-  <h3 class="my-3">Список проектов</h3>
+  <h4 class="my-3">Список проектов</h4>
   <div class="row" v-if="state.user && state.user.clinic && state.user.clinic.projects">
     <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-sm-0">
       <div class="card" v-for="project in state.user.clinic.projects" v-bind:key="project.id">

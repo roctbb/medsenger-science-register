@@ -38,12 +38,13 @@ class Project(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
     patients = db.relationship('Patient', secondary=project_patient, backref='projects')
-    form_groups = db.relationship('FormGroup', backref=backref('project', uselist=False), lazy=True)
+    form_groups = db.relationship('FormGroup', backref=backref('project', uselist=False), lazy=False)
 
     def as_dict(self):
         return {
             "id": self.id,
             "name": self.name,
+            "forms": as_dict(self.form_groups)
         }
 
 

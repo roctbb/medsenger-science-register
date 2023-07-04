@@ -1,6 +1,6 @@
 <template>
     <div v-if="project">
-        <h3 class="my-3">Добавление пациента в проект "{{ project.name }}"</h3>
+        <h4 class="my-3">Добавление пациента в проект "{{ project.name }}"</h4>
 
         <div class="alert alert-warning" v-if="error">
             {{ error }}
@@ -29,7 +29,7 @@
             </div>
 
             <button @click="addPatient" class="btn btn-primary">Добавить</button>
-            <button @click="back()" class="btn btn-warning">Назад</button>
+            <button @click="back()" class="btn btn-warning ms-1">Назад</button>
         </form>
     </div>
 </template>
@@ -45,11 +45,7 @@ export default {
         return {
             project: undefined,
             error: '',
-            newPatient: {
-                name: '',
-                sex: '',
-                birthday: ''
-            }
+            newPatient: undefined
         }
     },
     methods: {
@@ -64,7 +60,7 @@ export default {
         clear: function () {
             this.newPatient = {
                 name: '',
-                sex: '',
+                sex: 'male',
                 birthday: ''
             }
         },
@@ -77,6 +73,8 @@ export default {
         this.event_bus.on('project-selected', (project) => {
             this.project = project
         });
+
+        this.clear()
     }
 }
 </script>
