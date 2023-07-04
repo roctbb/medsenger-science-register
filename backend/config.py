@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-dotenv_path = '../.env'
+dotenv_path = '.env'
 
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)

@@ -17,12 +17,16 @@ class User(db.Model):
     auth_tokens = db.relationship('UserToken', backref=backref('user', uselist=False, lazy=False), lazy=True)
 
     def as_dict(self):
-        return {
+        info = {
             "id": self.id,
             "name": self.name,
-            "email": self.email,
-            "clinic": self.clinic.as_dict()
+            "email": self.email
         }
+
+        if self.clinic:
+            info["clinic"] = self.clinic.as_dict()
+
+        return info
 
 
 class UserToken(db.Model):

@@ -1,1 +1,5 @@
-from .manage import app
+from .manage import *
+from .blueprints import *
+
+app.register_blueprint(auth_blueprint, url_prefix='/api')
+app.register_blueprint(projects_blueprint, url_prefix='/api')

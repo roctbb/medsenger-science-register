@@ -1,6 +1,8 @@
 from backend.models import db
 from flask import request
 from .functions import *
+import traceback
+import sys
 
 
 def transaction(func):
@@ -23,6 +25,7 @@ def creates_response(func):
         except ExplainableException as e:
             return make_error(e, e.status())
         except Exception as e:
+            print(traceback.format_exc())
             print("ServerError", e)
             return make_error('ServerError', 500)
 

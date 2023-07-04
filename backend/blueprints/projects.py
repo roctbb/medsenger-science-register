@@ -8,11 +8,13 @@ projects_blueprint = Blueprint('projects', __name__)
 @creates_response
 @requires_user
 def get_projects(user):
-    return get_projects_for_user(user)
+    return as_dict(get_projects_for_user(user))
 
 
 @projects_blueprint.route('/project/<int:project_id>/patients', methods=['get'])
 @creates_response
 @requires_user
-def get_projects(user):
+def get_patients(user, project_id):
     project = find_project_by_id_for_user(user, project_id)
+
+    return as_dict(project.patients)
