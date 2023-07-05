@@ -1,4 +1,2 @@
-supervisorctl restart agents-forms
-supervisorctl restart agents-forms-jobs
-supervisorctl restart agents-forms-celeryd
+supervisorctl restart science-register
 npm run build

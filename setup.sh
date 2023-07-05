@@ -1,4 +1,5 @@
 npm install
+npm run build
 flask db init
 sudo pip3 install -r requirements.txt
 sudo cp agents_forms.conf /etc/supervisor/conf.d/
