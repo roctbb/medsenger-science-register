@@ -36,3 +36,20 @@ def add_patient(user, project_id):
     assign_to_project(patient, project)
 
     return patient.as_dict()
+
+
+@projects_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>', methods=['put'])
+@creates_response
+@requires_user
+def edit_patient(user, project_id, patient_id):
+    project = find_project_by_id_for_user(user, project_id)
+    patient = find_patient_by_id(patient_id)
+
+    if patient not in project.patients:
+        raise NotInProject
+
+    data = request.json
+
+    patient = update_patient(patient, data.get('name'), data.get('sex'), data.get('birthday'))
+
+    return patient.as_dict()

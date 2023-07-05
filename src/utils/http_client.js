@@ -46,14 +46,18 @@ class HttpClient {
         return await this.makeRequest(action, 'POST', data)
     }
 
-    async postJson(action, get_params, data) {
+    async postJson(action, get_params, data, method) {
+        if (empty(method)) {
+            method = 'POST'
+        }
+
         if (!empty(get_params)) {
             action = action + '?' + new URLSearchParams(get_params).toString()
         }
 
         let body = JSON.stringify(data)
 
-        return await this.makeRequest(action, 'POST', body, {
+        return await this.makeRequest(action, method, body, {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },)

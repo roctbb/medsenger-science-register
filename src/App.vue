@@ -16,7 +16,7 @@
             <patient-screen/>
         </div>
         <div v-show="screen==='fill-form'">
-            <fill-form-screen/>
+            <form-screen/>
         </div>
     </div>
 </template>
@@ -29,12 +29,12 @@ import ProjectsScreen from "@/components/ProjectsScreen.vue";
 import ProjectPatientsScreen from "@/components/ProjectPatientsScreen.vue";
 import AddPatientScreen from "@/components/AddPatientScreen.vue";
 import PatientScreen from "@/components/PatientScreen.vue";
-import FillFormScreen from "@/components/FillFormScreen.vue";
+import FormScreen from "@/components/FormScreen.vue";
 
 export default {
     name: 'App',
     components: {
-        FillFormScreen,
+        FormScreen,
         PatientScreen,
         LoginScreen,
         ProjectsScreen,

@@ -6,10 +6,10 @@ class SubmissionManager extends Manager {
         this.eventbus.emit('form-selected', form)
     }
 
-    openSubmissionPage(form) {
+    openSubmissionPage(form, submission) {
         this.eventbus.emit('change-screen', 'fill-form')
         this.eventbus.emit('form-selected', form)
-        this.eventbus.emit('submission-selected', form)
+        this.eventbus.emit('submission-selected', submission)
     }
 
     async getAll(project, patient) {

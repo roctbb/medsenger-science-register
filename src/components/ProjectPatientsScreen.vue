@@ -19,8 +19,16 @@
             <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="patient in filteredPatients"
                  v-bind:key="patient.id">
                 <div class="card">
-                    <div class="card-body" @click="openPatient(patient)">
-                        <h5 class="card-title">{{ patient.name }}</h5>
+                    <div class="card-body">
+                        <div class="hstack">
+                            <div class="me-auto" @click="openPatient(patient)">
+                                <h5 class="card-title my-1">{{ patient.name }}</h5>
+                            </div>
+                            <div @click="editPatient(patient)">
+                                <font-awesome-icon :icon="['fas', 'pen']"/>
+                            </div>
+                        </div>
+
                         <p class="text-muted my-0">{{ formatDate(patient.birthday) }}</p>
                     </div>
                 </div>
@@ -62,6 +70,9 @@ export default {
         addPatient: function () {
             this.managers.project.addPatientPage()
         },
+        editPatient: function (patient) {
+            this.managers.project.editPatientPage(patient)
+        },
         sortPatients: function () {
             this.patients.sort((a, b) => a.name.localeCompare(b.name))
         }
@@ -71,6 +82,15 @@ export default {
         this.event_bus.on('project-selected', this.loadPatients);
         this.event_bus.on('new-patient', (patient) => {
             this.patients.push(patient)
+            this.sortPatients()
+        });
+
+        this.event_bus.on('patient-updated', (updated_patient) => {
+            this.patients.forEach((patient, i) => {
+                if (patient.id === updated_patient.id) {
+                    this.patients[i] = updated_patient
+                }
+            });
             this.sortPatients()
         });
     }

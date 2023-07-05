@@ -25,7 +25,7 @@
         <div class="row py-2" v-if="submissions">
             <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="submission in submissions"
                  v-bind:key="submission.id">
-                <div class="card">
+                <div class="card" @click="openSubmission(submission)">
                     <div class="card-body">
                         <h5 class="card-title">{{ findForm(submission.form_id).name }}</h5>
                         <p class="text-muted my-0">{{ formatDateTime(submission.created_on) }}</p>
@@ -63,6 +63,9 @@ export default {
         },
         findForm(form_id) {
             return this.project.forms.filter((form) => form_id === form.id)[0]
+        },
+        openSubmission(submission) {
+            this.managers.submission.openSubmissionPage(this.findForm(submission.form_id), submission)
         }
     },
     mounted() {
@@ -70,9 +73,14 @@ export default {
             this.project = project
         });
 
+        this.event_bus.on('change-screen', async (screen) => {
+            if (screen === 'patient') {
+                this.submissions = await this.managers.submission.getAll(this.project, this.patient)
+            }
+        });
+
         this.event_bus.on('patient-selected', async (patient) => {
             this.patient = patient
-            this.submissions = await this.managers.submission.getAll(this.project, this.patient)
         });
 
         this.event_bus.on('submission-added', async (submission) => {

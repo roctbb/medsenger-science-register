@@ -1,7 +1,8 @@
 <template>
     <div v-if="project && patient && form">
 
-        <h4 class="my-3">{{ patient.name }}: {{ form.name }}</h4>
+        <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
+            v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }})</small></h4>
 
         <p>{{ form.description }}</p>
 
@@ -67,7 +68,7 @@
     </div>
 
     <div class="my-3">
-        <button @click="save()" class="btn btn-primary">Сохранить</button>
+        <button @click="save()" class="btn btn-primary" v-if="!disabled">Сохранить</button>
         <button @click="back()" class="btn btn-warning mx-1">Назад</button>
     </div>
 
@@ -76,9 +77,10 @@
 <script>
 
 import VueDatePicker from "@vuepic/vue-datepicker";
+import {formatDateTime} from "../utils/helpers";
 
 export default {
-    name: 'FillFormScreen',
+    name: 'FormScreen',
     components: {VueDatePicker},
     data() {
         return {
@@ -87,10 +89,12 @@ export default {
             form: undefined,
             answers: {},
             error: "",
-            disabled: false
+            disabled: false,
+            submission: undefined
         }
     },
     methods: {
+        formatDateTime,
         back: function () {
             this.clear()
             this.managers.project.backToPatientPage()
@@ -107,6 +111,7 @@ export default {
         clear: function () {
             this.answers = {}
             this.disabled = false
+            this.submission = undefined
         },
         getInputType: function (field) {
             if (field.type === 'string') {
@@ -138,6 +143,7 @@ export default {
                 this.answers[record.params.question_id] = record.value
             })
             this.disabled = true
+            this.submission = submission
         });
     }
 }
