@@ -4,3 +4,4 @@ from .exceptions import *
 from .projects import *
 from .patients import *
 from .forms import *
+from .clinics import *
