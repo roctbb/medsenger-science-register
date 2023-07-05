@@ -13,7 +13,10 @@
             <add-patient-screen/>
         </div>
         <div v-show="screen==='patient'">
-            <patient-screen />
+            <patient-screen/>
+        </div>
+        <div v-show="screen==='fill-form'">
+            <fill-form-screen/>
         </div>
     </div>
 </template>
@@ -26,10 +29,12 @@ import ProjectsScreen from "@/components/ProjectsScreen.vue";
 import ProjectPatientsScreen from "@/components/ProjectPatientsScreen.vue";
 import AddPatientScreen from "@/components/AddPatientScreen.vue";
 import PatientScreen from "@/components/PatientScreen.vue";
+import FillFormScreen from "@/components/FillFormScreen.vue";
 
 export default {
     name: 'App',
     components: {
+        FillFormScreen,
         PatientScreen,
         LoginScreen,
         ProjectsScreen,
@@ -72,9 +77,6 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700");
 @import "assets/styles/buttons.css";
 
-#app {
-    min-height: 100vh;
-}
 
 #app {
     font-family: Roboto, sans-serif;

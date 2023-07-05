@@ -18,6 +18,7 @@ class StateManager extends Manager {
     set user(user_description) {
         if (user_description.api_token && user_description.api_token !== this.state.token) {
             this.state.token = user_description.api_token
+            this.api.setToken(this.state.token)
             this.save()
         } else {
             user_description.api_token = this.state.token

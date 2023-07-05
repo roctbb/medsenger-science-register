@@ -21,6 +21,10 @@ def find_patient_by_credentials(name, sex, birthday):
     return Patient.query.filter_by(name=name, sex=sex, birthday=birthday).first()
 
 
+def find_patient_by_id(patient_id):
+    return Patient.query.get(patient_id)
+
+
 @transaction
 def assign_to_project(patient, project):
     if patient not in project.patients:

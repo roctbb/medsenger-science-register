@@ -10,7 +10,7 @@ project_patient = db.Table('project_patient',
                            db.Column('patient_id', db.Integer, db.ForeignKey('patient.id', ondelete="CASCADE"))
                            )
 
-form_in_groups = db.Table('form_in_groups',
+form_form_part = db.Table('form_form_part',
                       db.Column('form_id', db.Integer, db.ForeignKey('form.id', ondelete="CASCADE")),
-                      db.Column('group_id', db.Integer, db.ForeignKey('form_group.id', ondelete="CASCADE"))
+                      db.Column('part_id', db.Integer, db.ForeignKey('form_part.id', ondelete="CASCADE"))
                       )

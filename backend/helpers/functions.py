@@ -3,6 +3,10 @@ from flask import jsonify
 
 
 class ExplainableException(Exception):
+    def __init__(self, details=None):
+        self.details = details
+        super().__init__()
+
     def explain(self):
         return self.__class__.__name__
 
@@ -16,11 +20,15 @@ def hash(password):
 
 def make_error(reason='', code=422):
     if isinstance(reason, ExplainableException):
+        details = reason.details
         reason = reason.explain()
+    else:
+        details = None
 
     return jsonify({
         "state": "error",
-        "error": reason
+        "error": reason,
+        "details": details
     }), code
 
 

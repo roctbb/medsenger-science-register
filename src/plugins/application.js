@@ -6,6 +6,7 @@ import AuthManager from "@/managers/auth";
 import UserManager from "@/managers/user";
 import {reactive} from "vue";
 import ProjectManager from "@/managers/project";
+import SubmissionManager from "@/managers/submission";
 
 
 const applicationPlugin = {
@@ -23,7 +24,8 @@ const applicationPlugin = {
         app.config.globalProperties.managers = {
             auth: new AuthManager(state, event_bus, api),
             user: new UserManager(state, event_bus, api),
-            project: new ProjectManager(state, event_bus, api)
+            project: new ProjectManager(state, event_bus, api),
+            submission: new SubmissionManager(state, event_bus, api)
         }
     }
 }

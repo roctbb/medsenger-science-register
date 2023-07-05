@@ -22,6 +22,10 @@ class IncorrectToken(ExplainableException):
     pass
 
 
+class NotInProject(ExplainableException):
+    pass
+
+
 class ExpiredToken(ExplainableException):
     pass
 
@@ -29,6 +33,7 @@ class ExpiredToken(ExplainableException):
 class NoToken(ExplainableException):
     def status(self):
         return 403
+
 
 class AccessDenied(ExplainableException):
     def status(self):

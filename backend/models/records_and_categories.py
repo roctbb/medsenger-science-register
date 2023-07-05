@@ -33,9 +33,8 @@ class RecordCategory(db.Model):
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id', ondelete="CASCADE"))
-    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
     category_id = db.Column(db.Integer, db.ForeignKey('record_category.id', ondelete="SET null"), nullable=True)
-    submission_id = db.Column(db.Integer, db.ForeignKey('form_group_submission.id', ondelete="SET null"), nullable=True)
+    submission_id = db.Column(db.Integer, db.ForeignKey('form_submission.id', ondelete="SET null"), nullable=True)
 
     value = db.Column(db.String(256), nullable=True)
     params = db.Column(db.JSON, nullable=True)

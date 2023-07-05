@@ -49,7 +49,7 @@ def find_user_by_token(token):
 def create_token(user):
     token = UserToken(user_id=user.id)
     token.expire_on = datetime.now() + timedelta(days=7)
-    token.token = token_hex(32)
+    token.token = token_hex(16)
 
     db.session.add(token)
     return token

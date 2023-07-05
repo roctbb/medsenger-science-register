@@ -10,9 +10,13 @@ class ProjectManager extends Manager {
         this.eventbus.emit('project-selected', project)
     }
 
-    openPatientPage(project, patient) {
+    openPatientPage(patient) {
         this.eventbus.emit('change-screen', 'patient')
         this.eventbus.emit('patient-selected', patient)
+    }
+
+    backToPatientPage() {
+        this.eventbus.emit('change-screen', 'patient')
     }
 
     addPatientPage() {
@@ -21,7 +25,7 @@ class ProjectManager extends Manager {
 
     async addPatient(project, newPatient) {
         let patient = await this.api.project.addPatient(project.id, newPatient.name, newPatient.sex, newPatient.birthday)
-        this.openPatientPage(project, patient)
+        this.openPatientPage(patient)
     }
 }
 

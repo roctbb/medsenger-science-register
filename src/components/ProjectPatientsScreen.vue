@@ -52,7 +52,7 @@ export default {
     methods: {
         formatDate,
         openPatient: function (patient) {
-            this.managers.project.openPatientPage(this.project, patient)
+            this.managers.project.openPatientPage(patient)
         },
         loadPatients: async function (project) {
             this.project = project

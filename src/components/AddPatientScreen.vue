@@ -53,6 +53,7 @@ export default {
             e.preventDefault();
             try {
                 await this.managers.project.addPatient(this.project, this.newPatient)
+                this.clear()
             } catch (e) {
                 this.error = e.message
             }
@@ -63,6 +64,7 @@ export default {
                 sex: 'male',
                 birthday: ''
             }
+            this.error = ''
         },
         back: function () {
             this.clear()
