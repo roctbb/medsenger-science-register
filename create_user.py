@@ -5,11 +5,11 @@ try:
     email = input("email:")
     password = input("password:")
     name = input("name:")
-    clinic_id = input("name:")
+    clinic_id = input("clinic_id:")
 
-    clinic = find_clinic_by_id(clinic_id)
 
     with app.app_context():
+        clinic = find_clinic_by_id(clinic_id)
         create_user(email, password, name, clinic)
 
     print("ok!")
