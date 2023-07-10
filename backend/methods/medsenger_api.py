@@ -47,7 +47,7 @@ def medsenger_create_contract(user, patient_description, days):
     except:
         raise IncorrectDays
 
-    if not check_email(patient_description.get('email')):
+    if not patient_description.get('email') or not check_email(patient_description.get('email')):
         raise IncorrectEmail
 
     try:
