@@ -31,9 +31,9 @@ class ProjectManager extends Manager {
 
     async storePatient(project, patient) {
         if (!patient.id) {
-            patient = await this.api.project.addPatient(project.id, patient.name, patient.sex, patient.birthday)
+            patient = await this.api.project.addPatient(project.id, patient.name, patient.sex, patient.birthday, patient.medsenger_contract, patient.email, patient.days)
         } else {
-            patient = await this.api.project.editPatient(project.id, patient.id, patient.name, patient.sex, patient.birthday)
+            patient = await this.api.project.editPatient(project.id, patient.id, patient.name, patient.sex, patient.birthday, patient.medsenger_contract, patient.email, patient.days)
             this.eventbus.emit('patient-updated', patient)
         }
 

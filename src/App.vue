@@ -1,24 +1,41 @@
 <template>
-    <div v-if="isLoaded">
-        <div v-show="screen==='login'">
-            <login-screen/>
-        </div>
-        <div v-show="screen==='projects'">
-            <projects-screen/>
-        </div>
-        <div v-show="screen==='project-patients'">
-            <project-patients-screen/>
-        </div>
-        <div v-show="screen==='add-patient'">
-            <add-patient-screen/>
-        </div>
-        <div v-show="screen==='patient'">
-            <patient-screen/>
-        </div>
-        <div v-show="screen==='fill-form'">
-            <form-screen/>
+    <div>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container">
+                <a class="navbar-brand" href="#">Регистр пациентов</a>
+
+                <div class="d-flex" v-if="screen!=='login'">
+                    <button @click="logOut()" class="btn btn-secondary btn-sm">Выход</button>
+                </div>
+            </div>
+
+
+        </nav>
+
+        <div class="container">
+            <div v-if="isLoaded">
+                <div v-show="screen==='login'">
+                    <login-screen/>
+                </div>
+                <div v-show="screen==='projects'">
+                    <projects-screen/>
+                </div>
+                <div v-show="screen==='project-patients'">
+                    <project-patients-screen/>
+                </div>
+                <div v-show="screen==='add-patient'">
+                    <add-patient-screen/>
+                </div>
+                <div v-show="screen==='patient'">
+                    <patient-screen/>
+                </div>
+                <div v-show="screen==='fill-form'">
+                    <form-screen/>
+                </div>
+            </div>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -64,6 +81,9 @@ export default {
         },
         stateLoaded: function () {
             this.isLoaded = true
+        },
+        logOut: function () {
+            this.managers.auth.logout()
         }
     },
     async mounted() {

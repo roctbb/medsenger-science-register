@@ -14,6 +14,7 @@ class Patient(db.Model):
     name = db.Column(db.String(256), nullable=True)
     sex = db.Column(db.Enum(Sex), nullable=True)
     birthday = db.Column(db.Date, nullable=True)
+    email = db.Column(db.String(256), nullable=True)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
@@ -26,8 +27,23 @@ class Patient(db.Model):
             "id": self.id,
             "name": self.name,
             "sex": self.sex,
+            "email": self.email,
             "birthday": self.birthday.isoformat()
         }
+
+
+class Contract(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id', ondelete="CASCADE"))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id', ondelete="CASCADE"), nullable=True)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "doctor_id": self.doctor_id
+        }
+
 
 
 class Project(db.Model):

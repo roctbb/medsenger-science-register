@@ -29,6 +29,27 @@
                 </select>
             </div>
 
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" role="switch" type="checkbox"
+                           v-model="editedPatient.medsenger_contract"
+                           :disabled="patient && patient.contract_id != null">
+                    <label class="form-label">Создать контракт в Medsenger</label>
+                </div>
+            </div>
+
+            <div class="mb-3" v-if="editedPatient.medsenger_contract && (!patient || patient.contract_id == null)">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" v-model="editedPatient.email">
+            </div>
+
+            <div class="mb-3" v-if="editedPatient.medsenger_contract && (!patient || patient.contract_id == null)">
+                <label class="form-label">Длительность</label>
+                <select class="form-control" v-model="editedPatient.days">
+                    <option :value="180">180 дней</option>
+                </select>
+            </div>
+
             <button v-if="!patient" @click="save" class="btn btn-primary">Добавить</button>
             <button v-if="patient" @click="save" class="btn btn-primary">Сохранить</button>
             <button @click="back()" class="btn btn-warning ms-1">Назад</button>
@@ -55,6 +76,10 @@ export default {
         save: async function (e) {
             e.preventDefault();
             try {
+                if (this.patient && this.patient.contract_id) {
+                    this.editedPatient.medsenger_contract = false
+                }
+
                 await this.managers.project.storePatient(this.project, this.editedPatient)
                 this.clear()
             } catch (e) {
@@ -66,7 +91,10 @@ export default {
                 name: '',
                 sex: 'male',
                 birthday: '',
-                id: undefined
+                id: undefined,
+                medsenger_contract: false,
+                days: 180,
+                email: ''
             }
             this.error = ''
             this.patient = undefined
@@ -87,8 +115,12 @@ export default {
                 name: patient.name,
                 sex: patient.sex,
                 birthday: patient.birthday,
-                id: patient.id
+                id: patient.id,
+                medsenger_contract: !!patient.contract_id,
+                days: 180
             }
+
+            console.log(patient.contract_id)
         });
 
         this.event_bus.on('clear-patient', () => {

@@ -47,7 +47,7 @@ class ProjectActions extends api_utils.ActionGroup {
 
     }
 
-    async addPatient(project_id, name, sex, birthday) {
+    async addPatient(project_id, name, sex, birthday, medsenger_contract, email, days) {
 
         let query = {
             api_token: this.token,
@@ -56,7 +56,10 @@ class ProjectActions extends api_utils.ActionGroup {
         let data = {
             name: name,
             sex: sex,
-            birthday: birthday
+            birthday: birthday,
+            email: email,
+            days: days,
+            medsenger_contract: medsenger_contract
         }
 
         let result;
@@ -70,7 +73,11 @@ class ProjectActions extends api_utils.ActionGroup {
 
         let expectedErrors = [
             ['InsufficientData', 'Заполните все поля.'],
-            ['AlreadyExists', 'Пациент уже добавлен.']
+            ['AlreadyExists', 'Пациент уже добавлен.'],
+            ['MedsengerAlreadyExists', 'Контракт с этим пациентом в Medsenger уже существует.'],
+            ['IncorrectEmail', 'Проверьте правильность почтового адреса.'],
+            ['IncorrectDays', 'Проверьте длительность контракта.'],
+            ['IncorrectBirthday', 'Проверьте правильность даты рождения.'],
         ]
 
         api_utils.checkForErrors(result, expectedErrors)
@@ -79,7 +86,7 @@ class ProjectActions extends api_utils.ActionGroup {
 
     }
 
-    async editPatient(project_id, patient_id, name, sex, birthday) {
+    async editPatient(project_id, patient_id, name, sex, birthday, medsenger_contract, email, days) {
 
         let query = {
             api_token: this.token,
@@ -88,7 +95,10 @@ class ProjectActions extends api_utils.ActionGroup {
         let data = {
             name: name,
             sex: sex,
-            birthday: birthday
+            birthday: birthday,
+            email: email,
+            days: days,
+            medsenger_contract: medsenger_contract
         }
 
         let result;
@@ -102,6 +112,10 @@ class ProjectActions extends api_utils.ActionGroup {
 
         let expectedErrors = [
             ['InsufficientData', 'Заполните все поля.'],
+            ['MedsengerAlreadyExists', 'Контракт с этим пациентом в Medsenger уже существует.'],
+            ['IncorrectEmail', 'Проверьте правильность почтового адреса.'],
+            ['IncorrectDays', 'Проверьте длительность контракта.'],
+            ['IncorrectBirthday', 'Проверьте правильность даты рождения.'],
         ]
 
         api_utils.checkForErrors(result, expectedErrors)

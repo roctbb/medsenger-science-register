@@ -5,7 +5,10 @@
                 <h4 class="my-3">{{ patient.name }}</h4>
             </div>
             <div>
-                <div class="dropdown">
+                <a target="_blank" class="btn btn-sm btn-success" v-if="patient.contract_id"
+                   :href="medsenger_host + '/client#/?c=' + patient.contract_id">Medsenger</a>
+                <a class="btn btn-sm btn-success mx-1" @click="editPatient(patient)">Изменить</a>
+                <div class="dropdown d-inline">
                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                         Добавить анкету
@@ -49,7 +52,8 @@ export default {
         return {
             project: undefined,
             patient: undefined,
-            submissions: []
+            submissions: [],
+            medsenger_host: process.env.VUE_APP_MEDSENGER_HOST
         }
     },
     methods: {
@@ -66,6 +70,9 @@ export default {
         },
         openSubmission(submission) {
             this.managers.submission.openSubmissionPage(this.findForm(submission.form_id), submission)
+        },
+        editPatient: function (patient) {
+            this.managers.project.editPatientPage(patient)
         }
     },
     mounted() {
@@ -86,6 +93,7 @@ export default {
         this.event_bus.on('submission-added', async (submission) => {
             this.submissions.push(submission)
         });
+
     }
 }
 </script>

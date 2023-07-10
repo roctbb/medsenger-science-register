@@ -10,57 +10,60 @@
             {{ error }}
         </div>
 
-        <div class="card" v-for="part in form.parts" v-bind:key="part.id">
+        <div class="card mb-3" v-for="part in form.parts" v-bind:key="part.id">
             <div class="card-body">
                 <h5 class="card-title">{{ part.name }}</h5>
 
-                <div class="row mb-3" v-for="field in part.fields" v-bind:key="field.id">
-                    <label class="col-sm-4 col-form-label" :class="{ required: field.required }">{{
-                            field.text
-                        }}</label>
-                    <div class="col-sm-8">
-                        <input v-if="field.type === 'string'" type="text" class="form-control"
-                               v-model="answers[field.id]"
-                               v-bind:required="field.required" v-bind:disabled="disabled">
+                <div v-for="field in part.fields" v-bind:key="field.id">
+                    <div class="row mb-3" v-if="!field.show_if || answers[field.show_if]">
+                        <label class="col-sm-4 col-form-label" :class="{ required: field.required }">{{
+                                field.text
+                            }}</label>
+                        <div class="col-sm-8">
+                            <input v-if="field.type === 'string'" type="text" class="form-control"
+                                   v-model="answers[field.id]"
+                                   v-bind:required="field.required" v-bind:disabled="disabled">
 
-                        <input v-if="field.type === 'integer'" type="number" step="1" class="form-control"
-                               v-model="answers[field.id]"
-                               v-bind:required="field.required" v-bind:disabled="disabled">
+                            <input v-if="field.type === 'integer'" type="number" step="1" class="form-control"
+                                   v-model="answers[field.id]"
+                                   v-bind:required="field.required" v-bind:disabled="disabled">
 
-                        <input v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
-                               v-model="answers[field.id]"
-                               v-bind:required="field.required" v-bind:disabled="disabled">
+                            <input v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
+                                   v-model="answers[field.id]"
+                                   v-bind:required="field.required" v-bind:disabled="disabled">
 
-                        <textarea v-if="field.type === 'text'" class="form-control" v-model="answers[field.id]"
-                                  v-bind:required="field.required" v-bind:disabled="disabled"></textarea>
+                            <textarea v-if="field.type === 'text'" class="form-control" v-model="answers[field.id]"
+                                      v-bind:required="field.required" v-bind:disabled="disabled"></textarea>
 
 
-                        <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
-                                       v-model="answers[field.id]"
-                                       input-class-name="form-control" text-input
-                                       :enable-time-picker="false" locale="ru-RU" format="dd.MM.yyyy"
-                                       select-text="Выбрать" cancel-text="Закрыть" v-bind:required="field.required"
-                                       v-bind:disabled="disabled"/>
+                            <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
+                                           v-model="answers[field.id]"
+                                           input-class-name="form-control" text-input
+                                           :enable-time-picker="false" locale="ru-RU" format="dd.MM.yyyy"
+                                           select-text="Выбрать" cancel-text="Закрыть" v-bind:required="field.required"
+                                           v-bind:disabled="disabled"/>
 
-                        <div v-if="field.type === 'radio'">
-                            <div v-for="(value, option) in field.params.options"
-                                 v-bind:key='option'
-                                 class="form-check">
-                                <input class="form-check-input" type="radio"
-                                       :value="value" v-model="answers[field.id]" v-bind:disabled="disabled">
-                                <label class="form-check-label">
-                                    {{ option }}
-                                </label>
+                            <div v-if="field.type === 'radio'">
+                                <div v-for="(value, option) in field.params.options"
+                                     v-bind:key='option'
+                                     class="form-check">
+                                    <input class="form-check-input" type="radio"
+                                           :value="value" v-model="answers[field.id]" v-bind:disabled="disabled">
+                                    <label class="form-check-label">
+                                        {{ option }}
+                                    </label>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-check" v-if="field.type === 'checkbox'">
-                            <input class="form-check-input" type="checkbox" v-model="answers[field.id]"
-                                   v-bind:disabled="disabled">
-                        </div>
+                            <div class="form-check" v-if="field.type === 'checkbox'">
+                                <input class="form-check-input" type="checkbox" v-model="answers[field.id]"
+                                       v-bind:disabled="disabled">
+                            </div>
 
-                        <div class="form-text" v-if="field.description">{{ field.description }}</div>
+                            <div class="form-text" v-if="field.description">{{ field.description }}</div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

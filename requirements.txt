@@ -5,3 +5,4 @@ flask_migrate
 pytest
 flask-cors
 python-dotenv
+requests

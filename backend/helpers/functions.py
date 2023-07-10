@@ -1,5 +1,6 @@
 import hashlib
 from flask import jsonify
+import re
 
 
 class ExplainableException(Exception):
@@ -37,3 +38,11 @@ def make_result(data, code=200):
         "state": "success",
         "data": data
     }), code
+
+
+def check_email(email):
+    pat = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    if re.match(pat, email):
+        return True
+    else:
+        return False
