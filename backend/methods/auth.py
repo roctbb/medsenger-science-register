@@ -7,19 +7,27 @@ from backend.models import *
 from secrets import token_hex
 from .medsenger_api import *
 from .clinics import *
-
+from backend.config import MEDSENGER_LOGIN
 
 def authorize_by_credentials(email, password):
     if not email or not password:
         raise InsufficientData
 
-    medsenger_user = medsenger_login_user(email, password)
-    user = find_user_by_email(email)
+    if MEDSENGER_LOGIN:
+        medsenger_user = medsenger_login_user(email, password)
+        user = find_user_by_email(email)
 
-    if not user:
-        medsenger_clinic = medsenger_user['clinics'][0]
-        clinic = find_clinic_by_id(medsenger_clinic['id'])
-        user = create_user(email, password, medsenger_user['name'], clinic)
+        if not user:
+            medsenger_clinic = medsenger_user['clinics'][0]
+            clinic = find_clinic_by_id(medsenger_clinic['id'])
+            user = create_user(email, password, medsenger_user['name'], clinic)
+    else:
+        user = find_user_by_email(email)
+        if not user:
+            raise NotFound
+
+        if user.password != hash(password):
+            raise IncorrectPassword
 
     return user, create_token(user)
 
