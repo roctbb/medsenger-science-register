@@ -238,6 +238,7 @@ export default {
         if(this.questions.length > 0){
             let j;
             this.is_edit = true
+
             for(let i = 0; i<this.questions.length; i++){
                 this.questions[i].variants = [{"text": "","value": ""},{"text": "","value": ""}]
                 this.questions[i].checker = {"true": "","false": ""}
