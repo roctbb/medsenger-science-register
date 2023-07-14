@@ -6,8 +6,15 @@ from backend.models import *
 editor_blueprint = Blueprint('editor', __name__)
 
 
+@editor_blueprint.route('/get_data/<int:part_id>', methods=["get"])
+def get_one_exist_form_part(part_id):
+    form_part = FormPart.query.get(part_id)
+
+    return form_part.as_dict()
+
+
 @editor_blueprint.route('/get_data', methods=["get"])
-def get_data():
+def get_one_exists_form_parts():
     form_parts = FormPart.query.all()
 
     return json.dumps(as_dict(form_parts))
@@ -32,7 +39,7 @@ def create_part_page():
     return render_template('questionnaire.html')
 
 
-@editor_blueprint.route('/create/', methods=['post'])
+@editor_blueprint.route('/create', methods=['post'])
 def save_part_page():
     data = request.json
     form_part = FormPart()
@@ -63,11 +70,13 @@ def update_and_save_part_page(part_id):
     })
 
 
-@editor_blueprint.route("/delete/<int:part_id>", methods=["get"])
+@editor_blueprint.route("/delete/<int:part_id>", methods=["delete"])
 def delete_part_page(part_id):
     form_part = FormPart.query.get(part_id)
     db.session.delete(form_part)
     db.session.commit()
 
-    return redirect("/editor")
+    return jsonify({
+        "state": "ok"
+    })
 

@@ -2,7 +2,7 @@
     <div>
         <nav class="navbar bg-body-tertiary">
             <div class="container">
-                <a class="navbar-brand" href="#">Регистр пациентов</a>
+                <a class="navbar-brand" href="#">{{title}}</a>
 
                 <div class="d-flex" v-if="screen!=='login'">
                     <button @click="logOut()" class="btn btn-secondary btn-sm">Выход</button>
@@ -71,7 +71,8 @@ export default {
     data() {
         return {
             screen: "login",
-            isLoaded: false
+            isLoaded: false,
+            title: "Регистр пациентов"
         }
     },
     methods: {
@@ -88,6 +89,12 @@ export default {
         screenChanged: function (screen) {
             console.log("new state:", screen)
             this.screen = screen
+            if(screen=="editor-all" || screen == "editor"){  // Для каждой страницы можно настроить свой заголовок
+                this.title = "Редактор анкет"
+            }
+            else{
+                this.title = "Регистр пациентов"
+            }
         },
         stateLoaded: function () {
             this.isLoaded = true

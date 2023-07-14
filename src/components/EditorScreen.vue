@@ -3,7 +3,7 @@
     <h6 style="text-align: center; color: darkgrey;">{{ is_edit? "Редактируем" : "Создаём" }} анкету с названием</h6>
     <p style="text-align: center; font-size: 15pt;">{{name!=""? name : "(Без названия)"}}</p>
 
-    <div class="card my-3">
+    <div class="card my-3" v-if="isLoaded">
         <div class="card-body">
             <div class="row">
                 <label class="col-md-4 col-form-label text text">
@@ -18,7 +18,7 @@
 
 
     <div v-for="(question, i) in questions" class="mt-3" :key="i">
-        <div class="card">
+        <div class="card" v-if="isLoaded">
             <div class="card-body">
                 <h5 class="bold-text">
                     Вопрос №{{ i + 1 }}
@@ -203,8 +203,6 @@
 </template>
 
 <script>
-window.FORM = JSON.parse('{{ form_json | safe }}')
-console.log(window.FORM)
 
 function create_UUID(){
     var dt = new Date().getTime();
@@ -225,47 +223,10 @@ export default {
         questions: [],
         name: "Новая анкета",
         json: {},
-        is_edit: false
+        is_edit: false,
+        id_: 0
     }
   },
-  created() {
-        if (window.FORM)
-        {
-            this.questions = window.FORM.fields;
-            this.name = window.FORM.name;
-        }
-
-        if(this.questions.length > 0){
-            let j;
-            this.is_edit = true
-
-            for(let i = 0; i<this.questions.length; i++){
-                this.questions[i].variants = [{"text": "","value": ""},{"text": "","value": ""}]
-                this.questions[i].checker = {"true": "","false": ""}
-
-                if(this.questions[i].type == 'enum'){
-                    let iter = 0
-                    for(j in this.questions[i].params.options){
-                        if(iter >= this.questions[i].variants.length){
-                            this.questions[i].variants.push({"text": "","value": ""})
-                        }
-                        this.questions[i].variants[iter].text = j
-                        this.questions[i].variants[iter].value = this.questions[i].params.options[j]
-                        iter++
-                    }
-                }
-                else if(this.questions[i].type == 'checkbox'){
-                    this.questions[i].checker.true = this.questions[i].params.options.true
-                    this.questions[i].checker.false = this.questions[i].params.options.false
-                }
-
-                this.questions[i].params = {"options": {}}
-            }
-        }
-        else{
-            this.add_question()
-        }
-    },
     methods: {
         add_question() {
             this.questions.push({
@@ -329,8 +290,16 @@ export default {
             this.json.name = this.name
             this.json = JSON.stringify(this.json)
 
+            let href_part;
 
-            fetch('', {
+            if(this.is_edit){
+                href_part = this.id_
+            }
+            else{
+                href_part = "create"
+            }
+            console.log(href_part)
+            fetch(process.env.VUE_APP_MAINHOST + "/editor/" + href_part, {
               method: 'POST',
               headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -341,7 +310,7 @@ export default {
               .then(function(res){
                 if(res.state == "ok"){
                     alert('Анкета успешно сохранена как "' + res.name + '" (id: ' + res.id + ')')
-                    window.location.href = "/editor"
+                    window.location.href = "/"
                 }
                 else{
                     alert("Ошибка при сохранении анкеты\n" + res.state)
@@ -375,11 +344,54 @@ export default {
         }
     },
       async mounted() {
-          this.event_bus.on("change-screen", async(screen) => {
-            if(screen === "editor"){
-                console.log()
-            }
-       })
+          this.event_bus.on("open_question", async(question_id) => {
+               if(question_id != 0){
+                   let data_request = await fetch(process.env.VUE_APP_MAINHOST + "/editor/get_data/" + question_id.toString())
+                   let data_from_request = await data_request.json()
+
+                   this.data = data_from_request
+
+                   this.id_ = this.data.id
+
+                   this.is_edit = true
+
+                   if (this.data)
+                   {
+                       this.questions = this.data.fields;
+                       this.name = this.data.name;
+                   }
+
+                    let j;
+
+                    for(let i = 0; i<this.questions.length; i++){
+                        this.questions[i].variants = [{"text": "","value": ""},{"text": "","value": ""}]
+                        this.questions[i].checker = {"true": "","false": ""}
+
+                        if(this.questions[i].type == 'enum'){
+                            let iter = 0
+                            for(j in this.questions[i].params.options){
+                                if(iter >= this.questions[i].variants.length){
+                                    this.questions[i].variants.push({"text": "","value": ""})
+                                }
+                                this.questions[i].variants[iter].text = j
+                                this.questions[i].variants[iter].value = this.questions[i].params.options[j]
+                                iter++
+                            }
+                        }
+                        else if(this.questions[i].type == 'checkbox'){
+                            this.questions[i].checker.true = this.questions[i].params.options.true
+                            this.questions[i].checker.false = this.questions[i].params.options.false
+                        }
+
+                        this.questions[i].params = {"options": {}}
+                        }
+                    }
+
+                else{
+                    this.add_question()
+                }
+                this.isLoaded = true
+            })
   }
 }
 
