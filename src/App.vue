@@ -53,7 +53,7 @@ import ProjectPatientsScreen from "@/components/ProjectPatientsScreen.vue";
 import AddPatientScreen from "@/components/AddPatientScreen.vue";
 import PatientScreen from "@/components/PatientScreen.vue";
 import FormScreen from "@/components/FormScreen.vue";
-import EditorScreen_All from "@/components/EditorScreen_All.vue"
+import EditorAllScreen from "@/components/EditorAllScreen.vue"
 import EditorScreen from "@/components/EditorScreen.vue"
 
 export default {
@@ -65,7 +65,7 @@ export default {
         ProjectsScreen,
         ProjectPatientsScreen,
         AddPatientScreen,
-        EditorScreen_All,
+        EditorAllScreen,
         EditorScreen
     },
     data() {

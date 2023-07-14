@@ -6,6 +6,13 @@ from backend.models import *
 editor_blueprint = Blueprint('editor', __name__)
 
 
+@editor_blueprint.route('/get_data', methods=["get"])
+def get_data():
+    form_parts = FormPart.query.all()
+
+    return json.dumps(as_dict(form_parts))
+
+
 @editor_blueprint.route('/', methods=['get'])
 def get_form_parts():
     form_parts = FormPart.query.all()

@@ -9,7 +9,7 @@
       </div>
     </div>
   </div>
-   <button @click='' class="btn btn-primary">Редактор анкет</button>
+  <button class="btn btn-primary" @click="go_to_editor_all">Редактор анкет</button>
 </template>
 
 <script>
@@ -23,8 +23,12 @@ export default {
   methods: {
     openProject: function (project) {
       this.managers.project.open(project)
-    }
-  },
+    },
+    go_to_editor_all(){
+        this.event_bus.emit("change-screen", "editor-all")
+    },
+ },
+
   async mounted() {
   }
 }
