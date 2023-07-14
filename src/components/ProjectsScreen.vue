@@ -9,6 +9,7 @@
       </div>
     </div>
   </div>
+   <button @click='' class="btn btn-primary">Редактор анкет</button>
 </template>
 
 <script>

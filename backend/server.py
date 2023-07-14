@@ -7,6 +7,7 @@ app.register_blueprint(auth_blueprint, url_prefix='/api')
 app.register_blueprint(projects_blueprint, url_prefix='/api')
 app.register_blueprint(submission_blueprint, url_prefix='/api')
 app.register_blueprint(medsenger_blueprint, url_prefix='/api')
+app.register_blueprint(editor_blueprint, url_prefix='/editor')
 
 
 @app.route('/')
