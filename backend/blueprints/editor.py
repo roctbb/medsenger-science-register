@@ -1,12 +1,22 @@
 from flask import Blueprint, request, render_template, redirect
 from backend.methods import *
 from backend.models import *
-
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import check_password_hash
+from backend.config import *
 
 editor_blueprint = Blueprint('editor', __name__)
+auth = HTTPBasicAuth()
+
+
+@auth.verify_password
+def verify_password(username, password):
+    if username == EDITOR_USERNAME and check_password_hash(EDITOR_PASSWORD_HASH, password):
+        return username
 
 
 @editor_blueprint.route('/get_data/<int:part_id>', methods=["get"])
+@auth.login_required
 def get_one_exist_form_part(part_id):
     form_part = FormPart.query.get(part_id)
 
@@ -14,6 +24,7 @@ def get_one_exist_form_part(part_id):
 
 
 @editor_blueprint.route('/get_data', methods=["get"])
+@auth.login_required
 def get_one_exists_form_parts():
     form_parts = FormPart.query.all()
 
@@ -21,6 +32,7 @@ def get_one_exists_form_parts():
 
 
 @editor_blueprint.route('/', methods=['get'])
+@auth.login_required
 def get_form_parts():
     form_parts = FormPart.query.all()
 
@@ -28,6 +40,7 @@ def get_form_parts():
 
 
 @editor_blueprint.route('/<int:part_id>', methods=['get'])
+@auth.login_required
 def edit_part_page(part_id):
     form_part = FormPart.query.get(part_id)
 
@@ -35,11 +48,13 @@ def edit_part_page(part_id):
 
 
 @editor_blueprint.route('/create/', methods=['get'])
+@auth.login_required
 def create_part_page():
     return render_template('questionnaire.html')
 
 
 @editor_blueprint.route('/create', methods=['post'])
+@auth.login_required
 def save_part_page():
     data = request.json
     form_part = FormPart()
@@ -56,6 +71,7 @@ def save_part_page():
 
 
 @editor_blueprint.route('/<int:part_id>', methods=['post'])
+@auth.login_required
 def update_and_save_part_page(part_id):
     data = request.json
     form_part = FormPart.query.get(part_id)
@@ -71,6 +87,7 @@ def update_and_save_part_page(part_id):
 
 
 @editor_blueprint.route("/delete/<int:part_id>", methods=["delete"])
+@auth.login_required
 def delete_part_page(part_id):
     form_part = FormPart.query.get(part_id)
     db.session.delete(form_part)
@@ -79,4 +96,3 @@ def delete_part_page(part_id):
     return jsonify({
         "state": "ok"
     })
-

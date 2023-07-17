@@ -45,6 +45,11 @@
     </style>
     <title>Редактор анкет</title>
 
+    <script>
+        window.FORM = JSON.parse('{{ form_json | safe }}')
+        console.log(window.FORM)
+    </script>
+
 </head>
 
 <body>
@@ -55,7 +60,7 @@
         <div class="title">
                 <a href="#" class="navbar-brand">Редактор анкет</a>
         </div>
-        <div class="d-flex" bis_skin_checked="1"><a href="/editor">
+        <div class="d-flex"><a href="/editor">
             <button class="btn btn-secondary btn-sm">Назад</button>
         </a></div>
     </div>
@@ -146,7 +151,7 @@
                             <option value="text">Текст</option>
                             <option value="date">Дата</option>
                             <option value="checkbox">Галочка</option>
-                            <option value="enum">Выбор варианта</option>
+                            <option value="radio">Выбор варианта</option>
                         </select>
                     </div>
                 </div>
@@ -180,7 +185,7 @@
                     </div>
                 </template>
 
-                <template v-if="question.type=='enum'">
+                <template v-if="question.type=='radio'">
                     <!-- <hr> -->
                     <div class="row">
                         <h6 class="bold-text">Варианты:</h6>
@@ -303,7 +308,7 @@ const questionsApp = Vue.createApp({
                 this.questions[i].variants = [{"text": "","value": ""},{"text": "","value": ""}]
                 this.questions[i].checker = {"true": "","false": ""}
 
-                if(this.questions[i].type == 'enum'){
+                if(this.questions[i].type == 'radio'){
                     let iter = 0
                     for(j in this.questions[i].params.options){
                         if(iter >= this.questions[i].variants.length){
@@ -367,7 +372,7 @@ const questionsApp = Vue.createApp({
         save(){
             let result_questions = []
             for(question_number in this.questions){
-                if(this.questions[question_number].type == 'enum'){
+                if(this.questions[question_number].type == 'radio'){
                     for(variant_number in this.questions[question_number].variants){
                         variant = this.questions[question_number].variants[variant_number]
                         if(variant.value != ""){
