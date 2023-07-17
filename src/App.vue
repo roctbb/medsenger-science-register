@@ -32,12 +32,6 @@
                 <div v-show="screen==='fill-form'">
                     <form-screen/>
                 </div>
-                <div v-show="screen==='editor-all'">
-                    <editor-all-screen/>
-                </div>
-                <div v-show="screen==='editor'">
-                    <editor-screen/>
-                </div>
             </div>
         </div>
     </div>
@@ -53,8 +47,6 @@ import ProjectPatientsScreen from "@/components/ProjectPatientsScreen.vue";
 import AddPatientScreen from "@/components/AddPatientScreen.vue";
 import PatientScreen from "@/components/PatientScreen.vue";
 import FormScreen from "@/components/FormScreen.vue";
-import EditorScreen_All from "@/components/EditorScreen_All.vue"
-import EditorScreen from "@/components/EditorScreen.vue"
 
 export default {
     name: 'App',
@@ -65,8 +57,6 @@ export default {
         ProjectsScreen,
         ProjectPatientsScreen,
         AddPatientScreen,
-        EditorScreen_All,
-        EditorScreen
     },
     data() {
         return {
