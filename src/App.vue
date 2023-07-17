@@ -89,7 +89,7 @@ export default {
         screenChanged: function (screen) {
             console.log("new state:", screen)
             this.screen = screen
-            if(screen=="editor-all" || screen == "editor"){  // Для каждой страницы можно настроить свой заголовок
+            if(screen=="editor-all" || screen == "editor"){
                 this.title = "Редактор анкет"
             }
             else{
