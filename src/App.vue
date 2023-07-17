@@ -2,7 +2,7 @@
     <div>
         <nav class="navbar bg-body-tertiary">
             <div class="container">
-                <a class="navbar-brand" href="#">Регистр пациентов</a>
+                <a class="navbar-brand" href="#">{{title}}</a>
 
                 <div class="d-flex" v-if="screen!=='login'">
                     <button @click="logOut()" class="btn btn-secondary btn-sm">Выход</button>
@@ -32,6 +32,12 @@
                 <div v-show="screen==='fill-form'">
                     <form-screen/>
                 </div>
+                <div v-show="screen==='editor-all'">
+                    <editor-all-screen/>
+                </div>
+                <div v-show="screen==='editor'">
+                    <editor-screen/>
+                </div>
             </div>
         </div>
     </div>
@@ -47,6 +53,8 @@ import ProjectPatientsScreen from "@/components/ProjectPatientsScreen.vue";
 import AddPatientScreen from "@/components/AddPatientScreen.vue";
 import PatientScreen from "@/components/PatientScreen.vue";
 import FormScreen from "@/components/FormScreen.vue";
+import EditorAllScreen from "@/components/EditorAllScreen.vue"
+import EditorScreen from "@/components/EditorScreen.vue"
 
 export default {
     name: 'App',
@@ -56,12 +64,15 @@ export default {
         LoginScreen,
         ProjectsScreen,
         ProjectPatientsScreen,
-        AddPatientScreen
+        AddPatientScreen,
+        EditorAllScreen,
+        EditorScreen
     },
     data() {
         return {
             screen: "login",
-            isLoaded: false
+            isLoaded: false,
+            title: "Регистр пациентов"
         }
     },
     methods: {
@@ -78,6 +89,12 @@ export default {
         screenChanged: function (screen) {
             console.log("new state:", screen)
             this.screen = screen
+            if(screen=="editor-all" || screen == "editor"){
+                this.title = "Редактор анкет"
+            }
+            else{
+                this.title = "Регистр пациентов"
+            }
         },
         stateLoaded: function () {
             this.isLoaded = true

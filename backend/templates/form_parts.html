@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        .hover-card:hover{
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.2s;
+        }
+        .hover-danger-href:hover{
+            color: red;
+            transition: 0.2s
+        }
+    </style>
+    <title>Выбор анкеты</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <nav class="navbar bg-body-tertiary" style="padding: 15px;">
+        <div class="container">
+            <div class="title">
+                <a href="#" class="navbar-brand">Просмотр анкет</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="main">
+        <div class="hstack gap-3">
+            <div class="me-auto"><h4 class="my-3">Вы можете выбрать анкету для редактирования или создать новую</h4></div>
+            <div bis_skin_checked="1">
+                <a href="create">
+                    <button class="btn btn-sm btn-primary">Создать</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="row my-2">
+            <div class="col"><input type="text" placeholder="Поиск по названию или id..." class="form-control" v-model="search"></div>
+        </div>
+
+        <div class="row py-2">
+            {% for part in parts %}
+                <div class="col-sm-6 col-md-6 col-lg-4 mb-3" v-if="search != none && ('{{ part.name }}'.toLowerCase().indexOf(search.toLowerCase()) != -1 || '{{ part.id }}'.toLowerCase().indexOf(search.toLowerCase()) != -1) ">
+                    <div class="card hover-card">
+                        <div class="card-body">
+                            <a href="{{ part.id }}" style="text-decoration: none; color: black">
+                                <h5 class="card-title mt-1 mb-3">{{ part.name }}</h5>
+                                <p class="my-0 font-monospace" style="color: darkgrey; font-size: 9pt">
+                                    id: {{ part.id }}
+                                </p>
+                            </a>
+                            <div class="mt-2">
+                                <a href="javascript:if(confirm('Вы уверены, что хотите удалить анкету &#34;{{ part.name }}&#34;?')){window.location.href='delete/{{ part.id }}'}" class="hover-danger-href" style="font-size: 8pt; text-decoration: none">
+                                    Удалить
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        Vue.createApp({
+            data(){
+                return{
+                    search: ""
+                }
+            }
+        }).mount("#main")
+    </script>
+</body>
+</html>
