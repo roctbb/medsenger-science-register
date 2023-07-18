@@ -1,16 +1,14 @@
 import Manager from "@/managers/common";
+import User from "@/models/User";
 
 class AuthManager extends Manager {
     async makeLogin(login, password) {
-        this.state.user = await this.api.account.login(login, password)
-        this.eventbus.emit('change-screen', 'projects')
+        this.state.user = new User(await this.api.account.login(login, password))
     }
 
     logout() {
         this.state.clear()
-        this.eventbus.emit('change-screen', 'login')
     }
-
 }
 
 export default AuthManager

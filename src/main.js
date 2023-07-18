@@ -8,6 +8,7 @@ import {faPen} from '@fortawesome/free-solid-svg-icons'
 import App from './App.vue'
 import helpersPlugin from "@/plugins/helpers";
 import applicationPlugin from "@/plugins/application";
+import router from '@/router'
 
 library.add(faCircleXmark, faPen)
 
@@ -15,6 +16,7 @@ const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(helpersPlugin)
 app.use(applicationPlugin)
+app.use(router)
 
 app.mount('#app')
 

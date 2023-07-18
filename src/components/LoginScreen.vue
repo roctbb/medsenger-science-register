@@ -36,7 +36,10 @@ export default {
         makeLogin: async function (e) {
             e.preventDefault();
             try {
+                this.error = undefined
                 await this.managers.auth.makeLogin(this.email, this.password)
+                console.log("pushing projects route")
+                this.$router.push({name: 'projects'})
             } catch (e) {
                 this.error = e.message
             }

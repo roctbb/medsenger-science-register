@@ -5,7 +5,7 @@
                 <h4 class="my-3">Список пациентов в проекте "{{ project.name }}"</h4>
             </div>
             <div>
-                <button @click="addPatient" class="btn btn-sm btn-primary">Добавить</button>
+                <button @click="$router.push({name: 'create_patient', params: {project_id: project.id}})" class="btn btn-sm btn-primary">Добавить</button>
             </div>
         </div>
 
@@ -21,15 +21,15 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="hstack">
-                            <div class="me-auto" @click="openPatient(patient)">
+                            <div class="me-auto" @click="$router.push({name: 'patient', params: {project_id: project.id, id: patient.id}})">
                                 <h5 class="card-title my-1">{{ patient.name }}</h5>
                             </div>
-                            <div @click="editPatient(patient)">
+                            <div  @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: patient.id}})">
                                 <font-awesome-icon :icon="['fas', 'pen']"/>
                             </div>
                         </div>
 
-                        <p class="text-muted my-0">{{ formatDate(patient.birthday) }}</p>
+                        <p class="text-muted my-0">{{ patient.readable_birthday }}</p>
                     </div>
                 </div>
             </div>
@@ -44,12 +44,13 @@ import {empty, formatDate} from "../utils/helpers";
 
 export default {
     name: 'ProjectPatientsScreen',
+    props: ['id'],
     components: {},
     data() {
         return {
-            project: undefined,
-            patients: [],
-            searchField: ''
+            searchField: '',
+            patients: undefined,
+            project: undefined
         }
     },
     computed: {
@@ -59,40 +60,13 @@ export default {
     },
     methods: {
         formatDate,
-        openPatient: function (patient) {
-            this.managers.project.openPatientPage(patient)
-        },
-        loadPatients: async function (project) {
-            this.project = project
-            this.patients = await this.managers.project.getPatients(project)
-            this.sortPatients()
-        },
-        addPatient: function () {
-            this.managers.project.addPatientPage()
-        },
-        editPatient: function (patient) {
-            this.managers.project.editPatientPage(patient)
-        },
         sortPatients: function () {
             this.patients.sort((a, b) => a.name.localeCompare(b.name))
         }
-
     },
-    mounted() {
-        this.event_bus.on('project-selected', this.loadPatients);
-        this.event_bus.on('new-patient', (patient) => {
-            this.patients.push(patient)
-            this.sortPatients()
-        });
-
-        this.event_bus.on('patient-updated', (updated_patient) => {
-            this.patients.forEach((patient, i) => {
-                if (patient.id === updated_patient.id) {
-                    this.patients[i] = updated_patient
-                }
-            });
-            this.sortPatients()
-        });
+    async mounted() {
+        this.project = this.state.user.projects.find(project => { console.log(project); return project.id === parseInt(this.id)})
+        this.patients = await this.project.patients
     }
 }
 </script>

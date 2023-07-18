@@ -7,7 +7,8 @@
             <div>
                 <a target="_blank" class="btn btn-sm btn-success" v-if="patient.contract_id"
                    :href="medsenger_host + '/client#/?c=' + patient.contract_id">Medsenger</a>
-                <a class="btn btn-sm btn-success mx-1" @click="editPatient(patient)">Изменить</a>
+                <a class="btn btn-sm btn-success mx-1"
+                   @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: this.patient.id}})">Изменить</a>
                 <div class="dropdown d-inline">
                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -15,7 +16,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li v-for="form in project.forms" v-bind:key="form.id"><a class="dropdown-item"
-                                                                                  href="#" @click="fillForm(form)">{{
+                                                                                  @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
                                 form.name
                             }}</a></li>
                     </ul>
@@ -23,21 +24,21 @@
             </div>
         </div>
 
-        <p class="text-muted">{{ formatDate(patient.birthday) }}</p>
+        <p class="text-muted">{{ patient.readable_birthday }}</p>
 
         <div class="row py-2" v-if="submissions">
             <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="submission in submissions"
                  v-bind:key="submission.id">
-                <div class="card" @click="openSubmission(submission)">
+                <div class="card" @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
                     <div class="card-body">
                         <h5 class="card-title">{{ findForm(submission.form_id).name }}</h5>
-                        <p class="text-muted my-0">{{ formatDateTime(submission.created_on) }}</p>
+                        <p class="text-muted my-0">{{ submission.readable_created_on }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <button @click="back()" class="btn btn-warning">Назад</button>
+        <button @click="$router.back()" class="btn btn-warning">Назад</button>
     </div>
 </template>
 
@@ -47,6 +48,7 @@ import {formatDate, formatDateTime} from "../utils/helpers";
 
 export default {
     name: 'PatientScreen',
+    props: ['project_id', 'id'],
     components: {},
     data() {
         return {
@@ -59,41 +61,18 @@ export default {
     methods: {
         formatDateTime,
         formatDate,
-        back: function () {
-            this.managers.project.open(this.project)
-        },
-        fillForm(form) {
-            this.managers.submission.openFillPage(form)
-        },
-        findForm(form_id) {
-            return this.project.forms.filter((form) => form_id === form.id)[0]
-        },
-        openSubmission(submission) {
-            this.managers.submission.openSubmissionPage(this.findForm(submission.form_id), submission)
-        },
-        editPatient: function (patient) {
-            this.managers.project.editPatientPage(patient)
+        findForm(id) {
+            return this.project.forms.find(form => form.id === id)
         }
     },
-    mounted() {
-        this.event_bus.on('project-selected', (project) => {
-            this.project = project
-        });
+    async mounted() {
+        this.project = this.state.user.projects.find(project => {
+            console.log(project);
+            return project.id === parseInt(this.project_id)
+        })
 
-        this.event_bus.on('change-screen', async (screen) => {
-            if (screen === 'patient') {
-                this.submissions = await this.managers.submission.getAll(this.project, this.patient)
-            }
-        });
-
-        this.event_bus.on('patient-selected', async (patient) => {
-            this.patient = patient
-        });
-
-        this.event_bus.on('submission-added', async (submission) => {
-            this.submissions.push(submission)
-        });
-
+        this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
+        this.submissions = await this.patient.submissions
     }
 }
 </script>

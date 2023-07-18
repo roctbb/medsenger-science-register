@@ -1,55 +1,57 @@
 import Manager from "@/managers/common";
-import User from "@/models/user";
+import User from "@/models/User";
 
 class StateManager extends Manager {
 
     constructor(state, bus, api) {
         super(state, bus, api);
-        this.load().then(() => {
-            console.log("State is loaded")
-            this.eventbus.emit('state-load-done')
-        })
-    }
 
-    get user() {
-        return this.state.user
-    }
-
-    set user(user_description) {
-        if (user_description.api_token && user_description.api_token !== this.state.token) {
-            this.state.token = user_description.api_token
-            this.api.setToken(this.state.token)
-            this.save()
-        } else {
-            user_description.api_token = this.state.token
-        }
-
-        this.state.user = new User(user_description)
+        this._state = state
+        this.loaded = false;
     }
 
     async load() {
-        this.state.token = localStorage.getItem('register_token')
+        this._state.api_token = localStorage.getItem('register_token')
 
-        console.log("Token:", this.state.token)
+        console.log("Token:", this._state.api_token)
 
-        if (this.state.token) {
+        if (this._state.api_token) {
             try {
-                this.api.setToken(this.state.token)
-                this.user = await this.api.account.get()
-                this.eventbus.emit('change-screen', 'projects')
+                this.api.setToken(this._state.api_token)
+                this._state.user = new User(await this.api.account.get())
             } catch (e) {
+                console.log("Token is not valid")
                 console.log(e)
-                this.eventbus.emit('change-screen', 'login')
             }
         }
+
+        console.log("Loaded")
+        this.loaded = true
     }
 
     save() {
-        localStorage.setItem('register_token', this.state.token)
+        localStorage.setItem('register_token', this._state.api_token)
     }
 
     clear() {
+        this._state.user = undefined
         localStorage.clear()
+    }
+
+    get user() {
+        return this._state.user
+    }
+
+    set user(user) {
+        console.log("setting user to ", user)
+
+        if (user.api_token) {
+            this._state.api_token = user.api_token
+            this.api.setToken(this._state.api_token)
+            this.save()
+        }
+
+        this._state.user = user
     }
 }
 

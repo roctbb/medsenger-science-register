@@ -1,16 +1,6 @@
 import Manager from "@/managers/common";
 
 class SubmissionManager extends Manager {
-    openFillPage(form) {
-        this.eventbus.emit('change-screen', 'fill-form')
-        this.eventbus.emit('form-selected', form)
-    }
-
-    openSubmissionPage(form, submission) {
-        this.eventbus.emit('change-screen', 'fill-form')
-        this.eventbus.emit('form-selected', form)
-        this.eventbus.emit('submission-selected', submission)
-    }
 
     async getAll(project, patient) {
         return await this.api.submission.getAll(project.id, patient.id)

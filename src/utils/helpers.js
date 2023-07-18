@@ -8,12 +8,13 @@ const external_url = (path) => {
 
 const formatDate = (isodate) => {
     let d = new Date(isodate)
+    console.log(d)
     return d.getDate() + "." + ('0' + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear()
 }
 
 const formatDateTime = (isodate) => {
     let d = new Date(isodate)
-    return d.getDate() + "." + ('0' + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes()
+    return d.getDate() + "." + ('0' + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear() + " " + d.getHours() + ":" + ('0' + d.getMinutes()).slice(-2)
 }
 
 

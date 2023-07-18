@@ -25,6 +25,7 @@ class User(db.Model):
 
         if self.clinic:
             info["clinic"] = self.clinic.as_dict()
+            info["projects"] = as_dict(self.clinic.projects)
 
         return info
 

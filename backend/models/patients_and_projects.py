@@ -78,5 +78,4 @@ class Clinic(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "projects": as_dict(self.projects)
         }

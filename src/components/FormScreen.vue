@@ -15,29 +15,29 @@
                 <h5 class="card-title">{{ part.name }}</h5>
 
                 <div v-for="field in part.fields" v-bind:key="field.id">
-                    <div class="row mb-3" v-if="!field.show_if || answers[field.show_if]">
+                    <div class="row mb-3" v-if="!field.show_if || submission.answers[field.show_if]">
                         <label class="col-sm-4 col-form-label" :class="{ required: field.required }">{{
                                 field.text
                             }}</label>
                         <div class="col-sm-8">
                             <input v-if="field.type === 'string'" type="text" class="form-control"
-                                   v-model="answers[field.id]"
+                                   v-model="submission.answers[field.id]"
                                    v-bind:required="field.required" v-bind:disabled="disabled">
 
                             <input v-if="field.type === 'integer'" type="number" step="1" class="form-control"
-                                   v-model="answers[field.id]"
+                                   v-model="submission.answers[field.id]"
                                    v-bind:required="field.required" v-bind:disabled="disabled">
 
                             <input v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
-                                   v-model="answers[field.id]"
+                                   v-model="submission.answers[field.id]"
                                    v-bind:required="field.required" v-bind:disabled="disabled">
 
-                            <textarea v-if="field.type === 'text'" class="form-control" v-model="answers[field.id]"
+                            <textarea v-if="field.type === 'text'" class="form-control" v-model="submission.answers[field.id]"
                                       v-bind:required="field.required" v-bind:disabled="disabled"></textarea>
 
 
                             <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
-                                           v-model="answers[field.id]"
+                                           v-model="submission.answers[field.id]"
                                            input-class-name="form-control" text-input
                                            :enable-time-picker="false" locale="ru-RU" format="dd.MM.yyyy"
                                            select-text="Выбрать" cancel-text="Закрыть" v-bind:required="field.required"
@@ -48,7 +48,7 @@
                                      v-bind:key='option'
                                      class="form-check">
                                     <input class="form-check-input" type="radio"
-                                           :value="value" v-model="answers[field.id]" v-bind:disabled="disabled">
+                                           :value="value" v-model="submission.answers[field.id]" v-bind:disabled="disabled">
                                     <label class="form-check-label">
                                         {{ option }}
                                     </label>
@@ -56,7 +56,7 @@
                             </div>
 
                             <div class="form-check" v-if="field.type === 'checkbox'">
-                                <input class="form-check-input" type="checkbox" v-model="answers[field.id]"
+                                <input class="form-check-input" type="checkbox" v-model="submission.answers[field.id]"
                                        v-bind:disabled="disabled">
                             </div>
 
@@ -81,10 +81,12 @@
 
 import VueDatePicker from "@vuepic/vue-datepicker";
 import {formatDateTime} from "../utils/helpers";
+import Submission from "@/models/Submission";
 
 export default {
     name: 'FormScreen',
     components: {VueDatePicker},
+    props: ['project_id', 'patient_id', 'form_id', 'submission_id'],
     data() {
         return {
             project: undefined,
@@ -92,30 +94,25 @@ export default {
             form: undefined,
             answers: {},
             error: "",
-            disabled: false,
             submission: undefined
         }
     },
     methods: {
         formatDateTime,
         back: function () {
-            this.clear()
-            this.managers.project.backToPatientPage()
+            this.$router.back()
         },
         save: async function () {
             try {
-                await this.managers.submission.add(this.project, this.patient, this.form, this.answers)
-                this.clear()
+                await this.submission.save()
+                let submissions = (await this.patient.submissions)
+                submissions.push(this.submission)
                 this.back()
             } catch (e) {
                 this.error = e.message
             }
         },
-        clear: function () {
-            this.answers = {}
-            this.disabled = false
-            this.submission = undefined
-        },
+
         getInputType: function (field) {
             if (field.type === 'string') {
                 return 'text'
@@ -128,26 +125,26 @@ export default {
             }
         }
     },
-    mounted() {
-        this.event_bus.on('project-selected', (project) => {
-            this.project = project
-        });
+    computed: {
+        disabled: function () {
+            return this.submission_id
+        }
+    },
+    async mounted() {
+        this.project = this.state.user.projects.find(project => {
+            return project.id === parseInt(this.project_id)
+        })
 
-        this.event_bus.on('patient-selected', (patient) => {
-            this.patient = patient
-        });
+        this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.patient_id))
 
-        this.event_bus.on('form-selected', (form) => {
-            this.form = form
-        });
+        if (this.submission_id) {
+            this.submission = (await this.patient.submissions).find(submission => submission.id === parseInt(this.submission_id))
+            this.form = this.project.forms.find(form => form.id === this.submission.form_id)
+        } else if (this.form_id) {
+            this.form = this.project.forms.find(form => form.id === parseInt(this.form_id))
+            this.submission = Submission.create(this.project_id, this.patient_id, this.form_id)
+        }
 
-        this.event_bus.on('submission-selected', (submission) => {
-            submission.records.forEach((record) => {
-                this.answers[record.params.question_id] = record.value
-            })
-            this.disabled = true
-            this.submission = submission
-        });
     }
 }
 </script>

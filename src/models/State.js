@@ -1,7 +1,7 @@
 class ApplicationState {
     constructor() {
         this.user = undefined
-        this.token = undefined
+        this.api_token = undefined
     }
 }
 
