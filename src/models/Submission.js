@@ -15,6 +15,7 @@ class Submission extends Model {
         this.form_id = description.form_id
         this.answers = description.answers
         this.records = description.records
+        this.author = description.author
         this.created_on = description.created_on
 
         if (!this.answers) {

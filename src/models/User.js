@@ -1,5 +1,6 @@
 import Model from "@/models/Model";
 import Project from "@/models/Project";
+import {empty} from "@/utils/helpers";
 
 class User extends Model {
     constructor(description) {
@@ -7,6 +8,7 @@ class User extends Model {
 
         this.init(description)
     }
+
     init(description) {
         super.init(description)
 
@@ -14,7 +16,15 @@ class User extends Model {
         this.name = description.name
         this.api_token = description.api_token
         this.clinic = description.clinic
+        this.specialties = description.specialties
         this.projects = description.projects.map(project => new Project(project))
+    }
+
+    is(specialty) {
+        if (empty(this.specialties)) {
+            return false
+        }
+        return this.specialties.includes(specialty)
     }
 }
 

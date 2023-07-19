@@ -15,12 +15,16 @@ class User(db.Model):
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
     auth_tokens = db.relationship('UserToken', backref=backref('user', uselist=False, lazy=False), lazy=True)
+    specialties = db.Column(db.JSON, nullable=True)
+
+    submissions = db.relationship('FormSubmission', backref=backref('doctor', uselist=False), lazy=False)
 
     def as_dict(self):
         info = {
             "id": self.id,
             "name": self.name,
-            "email": self.email
+            "email": self.email,
+            "specialties": self.specialties
         }
 
         if self.clinic:
@@ -34,6 +38,7 @@ class UserToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
     token = db.Column(db.String(256), nullable=False)
+
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     expire_on = db.Column(db.DateTime, nullable=True)

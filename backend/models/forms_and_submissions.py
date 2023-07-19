@@ -23,13 +23,15 @@ class Form(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('project.id', ondelete="CASCADE"), nullable=True)
     parts = db.relationship('FormPart', secondary=form_form_part, backref='forms', lazy=False)
     submissions = db.relationship('FormSubmission', backref=backref('form', uselist=False), lazy=True)
+    specialty = db.Column(db.String(256), nullable=True)
 
     def as_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "parts": as_dict(self.parts)
+            "parts": as_dict(self.parts),
+            "specialty": self.specialty
         }
 
 
@@ -52,5 +54,6 @@ class FormSubmission(db.Model):
             "id": self.id,
             "form_id": self.form_id,
             "records": as_dict(self.records),
-            "created_on": self.created_on.isoformat()
+            "created_on": self.created_on.isoformat(),
+            "author": self.doctor.name if self.doctor else None
         }

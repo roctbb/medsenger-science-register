@@ -4,14 +4,14 @@ from backend.helpers import *
 
 
 @transaction
-def create_user(email, password, name, clinic):
+def create_user(email, password, name, clinic, specialties=()):
     if not email or not password or not name or not clinic:
         raise InsufficientData
 
     if find_user_by_email(email):
         raise AlreadyExists
 
-    user = User(email=email, password=hash(password), name=name, clinic_id=clinic.id)
+    user = User(email=email, password=hash(password), name=name, clinic_id=clinic.id, specialties=specialties)
     db.session.add(user)
 
     return user

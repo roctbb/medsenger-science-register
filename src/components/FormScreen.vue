@@ -2,7 +2,7 @@
     <div v-if="project && patient && form">
 
         <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
-            v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }})</small></h4>
+            v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }} / {{ this.submission.author }})</small></h4>
 
         <p>{{ form.description }}</p>
 

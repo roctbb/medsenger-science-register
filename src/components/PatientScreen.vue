@@ -15,8 +15,8 @@
                         Добавить анкету
                     </button>
                     <ul class="dropdown-menu">
-                        <li v-for="form in project.forms" v-bind:key="form.id"><a class="dropdown-item"
-                                                                                  @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
+                        <li v-for="form in available_forms" v-bind:key="form.id"><a class="dropdown-item"
+                                                                                    @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
                                 form.name
                             }}</a></li>
                     </ul>
@@ -29,10 +29,12 @@
         <div class="row py-2" v-if="submissions">
             <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="submission in submissions"
                  v-bind:key="submission.id">
-                <div class="card" @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
+                <div class="card"
+                     @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
                     <div class="card-body">
                         <h5 class="card-title">{{ findForm(submission.form_id).name }}</h5>
-                        <p class="text-muted my-0">{{ submission.readable_created_on }}</p>
+                        <small class="text-muted my-0">{{ submission.readable_created_on }}</small><br>
+                        <small class="text-muted my-0">{{ submission.author }}</small>
                     </div>
                 </div>
             </div>
@@ -63,6 +65,11 @@ export default {
         formatDate,
         findForm(id) {
             return this.project.forms.find(form => form.id === id)
+        }
+    },
+    computed: {
+        available_forms: function () {
+            return this.project.forms.filter(form => !form.specialty || this.state.user.is(form.specialty))
         }
     },
     async mounted() {
