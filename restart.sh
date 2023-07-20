@@ -1,2 +1,2 @@
-supervisorctl restart science-register
+supervisorctl restart telegynecology-register
 npm run build
