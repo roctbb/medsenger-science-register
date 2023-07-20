@@ -23,14 +23,6 @@ def get_form_parts():
     return render_template('form_parts.html', parts=form_parts)
 
 
-@editor_blueprint.route('/<int:part_id>', methods=['get'])
-@auth.login_required
-def edit_part_page(part_id):
-    form_part = FormPart.query.get(part_id)
-
-    return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()))
-
-
 @editor_blueprint.route('/create', methods=['get'])
 @auth.login_required
 def create_part_page():
@@ -54,7 +46,14 @@ def save_part_page():
     })
 
 
-@editor_blueprint.route('/<int:part_id>', methods=['post'])
+@editor_blueprint.route('/parts/<int:part_id>', methods=['get'])
+@auth.login_required
+def edit_part_page(part_id):
+    form_part = FormPart.query.get(part_id)
+
+    return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()))
+
+@editor_blueprint.route('/parts/<int:part_id>', methods=['post'])
 @auth.login_required
 def update_and_save_part_page(part_id):
     data = request.json

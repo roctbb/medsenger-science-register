@@ -23,9 +23,7 @@
         <div class="hstack gap-3">
             <div class="me-auto"><h4 class="my-3">Вы можете выбрать анкету для редактирования или создать новую</h4></div>
             <div>
-                <a href="create">
-                    <button class="btn btn-sm btn-primary">Создать</button>
-                </a>
+                <a href="/editor/create" class="btn btn-sm btn-primary">Создать</a>
             </div>
         </div>
 
@@ -34,7 +32,7 @@
                 <div class="col-sm-6 col-md-6 col-lg-4 mb-3">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ part.id }}" style="text-decoration: none; color: black">
+                            <a href="/editor/parts/{{ part.id }}" style="text-decoration: none; color: black">
                                 <h5 class="card-title mt-1 mb-3">{{ part.name }}</h5>
                                 <small class="my-0 text-muted">
                                     id: {{ part.id }}
