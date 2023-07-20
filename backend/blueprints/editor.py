@@ -15,22 +15,6 @@ def verify_password(username, password):
         return username
 
 
-@editor_blueprint.route('/get_data/<int:part_id>', methods=["get"])
-@auth.login_required
-def get_one_exist_form_part(part_id):
-    form_part = FormPart.query.get(part_id)
-
-    return form_part.as_dict()
-
-
-@editor_blueprint.route('/get_data', methods=["get"])
-@auth.login_required
-def get_one_exists_form_parts():
-    form_parts = FormPart.query.all()
-
-    return json.dumps(as_dict(form_parts))
-
-
 @editor_blueprint.route('/', methods=['get'])
 @auth.login_required
 def get_form_parts():
@@ -47,7 +31,7 @@ def edit_part_page(part_id):
     return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()))
 
 
-@editor_blueprint.route('/create/', methods=['get'])
+@editor_blueprint.route('/create', methods=['get'])
 @auth.login_required
 def create_part_page():
     return render_template('questionnaire.html')
