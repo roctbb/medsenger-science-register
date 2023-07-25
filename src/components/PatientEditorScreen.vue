@@ -109,6 +109,7 @@ export default {
         } else {
             this.patient = new Patient(this.project_id)
         }
+        console.log(process.env.VUE_APP_MAINHOST)
 
     }
 }
