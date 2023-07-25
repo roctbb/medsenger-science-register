@@ -71,7 +71,7 @@ export default {
             project: undefined,
             error: '',
             patient: undefined,
-            can_create_medsenger_contract: process.env.VUE_APP_MAINHOST
+            can_create_medsenger_contract: process.env.VUE_APP_MEDSENGER_CONTRACTS
         }
     },
     methods: {
