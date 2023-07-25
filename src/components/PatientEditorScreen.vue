@@ -29,7 +29,7 @@
                 </select>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3" v-if="can_create_medsenger_contract">
                 <div class="form-check form-switch">
                     <input class="form-check-input" role="switch" type="checkbox"
                            v-model="patient.medsenger_contract"
@@ -70,7 +70,8 @@ export default {
         return {
             project: undefined,
             error: '',
-            patient: undefined
+            patient: undefined,
+            can_create_medsenger_contract: process.env.VUE_APP_MAINHOST
         }
     },
     methods: {
