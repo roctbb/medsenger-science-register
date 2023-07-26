@@ -11,6 +11,7 @@ project_patient = db.Table('project_patient',
                            )
 
 form_form_part = db.Table('form_form_part',
-                      db.Column('form_id', db.Integer, db.ForeignKey('form.id', ondelete="CASCADE")),
-                      db.Column('part_id', db.Integer, db.ForeignKey('form_part.id', ondelete="CASCADE"))
-                      )
+                          db.Column('form_id', db.Integer, db.ForeignKey('form.id', ondelete="CASCADE")),
+                          db.Column('part_id', db.Integer, db.ForeignKey('form_part.id', ondelete="CASCADE")),
+                          db.Column('index', db.Integer, nullable=True)
+                          )
