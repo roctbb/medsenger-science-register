@@ -21,7 +21,7 @@ class Form(db.Model):
     description = db.Column(db.Text, nullable=True)
 
     project_id = db.Column(db.Integer, db.ForeignKey('project.id', ondelete="CASCADE"), nullable=True)
-    parts = db.relationship('FormPart', secondary=form_form_part, backref='forms', lazy=False)
+    parts = db.relationship('FormPart', secondary=form_form_part, order_by=form_form_part.c.index, backref='forms', lazy=False)
     submissions = db.relationship('FormSubmission', backref=backref('form', uselist=False), lazy=True)
     specialty = db.Column(db.String(256), nullable=True)
 
