@@ -163,6 +163,15 @@
                     </div>
                 </div>
 
+                <div class="row my-2">
+                    <div class="col-md-4 col-form-label text">
+                        Параметры (JSON)
+                    </div>
+                    <div class="col-md-8 col-form-label">
+                        <textarea class="form-control" rows="3" v-model="question.str_params"></textarea>
+                    </div>
+                </div>
+
                 <template v-if="question.type=='checkbox'">
                     <!-- <hr> -->
                     <div class="row my-2">
@@ -303,6 +312,10 @@ const questionsApp = Vue.createApp({
         if(this.questions.length > 0){
             this.is_edit = true
             for(let i = 0; i<this.questions.length; i++){
+                let tmp_params = Object.assign({}, this.questions[i].params)
+                if (tmp_params.options) delete tmp_params.options
+                this.questions[i].str_params = JSON.stringify(tmp_params)
+
                 this.questions[i].variants = [{"text": "","value": ""},{"text": "","value": ""}]
                 this.questions[i].checker = {"true": "","false": ""}
 
@@ -370,6 +383,14 @@ const questionsApp = Vue.createApp({
         save(){
             let result_questions = []
             for(question_number in this.questions){
+                if (this.questions[question_number].str_params) {
+                    if (this.questions[question_number].params)
+                        this.questions[question_number].params = Object.assign(this.questions[question_number].params, JSON.parse(this.questions[question_number].str_params))
+                    else
+                        this.questions[question_number].params = JSON.parse(this.questions[question_number].str_params)
+
+                    delete this.questions[question_number].str_params
+                }
                 if(this.questions[question_number].type == 'radio'){
                     for(variant_number in this.questions[question_number].variants){
                         variant = this.questions[question_number].variants[variant_number]
