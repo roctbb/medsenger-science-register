@@ -13,7 +13,7 @@
         </div>
 
         <div v-for="part in form.parts" v-bind:key="part.id">
-            <div class="card mb-3" v-if="part.repeatable">
+            <div class="card mb-3" v-if="part.repeatable && !disabled">
                 <div class="card-body">
                     <div class="hstack gap-3">
                         <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
@@ -29,7 +29,7 @@
                     <div class="hstack gap-3 mb-3">
                         <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
                         <div class="ms-auto"></div>
-                        <div v-if="part.repeatable">
+                        <div v-if="part.repeatable && !disabled">
                             <button class="btn btn-warning btn-sm" @click="submission.remove(part, group_key)">Удалить
                             </button>
                         </div>
