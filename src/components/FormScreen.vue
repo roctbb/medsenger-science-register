@@ -13,22 +13,22 @@
         </div>
 
         <div v-for="part in form.parts" v-bind:key="part.id">
-            <div class="card mb-3" v-if="part.repeatable && !disabled">
+            <div class="card mb-2" v-if="part.repeatable && !disabled">
                 <div class="card-body">
                     <div class="hstack gap-3">
                         <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
                         <div class="text-muted"><small>{{ part.description}}</small></div>
                         <div class="ms-auto">
-                            <button class="btn btn-info btn-sm" @click="submission.extend(part)">Добавить</button>
+                            <button class="btn btn-primary btn-sm" @click="submission.extend(part)">Добавить</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card mb-3" v-for="(group, group_key) in submission.answers[part.id]" v-bind:key="group_key">
+            <div class="card" :class="{'my-3': !part.repeatable, 'mb-2 bg-light': part.repeatable }" v-for="(group, group_key) in submission.answers[part.id]" v-bind:key="group_key">
                 <div class="card-body">
                     <div class="hstack gap-3 mb-3">
-                        <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
+                        <div><h6 v-if="part.repeatable" class="card-title my-0">{{ part.name }}</h6><h5 v-else class="card-title my-0">{{ part.name }}</h5></div>
                         <div><small v-if="!part.repeatable" class="text-muted">{{ part.description}}</small></div>
                         <div class="ms-auto" v-if="part.repeatable && !disabled">
                             <button class="btn btn-warning btn-sm" @click="submission.remove(part, group_key)">Удалить
@@ -101,6 +101,8 @@
                     </div>
                 </div>
             </div>
+
+            <hr style="border-top: dotted 1px;" />
         </div>
 
     </div>
