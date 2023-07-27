@@ -218,7 +218,7 @@
                         </div>
                     </div>
 
-                    <div v-if="question.type === 'radio'" class="mb-3">
+                    <div v-if="question.type === 'radio' || question.type === 'select'" class="mb-3">
                         <!-- <hr> -->
                         <div class="row">
                             <h6 class="bold-text">Варианты:</h6>
@@ -332,7 +332,7 @@
                     this.questions[i].variants = [{"text": "", "value": ""}, {"text": "", "value": ""}]
                     this.questions[i].checker = {"true": "", "false": ""}
 
-                    if (this.questions[i].type === 'radio') {
+                    if (this.questions[i].type === 'radio' || this.questions[i].type === 'select') {
                         let iter = 0
                         for (j in this.questions[i].params.options) {
                             if (iter >= this.questions[i].variants.length) {
@@ -402,7 +402,7 @@
 
                         delete this.questions[question_number].str_params
                     }
-                    if (this.questions[question_number].type == 'radio') {
+                    if (this.questions[question_number].type === 'radio' || this.questions[question_number].type === 'select') {
                         for (variant_number in this.questions[question_number].variants) {
                             variant = this.questions[question_number].variants[variant_number]
                             if (variant.value != "") {

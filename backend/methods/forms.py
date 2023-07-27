@@ -1,3 +1,5 @@
+import json
+
 from backend.models import *
 from .exceptions import *
 from backend.helpers import *
@@ -73,11 +75,14 @@ def get_patient_submissions(project, patient):
 
 
 def validate_form(form, answers):
+    details = []
     for part in form.parts:
         for group_key, group in answers.get(str(part.id), {}).items():
             for field in part.fields:
                 if field.get('required') and field.get('id') not in group:
-                    raise InsufficientData(field.get('id'))
+                    details.append((part.id, group_key, field.get('id')))
+
+    raise InsufficientData(json.dumps(details))
 
 
 def find_form_by_id(form_id):

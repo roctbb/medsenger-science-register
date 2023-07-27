@@ -21,7 +21,20 @@ const copy = function (obj) {
     return JSON.parse(JSON.stringify(obj))
 }
 
+const searchForArray = function (haystack, needle) {
+    var i, j, current;
+    for (i = 0; i < haystack.length; ++i) {
+        if (needle.length === haystack[i].length) {
+            current = haystack[i];
+            for (j = 0; j < needle.length && needle[j] === current[j]; ++j) ;
+            if (j === needle.length)
+                return true;
+        }
+    }
+    return false;
+}
+
 
 const api_url = (action) => external_url('/api/client') + action
 
-export {empty, external_url, api_url, formatDate, formatDateTime, copy}
+export {searchForArray, empty, external_url, api_url, formatDate, formatDateTime, copy}
