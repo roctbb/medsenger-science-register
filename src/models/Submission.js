@@ -47,7 +47,17 @@ class Submission extends Model {
     }
 
     extend(part) {
-        this.answers[part.id][uuidv4()] = {}
+        const part_id = uuidv4()
+        this.answers[part.id][part_id] = {}
+        this.initPart(part, part_id)
+    }
+
+    initPart(part, part_id) {
+        part.fields.forEach(field => {
+            if (field.type === 'select' || field.type === 'radio') {
+                this.answers[part.id][part_id][field.id] = Object.values(field.params.options)[0]
+            }
+        })
     }
 
     static create(project_id, patient_id, form) {
@@ -62,7 +72,9 @@ class Submission extends Model {
             submission.answers[part.id] = {}
 
             if (!part.repeatable) {
-                submission.answers[part.id][uuidv4()] = {}
+                const part_id = uuidv4()
+                submission.answers[part.id][part_id] = {}
+                submission.initPart(part, part_id)
             }
         })
 
