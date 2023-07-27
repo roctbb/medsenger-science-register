@@ -7,6 +7,7 @@ import uuid
 class FormPart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=True)
+    description = db.Column(db.Text, nullable=True)
     fields = db.Column(db.JSON, nullable=True)
     repeatable = db.Column(db.Boolean, default=False)
 
@@ -14,6 +15,7 @@ class FormPart(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "description": self.description,
             "fields": self.fields,
             "repeatable": self.repeatable,
         }

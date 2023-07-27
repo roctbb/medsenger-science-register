@@ -21,10 +21,6 @@
             border-radius: 5px;
         }
 
-        .text {
-            font-size: 12pt;
-        }
-
         .bold-text {
             font-weight: bold;
         }
@@ -47,7 +43,6 @@
 
     <script>
         window.FORM = JSON.parse('{{ form_json | safe }}')
-        console.log(window.FORM)
     </script>
 
 </head>
@@ -72,13 +67,33 @@
 
     <div class="card my-3">
         <div class="card-body">
-            <div class="row">
-                <label class="col-md-4 col-form-label col-form-label-sm text">
+            <div class="row my-2">
+                <label class="col-md-4 col-form-label col-form-label-sm">
                     Название
                 </label>
                 <div class="col-md-8">
-                    <input type="text" id="name" class="form-control-sm form-control" v-model="name"
-                           onfocus="this.select()">
+                    <input type="text" id="name" class="form-control-sm form-control" v-model="name">
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <label class="col-md-4 col-form-label col-form-label-sm">
+                    Описание
+                </label>
+                <div class="col-md-8">
+                    <textarea class="form-control form-control-sm" v-model="description"></textarea>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                <label class="col-md-4 col-form-label col-form-label-sm">
+                    Повторяемый?
+                </label>
+                <div class="col-md-8">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" :id="'required_question_setter_' + i"
+                               v-model="repeatable">
+                    </div>
                 </div>
             </div>
         </div>
@@ -100,7 +115,7 @@
                     </h6>
 
                     <div class="row my-2">
-                        <label class="col-md-4 col-form-label col-form-label-sm text">
+                        <label class="col-md-4 col-form-label col-form-label-sm">
                             Текст
                         </label>
                         <div class="col-md-8">
@@ -109,7 +124,7 @@
                     </div>
 
                     <div class="row my-2">
-                        <label class="col-md-4 col-form-label col-form-label-sm text">
+                        <label class="col-md-4 col-form-label col-form-label-sm">
                             Категория
                         </label>
                         <div class="col-md-8">
@@ -118,7 +133,7 @@
                     </div>
 
                     <div class="row my-2">
-                        <label class="col-md-4 col-form-label col-form-label-sm text">
+                        <label class="col-md-4 col-form-label col-form-label-sm">
                             Обязательный вопрос?
                         </label>
                         <div class="col-md-8">
@@ -130,7 +145,7 @@
                     </div>
 
                     <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm text">
+                        <div class="col-md-4 col-form-label col-form-label-sm">
                             Тип
                         </div>
                         <div class="col-md-8">
@@ -148,7 +163,7 @@
                     </div>
 
                     <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm text">
+                        <div class="col-md-4 col-form-label col-form-label-sm">
                             Показывать если
                         </div>
                         <div class="col-md-8">
@@ -162,20 +177,22 @@
                     </div>
 
                     <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm text">
+                        <div class="col-md-4 col-form-label col-form-label-sm">
                             Описание
                         </div>
                         <div class="col-md-8">
-                            <textarea class="form-control form-control-sm" rows="3" v-model="question.description"></textarea>
+                            <textarea class="form-control form-control-sm" rows="3"
+                                      v-model="question.description"></textarea>
                         </div>
                     </div>
 
                     <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm text">
+                        <div class="col-md-4 col-form-label col-form-label-sm">
                             Параметры (JSON)
                         </div>
                         <div class="col-md-8">
-                            <textarea class="form-control form-control-sm" rows="3" v-model="question.str_params"></textarea>
+                            <textarea class="form-control form-control-sm" rows="3"
+                                      v-model="question.str_params"></textarea>
                         </div>
                     </div>
 
@@ -186,7 +203,8 @@
                                 Значение, если галочка поставлена
                             </label>
                             <label class="col-md-8">
-                                <input type="text" class="form-control form-control-sm" v-model="questions[i].checker.true">
+                                <input type="text" class="form-control form-control-sm"
+                                       v-model="questions[i].checker.true">
                             </label>
                         </div>
                         <div class="row my-2">
@@ -254,7 +272,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4 col-form-label col-form-label-sm text">
+        <div class="col-md-4 col-form-label col-form-label-sm">
             <button class="btn btn-primary" @click="add_question()">Добавить вопрос</button>
         </div>
     </div>
@@ -279,7 +297,7 @@
         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = (dt + Math.random() * 16) % 16 | 0;
             dt = Math.floor(dt / 16);
-            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
         return uuid;
     }
@@ -290,6 +308,8 @@
             return {
                 questions: [],
                 name: "Новая анкета",
+                repeatable: false,
+                description: "",
                 json: {},
                 is_edit: false
             }
@@ -298,6 +318,8 @@
             if (window.FORM) {
                 this.questions = window.FORM.fields;
                 this.name = window.FORM.name;
+                this.description = window.FORM.description;
+                this.repeatable = window.FORM.repeatable;
             }
 
             if (this.questions.length > 0) {
@@ -310,7 +332,7 @@
                     this.questions[i].variants = [{"text": "", "value": ""}, {"text": "", "value": ""}]
                     this.questions[i].checker = {"true": "", "false": ""}
 
-                    if (this.questions[i].type == 'radio') {
+                    if (this.questions[i].type === 'radio') {
                         let iter = 0
                         for (j in this.questions[i].params.options) {
                             if (iter >= this.questions[i].variants.length) {
@@ -320,7 +342,7 @@
                             this.questions[i].variants[iter].value = this.questions[i].params.options[j]
                             iter++
                         }
-                    } else if (this.questions[i].type == 'checkbox') {
+                    } else if (this.questions[i].type === 'checkbox') {
                         this.questions[i].checker.true = this.questions[i].params.options.true
                         this.questions[i].checker.false = this.questions[i].params.options.false
                     }
@@ -396,8 +418,11 @@
                     result_questions.push(temp_add)
                 }
 
+                this.json = {}
                 this.json.fields = result_questions
                 this.json.name = this.name
+                this.json.description = this.description
+                this.json.repeatable = this.repeatable
                 this.json = JSON.stringify(this.json)
 
 
@@ -410,7 +435,7 @@
                     body: this.json
                 }).then(res => res.json())
                     .then(function (res) {
-                        if (res.state == "ok") {
+                        if (res.state === "ok") {
                             alert('Анкета успешно сохранена как "' + res.name + '" (id: ' + res.id + ')')
                             window.location.href = "/editor"
                         } else {

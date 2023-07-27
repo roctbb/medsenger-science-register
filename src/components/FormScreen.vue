@@ -17,6 +17,7 @@
                 <div class="card-body">
                     <div class="hstack gap-3">
                         <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
+                        <div class="text-muted"><small>{{ part.description}}</small></div>
                         <div class="ms-auto">
                             <button class="btn btn-info btn-sm" @click="submission.extend(part)">Добавить</button>
                         </div>
@@ -28,8 +29,8 @@
                 <div class="card-body">
                     <div class="hstack gap-3 mb-3">
                         <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
-                        <div class="ms-auto"></div>
-                        <div v-if="part.repeatable && !disabled">
+                        <div><small v-if="!part.repeatable" class="text-muted">{{ part.description}}</small></div>
+                        <div class="ms-auto" v-if="part.repeatable && !disabled">
                             <button class="btn btn-warning btn-sm" @click="submission.remove(part, group_key)">Удалить
                             </button>
                         </div>
