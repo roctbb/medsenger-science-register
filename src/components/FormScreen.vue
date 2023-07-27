@@ -81,6 +81,12 @@
                                     </div>
                                 </div>
 
+                                <div v-if="field.type === 'select'">
+                                    <select class="form-control" v-model="submission.answers[part.id][group_key][field.id]" v-bind:disabled="disabled">
+                                        <option v-for="(value, option) in field.params.options" :value="value">{{ option }}</option>
+                                    </select>
+                                </div>
+
                                 <div class="form-check" v-if="field.type === 'checkbox'">
                                     <input class="form-check-input" type="checkbox"
                                            v-model="submission.answers[part.id][group_key][field.id]"
