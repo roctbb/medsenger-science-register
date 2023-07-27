@@ -23,7 +23,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Пол</label>
-                <select class="form-control" v-model="patient.sex">
+                <select class="form-control form-select" v-model="patient.sex">
                     <option value="male">Мужской</option>
                     <option value="female">Женский</option>
                 </select>
@@ -45,7 +45,7 @@
 
             <div class="mb-3" v-if="patient.medsenger_contract && (!patient || patient.contract_id == null)">
                 <label class="form-label">Длительность</label>
-                <select class="form-control" v-model="patient.days">
+                <select class="form-control form-select" v-model="patient.days">
                     <option :value="180">180 дней</option>
                 </select>
             </div>

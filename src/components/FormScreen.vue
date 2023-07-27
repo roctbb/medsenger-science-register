@@ -82,7 +82,7 @@
                                 </div>
 
                                 <div v-if="field.type === 'select'">
-                                    <select class="form-control" v-model="submission.answers[part.id][group_key][field.id]" v-bind:disabled="disabled">
+                                    <select class="form-control form-select" v-model="submission.answers[part.id][group_key][field.id]" v-bind:disabled="disabled">
                                         <option v-for="(value, option) in field.params.options" :value="value" :key="value">{{ option }}</option>
                                     </select>
                                 </div>
