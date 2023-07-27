@@ -1,17 +1,21 @@
 from .alchemy import *
 from .relation_tables import *
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 
 class FormPart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=True)
     fields = db.Column(db.JSON, nullable=True)
+    repeatable = db.Column(db.Boolean, default=False)
 
     def as_dict(self):
         return {
             "id": self.id,
             "name": self.name,
-            "fields": self.fields
+            "fields": self.fields,
+            "repeatable": self.repeatable,
         }
 
 
@@ -21,7 +25,8 @@ class Form(db.Model):
     description = db.Column(db.Text, nullable=True)
 
     project_id = db.Column(db.Integer, db.ForeignKey('project.id', ondelete="CASCADE"), nullable=True)
-    parts = db.relationship('FormPart', secondary=form_form_part, order_by=form_form_part.c.index, backref='forms', lazy=False)
+    parts = db.relationship('FormPart', secondary=form_form_part, order_by=form_form_part.c.index, backref='forms',
+                            lazy=False)
     submissions = db.relationship('FormSubmission', backref=backref('form', uselist=False), lazy=True)
     specialty = db.Column(db.String(256), nullable=True)
 

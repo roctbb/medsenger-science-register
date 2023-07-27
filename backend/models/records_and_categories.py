@@ -38,7 +38,6 @@ class Record(db.Model):
 
     value = db.Column(db.String(256), nullable=True)
     params = db.Column(db.JSON, nullable=True)
-    question_uuid = db.Column(db.String(256), nullable=True)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
@@ -47,7 +46,6 @@ class Record(db.Model):
         return {
             "id": self.id,
             "params": self.params,
-            "question_uuid": self.question_uuid,
             "category": self.category.as_dict(),
             "created_on": self.created_on.isoformat(),
             "value": self.formatted_value()
