@@ -1,5 +1,6 @@
 import Model from "@/models/Model";
 import {formatDateTime} from "@/utils/helpers";
+import {v4 as uuidv4} from 'uuid';
 
 class Submission extends Model {
     constructor(description) {
@@ -24,7 +25,14 @@ class Submission extends Model {
 
         if (this.records) {
             this.records.forEach((record) => {
-                this.answers[record.params.question_id] = record.value
+                if (!this.answers[record.params.part_id]) {
+                    this.answers[record.params.part_id] = {}
+                }
+                if (!this.answers[record.params.part_id][record.params.group_key]) {
+                    this.answers[record.params.part_id][record.params.group_key] = {}
+                }
+
+                this.answers[record.params.part_id][record.params.group_key][record.params.question_id] = record.value
             })
         }
     }
@@ -34,13 +42,43 @@ class Submission extends Model {
         this.init(description)
     }
 
-    static create(project_id, patient_id, form_id) {
-        return new Submission({
+    remove(part, group_key) {
+        delete this.answers[part.id][group_key]
+    }
+
+    extend(part) {
+        const part_id = uuidv4()
+        this.answers[part.id][part_id] = {}
+        this.initPart(part, part_id)
+    }
+
+    initPart(part, part_id) {
+        part.fields.forEach(field => {
+            if (field.type === 'select' || field.type === 'radio') {
+                this.answers[part.id][part_id][field.id] = Object.values(field.params.options)[0]
+            }
+        })
+    }
+
+    static create(project_id, patient_id, form) {
+        let submission = new Submission({
             project_id: project_id,
             patient_id: patient_id,
-            form_id: form_id,
+            form_id: form.id,
             answers: {}
         })
+
+        form.parts.forEach(part => {
+            submission.answers[part.id] = {}
+
+            if (!part.repeatable) {
+                const part_id = uuidv4()
+                submission.answers[part.id][part_id] = {}
+                submission.initPart(part, part_id)
+            }
+        })
+
+        return submission
     }
 
     get readable_created_on() {

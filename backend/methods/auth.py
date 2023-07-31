@@ -9,6 +9,7 @@ from .medsenger_api import *
 from .clinics import *
 from backend.config import MEDSENGER_LOGIN
 
+
 def authorize_by_credentials(email, password):
     if not email or not password:
         raise InsufficientData
@@ -20,7 +21,7 @@ def authorize_by_credentials(email, password):
         if not user:
             medsenger_clinic = medsenger_user['clinics'][0]
             clinic = find_clinic_by_id(medsenger_clinic['id'])
-            user = create_user(email, password, medsenger_user['name'], clinic)
+            user = create_user(email, medsenger_user['name'], clinic, password=password)
     else:
         user = find_user_by_email(email)
         if not user:

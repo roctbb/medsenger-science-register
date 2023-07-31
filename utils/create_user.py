@@ -3,15 +3,18 @@ from backend.server import app
 
 try:
     email = input("email:")
-    password = input("password:")
     name = input("name:")
     clinic_id = input("clinic_id:")
     specialty = input('specialty:')
 
     with app.app_context():
         clinic = find_clinic_by_id(clinic_id)
-        create_user(email, password, name, clinic, [specialty] if specialty else [])
 
-    print("ok!")
+        if not clinic:
+            print("Clinic not found")
+        else:
+            user = create_user(email, name, clinic, [specialty] if specialty else [])
+            print("Activation key: ", user.activation_key)
+            print("ok!")
 except ExplainableException as e:
     print(e.explain())

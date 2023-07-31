@@ -59,6 +59,8 @@ def update_and_save_part_page(part_id):
     data = request.json
     form_part = FormPart.query.get(part_id)
     form_part.name = data.get('name')
+    form_part.description = data.get('description')
+    form_part.repeatable = data.get('repeatable')
     form_part.fields = data.get('fields')
     db.session.commit()
 

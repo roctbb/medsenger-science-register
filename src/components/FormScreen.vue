@@ -1,8 +1,10 @@
 <template>
-    <div v-if="project && patient && form">
+    <div v-if="project && patient && form && submission">
 
         <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
-            v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }} / {{ this.submission.author }})</small></h4>
+            v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }} / {{
+                this.submission.author
+            }})</small></h4>
 
         <p>{{ form.description }}</p>
 
@@ -10,62 +12,114 @@
             {{ error }}
         </div>
 
-        <div class="card mb-3" v-for="part in form.parts" v-bind:key="part.id">
-            <div class="card-body">
-                <h5 class="card-title">{{ part.name }}</h5>
+        <div v-for="part in form.parts" v-bind:key="part.id">
+            <div class="card mb-2" v-if="part.repeatable && !disabled">
+                <div class="card-body">
+                    <div class="hstack gap-3">
+                        <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
+                        <div class="text-muted"><small>{{ part.description }}</small></div>
+                        <div class="ms-auto">
+                            <button class="btn btn-primary btn-sm" @click="submission.extend(part)">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <div v-for="field in part.fields" v-bind:key="field.id">
-                    <div class="row mb-3" v-if="!field.show_if || submission.answers[field.show_if]">
-                        <label class="col-sm-4 col-form-label" :class="{ required: field.required }">{{
-                                field.text
-                            }}</label>
-                        <div class="col-sm-8">
-                            <input v-if="field.type === 'string'" type="text" class="form-control"
-                                   v-model="submission.answers[field.id]"
-                                   v-bind:required="field.required" v-bind:disabled="disabled">
-
-                            <input v-if="field.type === 'integer'" type="number" step="1" class="form-control"
-                                   v-model="submission.answers[field.id]"
-                                   v-bind:required="field.required" v-bind:disabled="disabled">
-
-                            <input v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
-                                   v-model="submission.answers[field.id]"
-                                   v-bind:required="field.required" v-bind:disabled="disabled">
-
-                            <textarea v-if="field.type === 'text'" class="form-control" v-model="submission.answers[field.id]"
-                                      v-bind:required="field.required" v-bind:disabled="disabled"></textarea>
-
-
-                            <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
-                                           v-model="submission.answers[field.id]"
-                                           input-class-name="form-control" text-input
-                                           :enable-time-picker="false" locale="ru-RU" format="dd.MM.yyyy"
-                                           select-text="Выбрать" cancel-text="Закрыть" v-bind:required="field.required"
-                                           v-bind:disabled="disabled"/>
-
-                            <div v-if="field.type === 'radio'">
-                                <div v-for="(value, option) in field.params.options"
-                                     v-bind:key='option'
-                                     class="form-check">
-                                    <input class="form-check-input" type="radio"
-                                           :value="value" v-model="submission.answers[field.id]" v-bind:disabled="disabled">
-                                    <label class="form-check-label">
-                                        {{ option }}
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-check" v-if="field.type === 'checkbox'">
-                                <input class="form-check-input" type="checkbox" v-model="submission.answers[field.id]"
-                                       v-bind:disabled="disabled">
-                            </div>
-
-                            <div class="form-text" v-if="field.description">{{ field.description }}</div>
+            <div class="card" :class="{'my-3': !part.repeatable, 'mb-2 bg-light': part.repeatable }"
+                 v-for="(group, group_key) in submission.answers[part.id]" v-bind:key="group_key">
+                <div class="card-body">
+                    <div class="hstack gap-3 mb-3">
+                        <div><h6 v-if="part.repeatable" class="card-title my-0">{{ part.name }}</h6><h5 v-else
+                                                                                                        class="card-title my-0">
+                            {{ part.name }}</h5></div>
+                        <div><small v-if="!part.repeatable" class="text-muted">{{ part.description }}</small></div>
+                        <div class="ms-auto" v-if="part.repeatable && !disabled">
+                            <button class="btn btn-warning btn-sm" @click="submission.remove(part, group_key)">Удалить
+                            </button>
                         </div>
                     </div>
 
+                    <div v-for="field in part.fields" v-bind:key="field.id">
+                        <div class="row mb-3"
+                             v-if="!field.show_if || submission.answers[part.id][group_key][field.show_if]">
+                            <label class="col-sm-4 col-form-label" :class="{ required: field.required }">{{
+                                    field.text
+                                }}</label>
+                            <div class="col-sm-8">
+
+                                <input
+                                    :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
+                                    v-if="field.type === 'string'" type="text" class="form-control"
+                                    v-model="submission.answers[part.id][group_key][field.id]"
+                                    v-bind:required="field.required" v-bind:disabled="disabled">
+
+                                <input
+                                    :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
+                                    v-if="field.type === 'integer'" type="number" step="1" class="form-control"
+                                    v-model="submission.answers[part.id][group_key][field.id]"
+                                    v-bind:required="field.required" v-bind:disabled="disabled">
+
+                                <input
+                                    :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
+                                    v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
+                                    v-model="submission.answers[part.id][group_key][field.id]"
+                                    v-bind:required="field.required" v-bind:disabled="disabled">
+
+                                <textarea
+                                    :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
+                                    v-if="field.type === 'text'" class="form-control"
+                                    v-model="submission.answers[part.id][group_key][field.id]"
+                                    v-bind:required="field.required" v-bind:disabled="disabled"></textarea>
+
+
+                                <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
+                                               v-model="submission.answers[part.id][group_key][field.id]"
+                                               :input-class-name="className(part.id, group_key, field.id)" text-input
+                                               :enable-time-picker="false" locale="ru-RU" format="dd.MM.yyyy"
+                                               select-text="Выбрать" cancel-text="Закрыть"
+                                               v-bind:required="field.required"
+                                               v-bind:disabled="disabled"/>
+
+                                <div v-if="field.type === 'radio'">
+                                    <div v-for="(value, option) in field.params.options"
+                                         v-bind:key='option'
+                                         class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               :value="value"
+                                               v-model="submission.answers[part.id][group_key][field.id]"
+                                               v-bind:disabled="disabled">
+                                        <label class="form-check-label">
+                                            {{ option }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div v-if="field.type === 'select'">
+                                    <select class="form-control form-select"
+                                            :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
+                                            v-model="submission.answers[part.id][group_key][field.id]"
+                                            v-bind:disabled="disabled">
+                                        <option v-for="(value, option) in field.params.options" :value="value"
+                                                :key="value">{{ option }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-check" v-if="field.type === 'checkbox'">
+                                    <input class="form-check-input" type="checkbox"
+                                           v-model="submission.answers[part.id][group_key][field.id]"
+                                           v-bind:disabled="disabled">
+                                </div>
+
+                                <div class="form-text" v-if="field.description">{{ field.description }}</div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+
+            <hr style="border-top: dotted 1px;"/>
         </div>
 
     </div>
@@ -80,7 +134,7 @@
 <script>
 
 import VueDatePicker from "@vuepic/vue-datepicker";
-import {formatDateTime} from "../utils/helpers";
+import {formatDateTime, searchForArray} from "../utils/helpers";
 import Submission from "@/models/Submission";
 
 export default {
@@ -94,22 +148,28 @@ export default {
             form: undefined,
             answers: {},
             error: "",
+            error_fields: [],
             submission: undefined
         }
     },
     methods: {
+        searchForArray,
         formatDateTime,
         back: function () {
             this.$router.back()
         },
         save: async function () {
+            this.error_fields = []
+
             try {
                 await this.submission.save()
                 let submissions = (await this.patient.submissions)
                 submissions.push(this.submission)
                 this.back()
             } catch (e) {
+                console.log(e)
                 this.error = e.message
+                this.error_fields = e.details
             }
         },
 
@@ -122,6 +182,13 @@ export default {
             }
             if (field.type === 'float') {
                 return 'number'
+            }
+        },
+        className: function (part_id, group_key, field_id) {
+            if (searchForArray(this.error_fields, [part_id, group_key, field_id])) {
+                return "form-control is-invalid"
+            } else {
+                return "form-control"
             }
         }
     },
@@ -142,7 +209,8 @@ export default {
             this.form = this.project.forms.find(form => form.id === this.submission.form_id)
         } else if (this.form_id) {
             this.form = this.project.forms.find(form => form.id === parseInt(this.form_id))
-            this.submission = Submission.create(this.project_id, this.patient_id, this.form_id)
+            this.submission = Submission.create(this.project_id, this.patient_id, this.form)
+            console.log(this.submission)
         }
 
     }

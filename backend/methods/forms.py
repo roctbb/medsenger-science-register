@@ -1,3 +1,5 @@
+import json
+
 from backend.models import *
 from .exceptions import *
 from backend.helpers import *
@@ -16,23 +18,27 @@ def submit_form(doctor, patient, form, answers):
     submission = create_submission(form, patient, doctor)
 
     for part in form.parts:
-        for field in part.fields:
-            answer = answers.get(field.get('id'))
-            category = find_category_by_code(field.get('category'))
+        groups = answers.get(str(part.id), {})
+        for group_key, group in groups.items():
+            for field in part.fields:
+                answer = group.get(field.get('id'))
+                category = find_category_by_code(field.get('category'))
 
-            params = {
-                "question_id": field.get('id'),
-                "answer_text": answer,
-                "question_text": field.get('text')
-            }
+                params = {
+                    "group_key": group_key,
+                    "part_id": part.id,
+                    "question_id": field.get('id'),
+                    "answer_text": answer,
+                    "question_text": field.get('text')
+                }
 
-            if answer and category:
-                record = Record(patient_id=patient.id,
-                                category_id=category.id,
-                                submission_id=submission.id,
-                                value=answer,
-                                params=params)
-                db.session.add(record)
+                if answer and category:
+                    record = Record(patient_id=patient.id,
+                                    category_id=category.id,
+                                    submission_id=submission.id,
+                                    value=answer,
+                                    params=params)
+                    db.session.add(record)
 
     return submission
 
@@ -69,10 +75,14 @@ def get_patient_submissions(project, patient):
 
 
 def validate_form(form, answers):
+    details = []
     for part in form.parts:
-        for field in part.fields:
-            if field.get('required') and field.get('id') not in answers:
-                raise InsufficientData(field.get('id'))
+        for group_key, group in answers.get(str(part.id), {}).items():
+            for field in part.fields:
+                if field.get('required') and field.get('id') not in group:
+                    details.append((part.id, group_key, field.get('id')))
+
+    raise InsufficientData(json.dumps(details))
 
 
 def find_form_by_id(form_id):
