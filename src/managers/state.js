@@ -1,5 +1,6 @@
 import Manager from "@/managers/common";
 import User from "@/models/User";
+import {deleteCookie, getCookie} from "@/utils/helpers";
 
 class StateManager extends Manager {
 
@@ -11,6 +12,12 @@ class StateManager extends Manager {
     }
 
     async load() {
+        if (getCookie("register_token")) {
+            let token = getCookie("register_token")
+            deleteCookie("register_token")
+            localStorage.setItem('register_token', token)
+        }
+
         this._state.api_token = localStorage.getItem('register_token')
 
         console.log("Token:", this._state.api_token)

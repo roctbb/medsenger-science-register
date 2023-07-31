@@ -1,53 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_bootstrap.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <style>
-        * {
-            font-family: Roboto, sans-serif;
-        }
-
-        .col {
-            border: 1px solid transparent;
-            padding: 5px;
-        }
-
-        .main-card {
-            border: rgba(0, 0, 0, 0.3) 1px solid;
-            border-radius: 5px;
-        }
-
-        .bold-text {
-            font-weight: bold;
-        }
-
-        .change_number_button {
-            border: none;
-            background: white;
-            color: darkgrey;
-            font-size: 1rem;
-            font-weight: normal;
-        }
-
-
-        .change_number_button:hover {
-            color: blue;
-            transition: all 600ms ease;
-        }
-    </style>
-    <title>Редактор анкет</title>
-
-    <script>
-        window.FORM = JSON.parse('{{ form_json | safe }}')
-    </script>
-
-</head>
-
-<body>
+{% block title %}Редактор анкет{% endblock %}
+{% block page_title %}Редактор анкет{% endblock %}
+{% block content %}
+<script>
+    window.FORM = JSON.parse('{{ form_json | safe }}')
+</script>
 {% raw %}
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <nav class="navbar bg-body-tertiary" style="padding: 15px;">
@@ -61,230 +19,228 @@
 
 <br>
 
-<div id="main" class="container">
-    <h6>{{ is_edit ? "Редактируем" : "Создаём" }} анкету с названием</h6>
-    <p>{{ name ? name : "(Без названия)" }}</p>
+<h6>{{ is_edit ? "Редактируем" : "Создаём" }} анкету с названием</h6>
+<p>{{ name ? name : "(Без названия)" }}</p>
 
-    <div class="card my-3">
-        <div class="card-body">
-            <div class="row my-2">
-                <label class="col-md-4 col-form-label col-form-label-sm">
-                    Название
-                </label>
-                <div class="col-md-8">
-                    <input type="text" id="name" class="form-control-sm form-control" v-model="name">
-                </div>
+<div class="card my-3">
+    <div class="card-body">
+        <div class="row my-2">
+            <label class="col-md-4 col-form-label col-form-label-sm">
+                Название
+            </label>
+            <div class="col-md-8">
+                <input type="text" id="name" class="form-control-sm form-control" v-model="name">
             </div>
+        </div>
 
-            <div class="row my-2">
-                <label class="col-md-4 col-form-label col-form-label-sm">
-                    Описание
-                </label>
-                <div class="col-md-8">
-                    <textarea class="form-control form-control-sm" v-model="description"></textarea>
-                </div>
+        <div class="row my-2">
+            <label class="col-md-4 col-form-label col-form-label-sm">
+                Описание
+            </label>
+            <div class="col-md-8">
+                <textarea class="form-control form-control-sm" v-model="description"></textarea>
             </div>
+        </div>
 
-            <div class="row my-2">
-                <label class="col-md-4 col-form-label col-form-label-sm">
-                    Повторяемый?
-                </label>
-                <div class="col-md-8">
-                    <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input" :id="'required_question_setter_' + i"
-                               v-model="repeatable">
-                    </div>
+        <div class="row my-2">
+            <label class="col-md-4 col-form-label col-form-label-sm">
+                Повторяемый?
+            </label>
+            <div class="col-md-8">
+                <div class="form-check form-switch">
+                    <input type="checkbox" class="form-check-input" :id="'required_question_setter_' + i"
+                           v-model="repeatable">
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div v-for="(question, i) in questions" class="col-12 col-md-6 mt-2">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="bold-text">
-                        Вопрос №{{ i + 1 }}
-                        &nbsp;
-                        <button class="change_number_button" @click="go_down(i)" v-if="i !== questions.length-1">
-                            ⬇
-                        </button>
-                        <button class="change_number_button" @click="go_up(i)" v-if="i !== 0">
-                            ⬆
-                        </button>
-                    </h6>
+<div class="row">
+    <div v-for="(question, i) in questions" class="col-12 col-md-6 mt-2">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="bold-text">
+                    Вопрос №{{ i + 1 }}
+                    &nbsp;
+                    <button class="change_number_button" @click="go_down(i)" v-if="i !== questions.length-1">
+                        ⬇
+                    </button>
+                    <button class="change_number_button" @click="go_up(i)" v-if="i !== 0">
+                        ⬆
+                    </button>
+                </h6>
 
-                    <div class="row my-2">
-                        <label class="col-md-4 col-form-label col-form-label-sm">
-                            Текст
-                        </label>
-                        <div class="col-md-8">
-                            <input type="text" v-model="question.text" class="form-control-sm form-control">
+                <div class="row my-2">
+                    <label class="col-md-4 col-form-label col-form-label-sm">
+                        Текст
+                    </label>
+                    <div class="col-md-8">
+                        <input type="text" v-model="question.text" class="form-control-sm form-control">
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <label class="col-md-4 col-form-label col-form-label-sm">
+                        Категория
+                    </label>
+                    <div class="col-md-8">
+                        <input type="text" v-model="question.category" class="form-control-sm form-control">
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <label class="col-md-4 col-form-label col-form-label-sm">
+                        Обязательный вопрос?
+                    </label>
+                    <div class="col-md-8">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" :id="'required_question_setter_' + i"
+                                   v-model="question.required">
                         </div>
                     </div>
+                </div>
 
-                    <div class="row my-2">
-                        <label class="col-md-4 col-form-label col-form-label-sm">
-                            Категория
-                        </label>
-                        <div class="col-md-8">
-                            <input type="text" v-model="question.category" class="form-control-sm form-control">
-                        </div>
+                <div class="row my-2">
+                    <div class="col-md-4 col-form-label col-form-label-sm">
+                        Тип
                     </div>
-
-                    <div class="row my-2">
-                        <label class="col-md-4 col-form-label col-form-label-sm">
-                            Обязательный вопрос?
-                        </label>
-                        <div class="col-md-8">
-                            <div class="form-check form-switch">
-                                <input type="checkbox" class="form-check-input" :id="'required_question_setter_' + i"
-                                       v-model="question.required">
-                            </div>
-                        </div>
+                    <div class="col-md-8">
+                        <select class="form-select form-select-sm" v-model="question.type">
+                            <option value="string">Строка</option>
+                            <option value="integer">Целое число</option>
+                            <option value="float">Дробное число</option>
+                            <option value="text">Текст</option>
+                            <option value="date">Дата</option>
+                            <option value="checkbox">Галочка</option>
+                            <option value="radio">Выбор варианта</option>
+                            <option value="select">Выпадающий список</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm">
-                            Тип
-                        </div>
-                        <div class="col-md-8">
-                            <select class="form-select form-select-sm" v-model="question.type">
-                                <option value="string">Строка</option>
-                                <option value="integer">Целое число</option>
-                                <option value="float">Дробное число</option>
-                                <option value="text">Текст</option>
-                                <option value="date">Дата</option>
-                                <option value="checkbox">Галочка</option>
-                                <option value="radio">Выбор варианта</option>
-                                <option value="select">Выпадающий список</option>
-                            </select>
-                        </div>
+                <div class="row my-2">
+                    <div class="col-md-4 col-form-label col-form-label-sm">
+                        Показывать если
                     </div>
-
-                    <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm">
-                            Показывать если
-                        </div>
-                        <div class="col-md-8">
-                            <select class="form-select form-select-sm" v-model="question.show_if">
-                                <option :value="undefined">Всегда</option>
-                                <option v-for="showif_question in questions" :value="showif_question.id"
-                                        :key="showif_question.id">{{ showif_question.text }}
-                                </option>
-                            </select>
-                        </div>
+                    <div class="col-md-8">
+                        <select class="form-select form-select-sm" v-model="question.show_if">
+                            <option :value="undefined">Всегда</option>
+                            <option v-for="showif_question in questions" :value="showif_question.id"
+                                    :key="showif_question.id">{{ showif_question.text }}
+                            </option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm">
-                            Описание
-                        </div>
-                        <div class="col-md-8">
+                <div class="row my-2">
+                    <div class="col-md-4 col-form-label col-form-label-sm">
+                        Описание
+                    </div>
+                    <div class="col-md-8">
                             <textarea class="form-control form-control-sm" rows="3"
                                       v-model="question.description"></textarea>
-                        </div>
                     </div>
+                </div>
 
-                    <div class="row my-2">
-                        <div class="col-md-4 col-form-label col-form-label-sm">
-                            Параметры (JSON)
-                        </div>
-                        <div class="col-md-8">
+                <div class="row my-2">
+                    <div class="col-md-4 col-form-label col-form-label-sm">
+                        Параметры (JSON)
+                    </div>
+                    <div class="col-md-8">
                             <textarea class="form-control form-control-sm" rows="3"
                                       v-model="question.str_params"></textarea>
+                    </div>
+                </div>
+
+                <div v-if="question.type === 'checkbox'">
+                    <!-- <hr> -->
+                    <div class="row my-2">
+                        <label class="col-md-4 col-form-label col-form-label-sm">
+                            Значение, если галочка поставлена
+                        </label>
+                        <label class="col-md-8">
+                            <input type="text" class="form-control form-control-sm"
+                                   v-model="questions[i].checker.true">
+                        </label>
+                    </div>
+                    <div class="row my-2">
+                        <label class="col-md-4 col-form-label-sm">
+                            Значение, если галочка не поставлена
+                        </label>
+                        <label class="col-md-8 col-form-label-sm">
+                            <input type="text" class="form-control-sm form-control"
+                                   v-model="questions[i].checker.false">
+                        </label>
+                    </div>
+                </div>
+
+                <div v-if="question.type === 'radio' || question.type === 'select'" class="mb-3">
+                    <!-- <hr> -->
+                    <div class="row">
+                        <h6 class="bold-text">Варианты:</h6>
+                        <div class="col-md-6 col-form-label-sm" style="text-align: center;"
+                             v-if="questions[i].variants.length > 0">
+                            Отображаемый текст
+                        </div>
+                        <div class="col-md-5 col-form-label-sm" style="text-align: center;"
+                             v-if="questions[i].variants.length > 0">
+                            Значение
+                        </div>
+                        <div class="col-md-1 col-form-label-sm" v-if="questions[i].variants.length > 0">
+
+                        </div>
+                        <div v-else>
+                            <h5 style="text-align: center;">
+                                Вариантов нет...
+                            </h5>
                         </div>
                     </div>
 
-                    <div v-if="question.type === 'checkbox'">
-                        <!-- <hr> -->
-                        <div class="row my-2">
-                            <label class="col-md-4 col-form-label col-form-label-sm">
-                                Значение, если галочка поставлена
-                            </label>
-                            <label class="col-md-8">
-                                <input type="text" class="form-control form-control-sm"
-                                       v-model="questions[i].checker.true">
-                            </label>
-                        </div>
-                        <div class="row my-2">
-                            <label class="col-md-4 col-form-label-sm">
-                                Значение, если галочка не поставлена
-                            </label>
-                            <label class="col-md-8 col-form-label-sm">
-                                <input type="text" class="form-control-sm form-control"
-                                       v-model="questions[i].checker.false">
-                            </label>
-                        </div>
-                    </div>
-
-                    <div v-if="question.type === 'radio' || question.type === 'select'" class="mb-3">
-                        <!-- <hr> -->
+                    <div v-for="(variant, j) in question.variants">
                         <div class="row">
-                            <h6 class="bold-text">Варианты:</h6>
-                            <div class="col-md-6 col-form-label-sm" style="text-align: center;"
-                                 v-if="questions[i].variants.length > 0">
-                                Отображаемый текст
-                            </div>
-                            <div class="col-md-5 col-form-label-sm" style="text-align: center;"
-                                 v-if="questions[i].variants.length > 0">
-                                Значение
-                            </div>
-                            <div class="col-md-1 col-form-label-sm" v-if="questions[i].variants.length > 0">
-
-                            </div>
-                            <div v-else>
-                                <h5 style="text-align: center;">
-                                    Вариантов нет...
-                                </h5>
-                            </div>
+                            <label class="col-md-6 col-form-label-sm">
+                                <input type="text" class="form-control form-control-sm" v-model="variant.text">
+                            </label>
+                            <label class="col-md-5 col-form-label-sm">
+                                <input type="text" class="form-control form-control-sm" v-model="variant.value">
+                            </label>
+                            <label class="col-md-1 col-form-label-sm">
+                                <input type="button" class="btn btn-sm btn-danger" value="Удалить"
+                                       @click="deleteParam(i, j)">
+                            </label>
                         </div>
-
-                        <div v-for="(variant, j) in question.variants">
-                            <div class="row">
-                                <label class="col-md-6 col-form-label-sm">
-                                    <input type="text" class="form-control form-control-sm" v-model="variant.text">
-                                </label>
-                                <label class="col-md-5 col-form-label-sm">
-                                    <input type="text" class="form-control form-control-sm" v-model="variant.value">
-                                </label>
-                                <label class="col-md-1 col-form-label-sm">
-                                    <input type="button" class="btn btn-sm btn-danger" value="Удалить"
-                                           @click="deleteParam(i, j)">
-                                </label>
-                            </div>
-                        </div>
-
-                        <button class="btn btn-primary btn-sm my-2" @click="add_new_param_line(question)">Добавить
-                            вариант
-                        </button>
                     </div>
 
-                    <hr>
-
-                    <button type="button" class="btn btn-sm btn-danger" @click="deleteQuestion(i)">Удалить вопрос №{{
-                            i + 1
-                        }}
+                    <button class="btn btn-primary btn-sm my-2" @click="add_new_param_line(question)">Добавить
+                        вариант
                     </button>
                 </div>
+
+                <hr>
+
+                <button type="button" class="btn btn-sm btn-danger" @click="deleteQuestion(i)">Удалить вопрос №{{
+                        i + 1
+                    }}
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-md-4 col-form-label col-form-label-sm">
-            <button class="btn btn-primary" @click="add_question()">Добавить вопрос</button>
-        </div>
+<div class="row">
+    <div class="col-md-4 col-form-label col-form-label-sm">
+        <button class="btn btn-primary" @click="add_question()">Добавить вопрос</button>
     </div>
+</div>
 
 
-    <div class="d-grid my-4">
-        <button class="btn btn-primary btn-lg" @click="save()" type="submit">Сохранить анкету</button>
-    </div>
+<div class="d-grid my-4">
+    <button class="btn btn-primary btn-lg" @click="save()" type="submit">Сохранить анкету</button>
+</div>
 
-    <div class="d-grid my-4">
-        <div></div>
-    </div>
+<div class="d-grid my-4">
+    <div></div>
 </div>
 
 
@@ -472,6 +428,4 @@
 
 </script>
 {% endraw %}
-</body>
-
-</html>
+{% endblock %}
