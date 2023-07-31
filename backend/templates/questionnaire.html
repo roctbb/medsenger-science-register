@@ -17,9 +17,9 @@
     </div>
 </nav>
 
-<br>
+<div id="main"></div>
 
-<h6>{{ is_edit ? "Редактируем" : "Создаём" }} анкету с названием</h6>
+<h6 class="my-3">{{ is_edit ? "Редактируем" : "Создаём" }} анкету с названием</h6>
 <p>{{ name ? name : "(Без названия)" }}</p>
 
 <div class="card my-3">
@@ -239,8 +239,6 @@
     <button class="btn btn-primary btn-lg" @click="save()" type="submit">Сохранить анкету</button>
 </div>
 
-<div class="d-grid my-4">
-    <div></div>
 </div>
 
 
