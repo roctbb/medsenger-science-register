@@ -15,7 +15,7 @@
                         Добавить анкету
                     </button>
                     <ul class="dropdown-menu">
-                        <li v-for="form in available_forms" v-bind:key="form.id"><a class="dropdown-item wrap-text"
+                        <li v-for="form in available_forms" v-bind:key="form.id"><a class="dropdown-item text-wrap"
                                                                                     @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
                                 form.name
                             }}</a></li>
