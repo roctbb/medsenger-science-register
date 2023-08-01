@@ -80,13 +80,15 @@ export default {
             try {
                 if (this.patient.id) {
                     await this.patient.save()
+                    this.$router.back()
                 } else {
                     await this.patient.save()
                     let patients = await this.project.patients
                     patients.push(this.patient)
+                    this.$router.push({name: 'patient', params: {id: this.patient.id}})
                 }
 
-                this.$router.back()
+
             } catch (e) {
                 this.error = e.message
             }
