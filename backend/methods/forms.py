@@ -81,8 +81,8 @@ def validate_form(form, answers):
             for field in part.fields:
                 if field.get('required') and field.get('id') not in group:
                     details.append((part.id, group_key, field.get('id')))
-
-    raise InsufficientData(json.dumps(details))
+    if details:
+        raise InsufficientData(json.dumps(details))
 
 
 def find_form_by_id(form_id):

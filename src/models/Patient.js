@@ -26,6 +26,9 @@ class Patient extends Model {
                 this.medsenger_contract = false
             }
         }
+        else {
+            this.sex = 'male'
+        }
 
         this.project_id = project_id
     }
