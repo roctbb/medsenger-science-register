@@ -369,6 +369,7 @@
                 let result_questions = []
                 for (question_number in this.questions) {
                     if (this.questions[question_number].type === 'subheader') {
+                        result_questions.push(this.questions[question_number])
                         continue
                     }
 
