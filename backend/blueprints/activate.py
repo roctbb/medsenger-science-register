@@ -15,7 +15,7 @@ def activate_view():
         return render_template('activate.html', critical_error='Пользователь не найден или уже активирован.')
 
     if request.method.lower() == 'get':
-        return render_template('activate.html', name=user.name)
+        return render_template('activate.html', user=user)
     else:
         error = ''
 
@@ -33,7 +33,7 @@ def activate_view():
             error = 'Пароль не совпадает с подтверждением'
 
         if error:
-            return render_template('activate.html', name=user.name, error=error)
+            return render_template('activate.html', user=user, error=error)
         else:
             activate_user(user, password)
             token = create_token(user)

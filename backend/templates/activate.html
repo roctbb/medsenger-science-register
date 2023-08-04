@@ -21,8 +21,14 @@
 
     <div class="mb-3">
         <label class="form-label">ФИО</label>
-        <input type="text" class="form-control" name="name" value="{{ name }}">
+        <input type="text" class="form-control" name="name" value="{{ user.name }}">
     </div>
+
+    <div class="mb-3">
+        <label class="form-label">Логин</label>
+        <input type="text" class="form-control" value="{{ user.login }}" disabled>
+    </div>
+
     <div class="mb-3">
         <label class="form-label">Придумайте пароль</label>
         <input type="password" class="form-control" name="password">
