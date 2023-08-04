@@ -48,7 +48,7 @@ def activate_user(user, password):
 
 
 def find_user_by_email(email):
-    return User.query.filter_by(email=email).first()
+    return User.query.filter_by(email=email.lower()).first()
 
 
 def find_user_by_activation_key(key):
