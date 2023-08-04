@@ -24,6 +24,10 @@ class User extends Model {
         if (empty(this.specialties)) {
             return false
         }
+        if (this.specialties.includes('администратор'))
+        {
+            return true;
+        }
         return this.specialties.includes(specialty)
     }
 }
