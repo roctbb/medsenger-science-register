@@ -384,7 +384,7 @@
                     if (this.questions[question_number].type === 'radio' || this.questions[question_number].type === 'select') {
                         for (variant_number in this.questions[question_number].variants) {
                             variant = this.questions[question_number].variants[variant_number]
-                            if (variant.value != "") {
+                            if (variant.value !== "") {
                                 this.questions[question_number].params.options[variant.text] = variant.value
                             }
                         }
