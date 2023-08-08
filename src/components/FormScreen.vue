@@ -1,12 +1,24 @@
 <template>
     <div v-if="project && patient && form && submission">
 
-        <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
-            v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }} / {{
-                this.submission.author
-            }})</small></h4>
+        <div class="description">
+            <div class="hstack gap-3">
+                <div class="me-auto">
+                    <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
+                        v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }} / {{
+                            this.submission.author
+                        }})</small></h4>
+                </div>
+                <div>
+                    <button onclick="window.print()"
+                            class="btn btn-primary btn-sm me-1">Печать
+                    </button>
+                </div>
+            </div>
 
-        <p>{{ form.description }}</p>
+            <p>{{ form.description }}</p>
+
+        </div>
 
         <div class="alert alert-warning" v-if="error">
             {{ error }}
@@ -122,12 +134,12 @@
                 </div>
             </div>
 
-            <hr style="border-top: dotted 1px;"/>
+            <hr class="no-print" style="border-top: dotted 1px;"/>
         </div>
 
     </div>
 
-    <div class="my-3">
+    <div class="my-3 no-print">
         <button @click="save()" class="btn btn-primary" v-if="!disabled">Сохранить</button>
         <button @click="back()" class="btn btn-warning mx-1">Назад</button>
     </div>
