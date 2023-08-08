@@ -46,3 +46,7 @@ def check_email(email):
         return True
     else:
         return False
+
+
+def collect_categories(forms):
+    return sorted(set([category for category in map(lambda form: form.category, forms) if category is not None]), key=lambda c: -c.priority)

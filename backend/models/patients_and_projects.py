@@ -2,6 +2,7 @@ import enum
 
 from .alchemy import *
 from .relation_tables import *
+from ..helpers import collect_categories
 
 
 class Sex(str, enum.Enum):
@@ -45,7 +46,6 @@ class Contract(db.Model):
         }
 
 
-
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=True)
@@ -60,7 +60,8 @@ class Project(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "forms": as_dict(self.forms)
+            "forms": as_dict(self.forms),
+            "categories": as_dict(collect_categories(self.forms))
         }
 
 
