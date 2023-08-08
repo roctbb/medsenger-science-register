@@ -1,0 +1,51 @@
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .container {
+        max-width: none !important;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .mb-3 {
+        margin-bottom: 0.8rem !important;
+    }
+
+    .card, .form-control, .form-control-sm {
+        font-size: 0.8rem !important;
+        padding: 0.275rem 0.55rem;
+        /*border: none;*/
+    }
+
+    h6 {
+        font-size: 0.9rem;
+    }
+
+    h4 {
+        font-size: 1rem;
+    }
+
+     p {
+        font-size: 0.8rem;
+         margin-bottom: 0.5rem;
+     }
+
+    .description .my-3 {
+        margin-top: 0.8rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+    .card-body {
+        padding: 0;
+    }
+
+    .description {
+        padding: 0.275rem 0.55rem;
+    }
+
+    .card-title {
+        padding-top: 0.55rem;
+        padding-bottom: 0.55rem;
+    }
+}

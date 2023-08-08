@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="navbar bg-body-tertiary">
+        <nav class="navbar bg-body-tertiary no-print">
             <div class="container">
                 <a class="navbar-brand" href="#">Регистр пациентов</a>
 
@@ -42,6 +42,7 @@ export default {
 
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700");
 @import "assets/styles/buttons.css";
+@import "assets/styles/printing.css";
 
 
 #app {
