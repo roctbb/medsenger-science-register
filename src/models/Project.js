@@ -13,6 +13,33 @@ class Project extends Model {
         this._patients = undefined
         this.name = description.name
         this.forms = description.forms
+        this.categories = {}
+
+        description.categories.forEach((category) => {
+            this.categories[category.id] = category
+            this.categories[category.id].forms = []
+        })
+
+        this.categories[0] = {
+            name: "Общее",
+            priority: 0,
+            forms: []
+        }
+
+        this.forms.forEach((form) => {
+            if (form.category_id) {
+                this.categories[form.category_id].forms.push(form)
+            } else {
+                this.categories[0].forms.push(form)
+            }
+        })
+
+        if (this.categories[0].forms.length === 0) {
+            delete this.categories[0]
+        }
+
+        this.form_groups = Object.values(this.categories)
+        this.form_groups.sort((a, b) =>  b.priority - a.priority)
     }
 
     get patients() {
@@ -26,6 +53,10 @@ class Project extends Model {
                 })
             }
         })
+    }
+
+    has_groups() {
+        return this.form_groups.length !== 1
     }
 }
 
