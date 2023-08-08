@@ -73,12 +73,16 @@ class FormSubmission(db.Model):
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
+    is_legacy = db.Column(db.Boolean, default=False)
+
     records = db.relationship('Record', backref=backref('submission', uselist=False, lazy=True), lazy=False)
 
     def as_dict(self):
         return {
             "id": self.id,
             "form_id": self.form_id,
+            "patient_id": self.patient_id,
+            "project_id": self.project_id,
             "records": as_dict(self.records),
             "created_on": self.created_on.isoformat(),
             "author": self.doctor.name if self.doctor else None

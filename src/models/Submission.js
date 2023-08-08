@@ -38,7 +38,14 @@ class Submission extends Model {
     }
 
     async save() {
-        let description = await this._api.submission.submit(this.project_id, this.patient_id, this.form_id, this.answers)
+        let description = undefined
+
+        if (this.id) {
+            description = await this._api.submission.update(this.project_id, this.patient_id, this.form_id, this.id, this.answers)
+        } else {
+            description = await this._api.submission.submit(this.project_id, this.patient_id, this.form_id, this.answers)
+        }
+
         this.init(description)
     }
 

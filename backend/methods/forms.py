@@ -71,7 +71,7 @@ def get_patient_submissions(project, patient):
     if patient not in project.patients:
         raise NotInProject
 
-    return FormSubmission.query.filter_by(project_id=project.id, patient_id=patient.id).all()
+    return FormSubmission.query.filter_by(is_legacy=False, project_id=project.id, patient_id=patient.id).all()
 
 
 def validate_form(form, answers):
@@ -87,6 +87,14 @@ def validate_form(form, answers):
 
 def find_form_by_id(form_id):
     return Form.query.get(form_id)
+
+
+def find_submission_by_id(submission_id):
+    return FormSubmission.query.get(submission_id)
+
+@transaction
+def mark_legacy(submission):
+    submission.is_legacy = True
 
 
 def find_category_by_code(category_code):

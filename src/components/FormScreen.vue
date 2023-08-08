@@ -13,6 +13,9 @@
                     <button onclick="window.print()"
                             class="btn btn-primary btn-sm me-1">Печать
                     </button>
+                    <button @click="edit()" v-if="disabled && !editing"
+                            class="btn btn-primary btn-sm me-1">Изменить
+                    </button>
                 </div>
             </div>
 
@@ -164,22 +167,26 @@ export default {
             answers: {},
             error: "",
             error_fields: [],
-            submission: undefined
+            submission: undefined,
+            editing: false
         }
     },
     methods: {
         searchForArray,
         formatDateTime,
-        back: function () {
-            this.$router.back()
-        },
         save: async function () {
             this.error_fields = []
 
             try {
                 await this.submission.save()
                 let submissions = (await this.patient.submissions)
-                submissions.push(this.submission)
+
+                if (!this.editing) {
+                    submissions.push(this.submission)
+                } else {
+                    this.editing = false
+                }
+
                 this.back()
             } catch (e) {
                 console.log(e)
@@ -187,7 +194,9 @@ export default {
                 this.error_fields = e.details
             }
         },
-
+        edit: function () {
+            this.editing = true
+        },
         getInputType: function (field) {
             if (field.type === 'string') {
                 return 'text'
@@ -205,11 +214,17 @@ export default {
             } else {
                 return "form-control"
             }
+        },
+        back: function () {
+            if (this.submission_id && this.editing) {
+                this.submission.reset()
+            }
+            this.$router.back()
         }
     },
     computed: {
         disabled: function () {
-            return this.submission_id
+            return this.submission_id && !this.editing
         }
     },
     async mounted() {
