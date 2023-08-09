@@ -6,6 +6,7 @@ import ProjectScreen from "@/components/ProjectScreen.vue";
 import PatientScreen from "@/components/PatientScreen.vue";
 import PatientEditorScreen from "@/components/PatientEditorScreen.vue";
 import FormScreen from "@/components/FormScreen.vue";
+import CompareScreen from "@/components/CompareScreen.vue";
 
 const routes = [
     {path: '/', name: 'index'},
@@ -35,6 +36,12 @@ const routes = [
         path: '/projects/:project_id/patients/:patient_id/form/:form_id',
         name: 'form',
         component: FormScreen,
+        props: true
+    },
+    {
+        path: '/projects/:project_id/patients/:patient_id/form/:form_id/compare',
+        name: 'form_compare',
+        component: CompareScreen,
         props: true
     },
 ]
