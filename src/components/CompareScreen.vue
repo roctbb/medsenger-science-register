@@ -30,7 +30,13 @@
                     <table class="table table-striped" v-for="row in extractParts(submissions, part)"
                            :key="row">
                         <thead>
-                            <tr><th>{{ part.name }}</th><td v-for="submission in submissions" :key="submission.id">{{ submission.readable_created_on }}</td></tr>
+                        <tr>
+                            <th>{{ part.name }}</th>
+                            <td v-for="submission in submissions" :key="submission.id">{{
+                                    submission.readable_created_on
+                                }}
+                            </td>
+                        </tr>
                         </thead>
                         <tbody>
                         <tr v-for="field in part.fields" v-bind:key="field.id">
@@ -39,63 +45,65 @@
                                 <div class="form-text" v-if="field.description">{{ field.description }}</div>
                             </td>
                             <td v-for="(submission_answers, i) in row" :key="i">
-                                <input
-                                    v-if="field.type === 'string'" type="text" class="form-control"
-                                    v-model="submission_answers[field.id]"
-                                    v-bind:required="field.required" disabled>
+                                <div v-if="submission_answers">
+                                    <input
+                                        v-if="field.type === 'string'" type="text" class="form-control"
+                                        v-model="submission_answers[field.id]"
+                                        v-bind:required="field.required" disabled>
 
-                                <input
-                                    v-if="field.type === 'integer'" type="number" step="1" class="form-control"
-                                    v-model="submission_answers[field.id]"
-                                    v-bind:required="field.required" disabled>
+                                    <input
+                                        v-if="field.type === 'integer'" type="number" step="1" class="form-control"
+                                        v-model="submission_answers[field.id]"
+                                        v-bind:required="field.required" disabled>
 
-                                <input
-                                    v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
-                                    v-model="submission_answers[field.id]"
-                                    v-bind:required="field.required" disabled>
+                                    <input
+                                        v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
+                                        v-model="submission_answers[field.id]"
+                                        v-bind:required="field.required" disabled>
 
-                                <textarea
-                                    v-if="field.type === 'text'" class="form-control"
-                                    v-model="submission_answers[field.id]"
-                                    v-bind:required="field.required" disabled></textarea>
+                                    <textarea
+                                        v-if="field.type === 'text'" class="form-control"
+                                        v-model="submission_answers[field.id]"
+                                        v-bind:required="field.required" disabled></textarea>
 
 
-                                <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
-                                               v-model="submission_answers[field.id]"
-                                               text-input
-                                               :enable-time-picker="false" locale="ru-RU" format="dd.MM.yyyy"
-                                               select-text="Выбрать" cancel-text="Закрыть"
-                                               v-bind:required="field.required"
-                                               disabled/>
+                                    <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
+                                                   v-model="submission_answers[field.id]"
+                                                   text-input
+                                                   :enable-time-picker="false" locale="ru-RU" format="dd.MM.yyyy"
+                                                   select-text="Выбрать" cancel-text="Закрыть"
+                                                   v-bind:required="field.required"
+                                                   disabled/>
 
-                                <div v-if="field.type === 'radio'">
-                                    <div v-for="(value, option) in field.params.options"
-                                         v-bind:key='option'
-                                         class="form-check">
-                                        <input class="form-check-input" type="radio"
-                                               :value="value"
+                                    <div v-if="field.type === 'radio'">
+                                        <div v-for="(value, option) in field.params.options"
+                                             v-bind:key='option'
+                                             class="form-check">
+                                            <input class="form-check-input" type="radio"
+                                                   :value="value"
+                                                   v-model="submission_answers[field.id]"
+                                                   disabled>
+                                            <label class="form-check-label">
+                                                {{ option }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="field.type === 'select'">
+                                        <select class="form-control form-select"
+                                                v-model="submission_answers[field.id]"
+                                                disabled>
+                                            <option v-for="(value, option) in field.params.options" :value="value"
+                                                    :key="value">{{ option }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-check" v-if="field.type === 'checkbox'">
+                                        <input class="form-check-input" type="checkbox"
                                                v-model="submission_answers[field.id]"
                                                disabled>
-                                        <label class="form-check-label">
-                                            {{ option }}
-                                        </label>
                                     </div>
-                                </div>
-
-                                <div v-if="field.type === 'select'">
-                                    <select class="form-control form-select"
-                                            v-model="submission_answers[field.id]"
-                                            disabled>
-                                        <option v-for="(value, option) in field.params.options" :value="value"
-                                                :key="value">{{ option }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="form-check" v-if="field.type === 'checkbox'">
-                                    <input class="form-check-input" type="checkbox"
-                                           v-model="submission_answers[field.id]"
-                                           disabled>
                                 </div>
                             </td>
                         </tr>
