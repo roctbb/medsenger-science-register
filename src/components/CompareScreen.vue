@@ -166,7 +166,7 @@ export default {
 
             const getPart = (s, i) => {
                 let sp = s.answers[form_part.id]
-                if (Object.keys(sp).length > i) {
+                if (sp && Object.keys(sp).length > i) {
                     return sp[Object.keys(sp).at(i)]
                 } else {
                     return null
