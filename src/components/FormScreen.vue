@@ -13,6 +13,9 @@
                     <button onclick="window.print()"
                             class="btn btn-primary btn-sm me-1">Печать
                     </button>
+                    <button @click="$router.push({name: 'form_compare', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})"
+                            class="btn btn-primary btn-sm me-1">Сравнение
+                    </button>
                     <button @click="edit()" v-if="disabled && !editing"
                             class="btn btn-primary btn-sm me-1">Изменить
                     </button>
