@@ -19,6 +19,7 @@
                     <button @click="edit()" v-if="disabled && !editing"
                             class="btn btn-primary btn-sm me-1">Изменить
                     </button>
+                    <button @click="back()" class="btn btn-warning btn-sm me-1">Назад</button>
                 </div>
             </div>
 
