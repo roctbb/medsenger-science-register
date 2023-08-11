@@ -47,7 +47,7 @@ class ProjectActions extends api_utils.ActionGroup {
 
     }
 
-    async addPatient(project_id, name, sex, birthday, medsenger_contract, email, days) {
+    async addPatient(project_id, name, sex, birthday, medsenger_contract, email, days, phone) {
 
         let query = {
             api_token: this.token,
@@ -59,6 +59,7 @@ class ProjectActions extends api_utils.ActionGroup {
             birthday: birthday,
             email: email,
             days: days,
+            phone: phone,
             medsenger_contract: medsenger_contract
         }
 
@@ -86,7 +87,7 @@ class ProjectActions extends api_utils.ActionGroup {
 
     }
 
-    async editPatient(project_id, patient_id, name, sex, birthday, medsenger_contract, email, days) {
+    async editPatient(project_id, patient_id, name, sex, birthday, medsenger_contract, email, days, phone) {
 
         let query = {
             api_token: this.token,
@@ -96,6 +97,7 @@ class ProjectActions extends api_utils.ActionGroup {
             name: name,
             sex: sex,
             birthday: birthday,
+            phone: phone,
             email: email,
             days: days,
             medsenger_contract: medsenger_contract

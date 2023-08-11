@@ -38,7 +38,7 @@ def add_submission(user, project_id, patient_id):
                             methods=['put'])
 @creates_response
 @requires_user
-def replace_submission(user, project_id, patient_id, submission_id):
+def edit_submission(user, project_id, patient_id, submission_id):
     data = request.json
 
     form_id = data.get('form_id')
@@ -49,8 +49,8 @@ def replace_submission(user, project_id, patient_id, submission_id):
     form = find_form_by_id(form_id)
 
     new_submission = submit_form(user, patient, form, answers)
-
     legacy_submission = find_submission_by_id(submission_id)
-    mark_legacy(legacy_submission)
+
+    replace_submission(legacy_submission, new_submission)
 
     return new_submission.as_dict()

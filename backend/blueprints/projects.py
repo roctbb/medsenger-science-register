@@ -17,7 +17,7 @@ def get_projects(user):
 def get_patients(user, project_id):
     project = find_project_by_id_for_user(user, project_id)
 
-    patients_descriptions = as_dict(project.patients)
+    patients_descriptions = list(sorted(as_dict(project.patients), key=lambda p: p['name']))
 
     patients_to_contracts = {
         contract.patient_id: contract.id for contract in
@@ -42,7 +42,7 @@ def add_patient(user, project_id):
         contract_id = medsenger_create_contract(user, data, data.get('days'))
 
     try:
-        patient = create_patient(data.get('name'), data.get('sex'), data.get('birthday'))
+        patient = create_patient(data.get('name'), data.get('sex'), data.get('birthday'), data.get('phone'))
     except AlreadyExists:
         patient = find_patient_by_credentials(data.get('name'), data.get('sex'), data.get('birthday'))
 
@@ -68,12 +68,12 @@ def edit_patient(user, project_id, patient_id):
 
     data = request.json
 
-    patient = update_patient(patient, data.get('name'), data.get('sex'), data.get('birthday'))
+    patient = update_patient(patient, data.get('name'), data.get('sex'), data.get('birthday'), data.get('phone'))
 
     patient_description = patient.as_dict()
 
     contract_id = None
-    if data.get('medsenger_contract') == True:
+    if data.get('medsenger_contract') == True and not patient.contracts:
         contract_id = medsenger_create_contract(user, data, data.get('days'))
 
     if contract_id:

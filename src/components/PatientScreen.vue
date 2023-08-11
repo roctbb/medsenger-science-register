@@ -1,40 +1,34 @@
 <template>
     <div v-if="project && patient">
+
         <div class="hstack gap-3">
             <div class="me-auto">
-                <h4 class="my-3">{{ patient.name }}</h4>
+                <h4 class="my-3">{{ patient.name }} <small class="text-muted">пациент</small></h4>
             </div>
             <div>
-                <button @click="$router.push({name: 'project', params: {id: this.project.id}})" class="btn btn-warning btn-sm me-1">Назад</button>
+                <button @click="$router.push({name: 'project', params: {id: this.project.id}})"
+                        class="btn btn-warning btn-sm me-1">Назад
+                </button>
                 <a target="_blank" class="btn btn-sm btn-success me-1" v-if="patient.contract_id"
                    :href="medsenger_host + '/client#/?c=' + patient.contract_id">Medsenger</a>
                 <a class="btn btn-sm btn-success me-1"
-                   @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: this.patient.id}})">Изменить</a>
-
-                <div class="dropdown d-inline" v-if="!project.has_groups()">
-                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                        Добавить
-                    </button>
-
-                    <ul class="dropdown-menu">
-                        <li v-for="form in available_forms()" v-bind:key="form.id"><a
-                            class="dropdown-item text-wrap"
-                            @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
-                                form.name
-                            }}</a></li>
-                    </ul>
-                </div>
+                   @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: this.patient.id}})">Изменить
+                    профиль</a>
             </div>
         </div>
 
-        <p class="text-muted">{{ patient.readable_birthday }}</p>
+        <div class="row my-1">
+            <div class="col">
+                <input type="text" placeholder="Поиск..." v-model="search_field" class="form-control"/>
+            </div>
+        </div>
 
-        {{ project.form }}
+        <p class="text-muted my-3">{{ patient.readable_birthday }} <span
+            v-if="patient.phone"> / телефон {{ patient.phone }}</span></p>
 
         <div v-if="!project.has_groups()">
             <div class="row py-2" v-if="submissions">
-                <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="submission in submissions"
+                <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="submission in apply_search(submissions)"
                      v-bind:key="submission.id">
                     <div class="card"
                          @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
@@ -46,37 +40,31 @@
                     </div>
                 </div>
             </div>
+
+            <div class="dropdown d-inline" v-if="!project.has_groups()">
+                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    Добавить
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li v-for="form in available_forms()" v-bind:key="form.id"><a
+                        class="dropdown-item text-wrap"
+                        @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
+                            form.name
+                        }}</a></li>
+                </ul>
+            </div>
+
         </div>
         <div v-else>
             <div v-for="group in project.form_groups" :key="group.id">
 
-                <div class="hstack gap-3">
-                    <div class="me-auto">
-                        <h6 class="my-3">{{ group.name }}</h6>
-                    </div>
-                    <div>
-                        <div class="dropdown d-inline" v-if="project.has_groups()">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                Добавить
-                            </button>
-
-                            <ul class="dropdown-menu">
-                                <li v-for="form in available_forms(group)" v-bind:key="form.id"><a
-                                    class="dropdown-item text-wrap"
-                                    @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
-                                        form.name
-                                    }}</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
+                <h6 class="my-3">{{ group.name }}</h6>
 
                 <div class="row py-2" v-if="submissions">
                     <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
-                         v-for="submission in submissions.filter(s => findForm(s.form_id).category_id === group.id)"
+                         v-for="submission in apply_search(submissions.filter(s => findForm(s.form_id).category_id === group.id))"
                          v-bind:key="submission.id">
                         <div class="card"
                              @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
@@ -88,6 +76,22 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="dropdown d-inline" v-if="project.has_groups()">
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Добавить
+                    </button>
+
+                    <ul class="dropdown-menu">
+                        <li v-for="form in available_forms(group)" v-bind:key="form.id"><a
+                            class="dropdown-item text-wrap"
+                            @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
+                                form.name
+                            }}</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -95,7 +99,7 @@
 
 <script>
 
-import {formatDate, formatDateTime} from "../utils/helpers";
+import {empty, formatDate, formatDateTime} from "../utils/helpers";
 
 export default {
     name: 'PatientScreen',
@@ -105,6 +109,7 @@ export default {
         return {
             project: undefined,
             patient: undefined,
+            search_field: "",
             submissions: [],
             medsenger_host: process.env.VUE_APP_MEDSENGER_HOST
         }
@@ -119,8 +124,21 @@ export default {
             if (category === undefined) {
                 return this.project.forms.filter(form => !form.specialty || this.state.user.is(form.specialty))
             } else {
-                return this.project.forms.filter(form => form.category_id === category.id && (form => !form.specialty || this.state.user.is(form.specialty)))
+                return this.project.forms.filter(form => form.category_id === category.id && (!form.specialty || this.state.user.is(form.specialty)))
             }
+        },
+        apply_search: function (submissions) {
+            let query = this.search_field.toLowerCase()
+
+            let filtered_submissions = submissions.filter(s =>
+                empty(this.search_field) ||
+                this.findForm(s.form_id).name.toLowerCase().includes(query) ||
+                s.readable_created_on.includes(query) ||
+                s.author.toLowerCase().includes(query)
+            )
+
+            filtered_submissions.sort((a, b) => a.created_on - b.created_on)
+            return filtered_submissions
         }
     },
     async mounted() {

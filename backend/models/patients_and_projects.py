@@ -16,12 +16,16 @@ class Patient(db.Model):
     sex = db.Column(db.Enum(Sex), nullable=True)
     birthday = db.Column(db.Date, nullable=True)
     email = db.Column(db.String(256), nullable=True)
+    phone = db.Column(db.String(12), nullable=True)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
+
     records = db.relationship('Record', backref=backref('patient', uselist=False), lazy=True)
     submissions = db.relationship('FormSubmission', backref=backref('patient', uselist=False), lazy=True)
+    contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=True)
 
     def as_dict(self):
         return {
@@ -29,6 +33,8 @@ class Patient(db.Model):
             "name": self.name,
             "sex": self.sex,
             "email": self.email,
+            "phone": self.phone,
+            "created_by": self.doctor.name if self.doctor else "",
             "birthday": self.birthday.isoformat()
         }
 

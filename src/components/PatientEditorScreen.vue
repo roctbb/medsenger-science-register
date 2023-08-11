@@ -29,6 +29,11 @@
                 </select>
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">Телефон</label>
+                <input type="text" class="form-control" v-model="patient.phone">
+            </div>
+
             <div class="mb-3" v-if="can_create_medsenger_contract">
                 <div class="form-check form-switch">
                     <input class="form-check-input" role="switch" type="checkbox"

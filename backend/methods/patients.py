@@ -4,21 +4,21 @@ from backend.helpers import *
 
 
 @transaction
-def create_patient(name, sex, birthday):
+def create_patient(name, sex, birthday, phone=None):
     if not name or not sex or not birthday:
         raise InsufficientData
 
     if find_patient_by_credentials(name, sex, birthday):
         raise AlreadyExists
 
-    patient = Patient(name=name, sex=sex, birthday=birthday)
+    patient = Patient(name=name, sex=sex, birthday=birthday, phone=phone)
     db.session.add(patient)
 
     return patient
 
 
 @transaction
-def update_patient(patient, name, sex, birthday):
+def update_patient(patient, name, sex, birthday, phone=None):
     if not patient:
         NotFound
 
@@ -32,6 +32,7 @@ def update_patient(patient, name, sex, birthday):
     patient.name = name
     patient.sex = sex
     patient.birthday = birthday
+    patient.phone = phone
 
     return patient
 

@@ -92,6 +92,7 @@ def find_form_by_id(form_id):
 def find_submission_by_id(submission_id):
     return FormSubmission.query.get(submission_id)
 
+
 @transaction
 def mark_legacy(submission):
     submission.is_legacy = True
@@ -99,3 +100,9 @@ def mark_legacy(submission):
 
 def find_category_by_code(category_code):
     return RecordCategory.query.filter_by(code=category_code).first()
+
+
+@transaction
+def replace_submission(old, new):
+    mark_legacy(old)
+    new.created_on = old.created_on
