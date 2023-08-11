@@ -5,7 +5,7 @@ class Model {
         this._backup = description
 
         if (description) {
-            this.id = description.id
+            this.id = parseInt(description.id)
         }
     }
 
