@@ -19,6 +19,8 @@ class Patient extends Model {
             this.contract_id = description.contract_id
             this.email = description.email
             this.days = description.days
+            this.created_by = description.created_by
+            this.phone = description.phone
 
             if (this.contract_id) {
                 this.medsenger_contract = true
@@ -34,16 +36,16 @@ class Patient extends Model {
     }
 
     get readable_birthday() {
-        return formatDate(this.birthday)
+        return formatDate(new Date(this.birthday))
     }
 
 
     async save() {
         if (this.id) {
-            let description = await this._api.project.editPatient(this.project_id, this.id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days)
+            let description = await this._api.project.editPatient(this.project_id, this.id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
             this.init(this.project_id, description)
         } else {
-            let description = await this._api.project.addPatient(this.project_id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days)
+            let description = await this._api.project.addPatient(this.project_id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
             this.init(this.project_id, description)
         }
     }

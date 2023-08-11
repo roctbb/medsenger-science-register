@@ -19,6 +19,7 @@ class User(db.Model):
     activation_key = db.Column(db.String(256), nullable=True)
 
     submissions = db.relationship('FormSubmission', backref=backref('doctor', uselist=False), lazy=False)
+    patients = db.relationship('Patient', backref=backref('doctor', uselist=False), lazy=True)
 
     def as_dict(self):
         info = {

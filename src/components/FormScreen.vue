@@ -5,7 +5,7 @@
             <div class="hstack gap-3">
                 <div class="me-auto">
                     <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
-                        v-if="this.disabled"> ({{ formatDateTime(this.submission.created_on) }} / {{
+                        v-if="this.disabled"> ({{ this.submission.readable_created_on }} / {{
                             this.submission.author
                         }})</small></h4>
                 </div>
