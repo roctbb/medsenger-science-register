@@ -48,7 +48,7 @@ class Project extends Model {
                 resolve(this._patients)
             } else {
                 this._api.project.getPatients(this.id).then(patients => {
-                    this._patients = patients.map((patient_description) => new Patient(this.id, patient_description))
+                    this._patients = patients.map((patient_description) => new Patient(this, patient_description))
                     resolve(this._patients)
                 })
             }

@@ -114,7 +114,7 @@ export default {
         if (this.id) {
             this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
         } else {
-            this.patient = new Patient(this.project_id)
+            this.patient = new Patient(this.project)
         }
 
     }

@@ -3,13 +3,13 @@ import {formatDate} from "@/utils/helpers";
 import Submission from "@/models/Submission";
 
 class Patient extends Model {
-    constructor(project_id, description) {
+    constructor(project, description) {
         super(description)
         this._submissions = undefined
-        this.init(project_id, description)
+        this.init(project, description)
     }
 
-    init(project_id, description) {
+    init(project, description) {
         super.init(description);
 
         if (description) {
@@ -32,7 +32,8 @@ class Patient extends Model {
             this.sex = 'male'
         }
 
-        this.project_id = project_id
+        this.project = project
+        this.project_id = project.id
     }
 
     get readable_birthday() {
@@ -46,12 +47,12 @@ class Patient extends Model {
             this.init(this.project_id, description)
         } else {
             let description = await this._api.project.addPatient(this.project_id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
-            this.init(this.project_id, description)
+            this.init(this.project, description)
         }
     }
 
     reset() {
-        this.init(this.project_id, this._backup)
+        this.init(this.project, this._backup)
     }
 
     get submissions() {
@@ -60,7 +61,7 @@ class Patient extends Model {
                 resolve(this._submissions)
             } else {
                 this._api.submission.getAll(this.project_id, this.id).then(submissions => {
-                    this._submissions = submissions.map((submission) => new Submission(submission))
+                    this._submissions = submissions.map((submission) => new Submission(submission, this.project.forms.find(f => f.id === submission.form_id)))
                     resolve(this._submissions)
                 })
             }

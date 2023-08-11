@@ -3,12 +3,12 @@ import {formatDateTime} from "@/utils/helpers";
 import {v4 as uuidv4} from 'uuid';
 
 class Submission extends Model {
-    constructor(description) {
+    constructor(description, form) {
         super()
-        this.init(description)
+        this.init(description, form)
     }
 
-    init(description) {
+    init(description, form) {
         super.init(description);
 
         this.project_id = description.project_id
@@ -18,6 +18,7 @@ class Submission extends Model {
         this.records = description.records
         this.author = description.author
         this.created_on = new Date(description.created_on)
+        this.form = form
 
         if (!this.answers) {
             this.answers = {}
@@ -46,7 +47,11 @@ class Submission extends Model {
             description = await this._api.submission.submit(this.project_id, this.patient_id, this.form_id, this.answers)
         }
 
-        this.init(description)
+        this.init(description, this.form)
+    }
+
+    reset() {
+        this.init(this._backup, this.form)
     }
 
     remove(part, group_key) {
@@ -67,13 +72,13 @@ class Submission extends Model {
         })
     }
 
-    static create(project_id, patient_id, form) {
+    static create(project, patient, form) {
         let submission = new Submission({
-            project_id: project_id,
-            patient_id: patient_id,
+            project_id: project.id,
+            patient_id: patient.id,
             form_id: form.id,
             answers: {}
-        })
+        }, form)
 
         form.parts.forEach(part => {
             submission.answers[part.id] = {}

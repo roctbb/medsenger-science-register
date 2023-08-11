@@ -242,8 +242,7 @@ export default {
             this.form = this.project.forms.find(form => form.id === this.submission.form_id)
         } else if (this.form_id) {
             this.form = this.project.forms.find(form => form.id === parseInt(this.form_id))
-            this.submission = Submission.create(this.project_id, this.patient_id, this.form)
-            console.log(this.submission)
+            this.submission = Submission.create(this.project, this.patient, this.form)
         }
 
     }
