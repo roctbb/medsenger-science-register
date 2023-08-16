@@ -20,6 +20,7 @@ class User(db.Model):
 
     submissions = db.relationship('FormSubmission', backref=backref('doctor', uselist=False), lazy=False)
     patients = db.relationship('Patient', backref=backref('doctor', uselist=False), lazy=True)
+    comments = db.relationship('Comment', backref=backref('doctor', uselist=False), lazy=True)
 
     def as_dict(self):
         info = {

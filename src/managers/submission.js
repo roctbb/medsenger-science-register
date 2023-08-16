@@ -2,8 +2,8 @@ import Manager from "@/managers/common";
 
 class SubmissionManager extends Manager {
 
-    async getAll(project, patient) {
-        return await this.api.submission.getAll(project.id, patient.id)
+    async all(project, patient) {
+        return await this.api.submission.all(project.id, patient.id)
     }
 
     async add(project, patient, form, answers) {

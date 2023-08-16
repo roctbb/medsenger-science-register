@@ -25,7 +25,8 @@ class Patient(db.Model):
 
     records = db.relationship('Record', backref=backref('patient', uselist=False), lazy=True)
     submissions = db.relationship('FormSubmission', backref=backref('patient', uselist=False), lazy=True)
-    contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=True)
+    contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=False)
+    comments = db.relationship('Comment', backref=backref('patient', uselist=False), lazy=False)
 
     def as_dict(self):
         return {
@@ -34,6 +35,7 @@ class Patient(db.Model):
             "sex": self.sex,
             "email": self.email,
             "phone": self.phone,
+            "comments": list(sorted(as_dict(self.comments), key=lambda p: p['created_on'])),
             "created_by": self.doctor.name if self.doctor else "",
             "birthday": self.birthday.isoformat()
         }

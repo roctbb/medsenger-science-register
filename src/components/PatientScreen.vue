@@ -26,42 +26,59 @@
         <p class="text-muted my-3">{{ patient.readable_birthday }} <span
             v-if="patient.phone"> / телефон {{ patient.phone }}</span></p>
 
-        <div v-for="group in project.form_groups" :key="group.id">
-
-            <h6 class="my-3" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
-            <div class="row py-2" v-if="submissions">
-                <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
-                     v-for="submission in apply_search(submissions, group)"
-                     v-bind:key="submission.id">
-                    <div class="card"
-                         @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ submission.form.name }}</h5>
-                            <small class="text-muted my-0">{{ submission.readable_created_on }}</small><br>
-                            <small class="text-muted my-0">{{ submission.author }}</small>
+        <div class="row">
+            <div class="col-8">
+                <div v-for="group in project.form_groups" :key="group.id">
+                    <h6 class="mb-2" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
+                    <div class="row py-2" v-if="submissions">
+                        <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
+                             v-for="submission in apply_search(submissions, group)"
+                             v-bind:key="submission.id">
+                            <div class="card"
+                                 @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ submission.form.name }}</h5>
+                                    <small class="text-muted my-0">{{ submission.readable_created_on }}</small><br>
+                                    <small class="text-muted my-0">{{ submission.author }}</small>
+                                </div>
+                            </div>
                         </div>
+
+                        <p class="m-0" v-if="!apply_search(submissions, group).length"><small>Нет данных</small></p>
+                    </div>
+
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-primary btn-sm dropdown-toggle mt-2 mb-4" type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            Добавить
+                        </button>
+
+                        <ul class="dropdown-menu">
+                            <li v-for="form in available_forms(group)" v-bind:key="form.id"><a
+                                class="dropdown-item text-wrap"
+                                @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
+                                    form.name
+                                }}</a></li>
+                        </ul>
                     </div>
                 </div>
-
-                <p v-if="!apply_search(submissions, group).length">Нет данных</p>
             </div>
+            <div class="col-4" style="border-left: 1px dotted gray;">
+                <h6 class="mb-2">Комментарии</h6>
 
-            <div class="dropdown d-inline">
-                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                    Добавить
-                </button>
+                <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
+                        comment.author
+                    }}</strong><span v-if="comment.description"> / {{ comment.description }}</span>: {{ comment.text }}</small>
+                </p>
+                <p class="my-3" v-if="!patient.comments.length"><small>Комментариев еще нет</small></p>
 
-                <ul class="dropdown-menu">
-                    <li v-for="form in available_forms(group)" v-bind:key="form.id"><a
-                        class="dropdown-item text-wrap"
-                        @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
-                            form.name
-                        }}</a></li>
-                </ul>
+                <textarea class="form-control" v-model="new_comment"></textarea>
+                <button @click="addComment()" class="btn btn-sm btn-success my-1">Добавить</button>
             </div>
         </div>
+
+
     </div>
 </template>
 
@@ -79,7 +96,8 @@ export default {
             patient: undefined,
             search_field: "",
             submissions: [],
-            medsenger_host: process.env.VUE_APP_MEDSENGER_HOST
+            medsenger_host: process.env.VUE_APP_MEDSENGER_HOST,
+            new_comment: ""
         }
     },
     methods: {
@@ -104,6 +122,10 @@ export default {
 
             filtered_submissions.sort((a, b) => a.created_on - b.created_on)
             return filtered_submissions
+        },
+        addComment: function () {
+            this.patient.add_comment(this.new_comment)
+            this.new_comment = ""
         }
     },
     async mounted() {

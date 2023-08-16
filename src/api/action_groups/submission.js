@@ -1,7 +1,7 @@
 import api_utils from "../api_utils";
 
 class SubmissionActions extends api_utils.ActionGroup {
-    async getAll(project_id, patient_id) {
+    async all(project_id, patient_id) {
 
         let query = {
             api_token: this.token,
