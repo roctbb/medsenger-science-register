@@ -3,6 +3,7 @@ import AccountActions from "@/api/action_groups/account";
 import ProjectActions from "@/api/action_groups/project";
 import SubmissionActions from "@/api/action_groups/submission";
 import MedsengerActions from "@/api/action_groups/medsenger";
+import PatientActions from "@/api/action_groups/patient";
 
 class ApiClient {
     constructor(host, token) {
@@ -11,9 +12,10 @@ class ApiClient {
         this.account = new AccountActions(client, token)
         this.project = new ProjectActions(client, token)
         this.submission = new SubmissionActions(client, token)
+        this.patient = new PatientActions(client, token)
         this.medsenger = new MedsengerActions(client, token)
 
-        this.__actionGroups = [this.account, this.project, this.submission, this.medsenger]
+        this.__actionGroups = [this.account, this.project, this.submission, this.medsenger, this.patient]
     }
 
     setRole(role) {

@@ -1,6 +1,7 @@
 import Model from "@/models/Model";
 import {formatDate} from "@/utils/helpers";
 import Submission from "@/models/Submission";
+import Comment from "@/models/Comment";
 
 class Patient extends Model {
     constructor(project, description) {
@@ -21,14 +22,20 @@ class Patient extends Model {
             this.days = description.days
             this.created_by = description.created_by
             this.phone = description.phone
+            this.comments = []
+
+            if (description.comments) {
+                description.comments.forEach(comment => {
+                    this.comments.push(new Comment(comment))
+                })
+            }
 
             if (this.contract_id) {
                 this.medsenger_contract = true
             } else {
                 this.medsenger_contract = false
             }
-        }
-        else {
+        } else {
             this.sex = 'male'
         }
 
@@ -40,13 +47,18 @@ class Patient extends Model {
         return formatDate(new Date(this.birthday))
     }
 
+    async add_comment(text) {
+        let comment = await this._api.patient.addComment(this.project_id, this.id, text)
+        this.comments.push(new Comment(comment))
+    }
+
 
     async save() {
         if (this.id) {
-            let description = await this._api.project.editPatient(this.project_id, this.id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
+            let description = await this._api.patient.edit(this.project_id, this.id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
             this.init(this.project_id, description)
         } else {
-            let description = await this._api.project.addPatient(this.project_id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
+            let description = await this._api.patient.add(this.project_id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
             this.init(this.project, description)
         }
     }
@@ -60,7 +72,7 @@ class Patient extends Model {
             if (this._submissions) {
                 resolve(this._submissions)
             } else {
-                this._api.submission.getAll(this.project_id, this.id).then(submissions => {
+                this._api.submission.all(this.project_id, this.id).then(submissions => {
                     this._submissions = submissions.map((submission) => new Submission(submission, this.project.forms.find(f => f.id === submission.form_id)))
                     resolve(this._submissions)
                 })

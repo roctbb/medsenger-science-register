@@ -1,4 +1,5 @@
 import api from "@/api"
+import {formatDateTime} from "@/utils/helpers";
 
 class Model {
     init(description) {
@@ -15,6 +16,10 @@ class Model {
 
     reset() {
         this.init(this._backup)
+    }
+
+    get readable_created_on() {
+        return formatDateTime(this.created_on)
     }
 }
 

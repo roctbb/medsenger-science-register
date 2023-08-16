@@ -4,3 +4,4 @@ from .submissions import *
 from .medsenger import *
 from .editor import *
 from .activate import *
+from .comments import *

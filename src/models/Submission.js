@@ -1,5 +1,4 @@
 import Model from "@/models/Model";
-import {formatDateTime} from "@/utils/helpers";
 import {v4 as uuidv4} from 'uuid';
 
 class Submission extends Model {
@@ -89,10 +88,6 @@ class Submission extends Model {
             form_id: form.id,
             answers: {}
         }, form)
-    }
-
-    get readable_created_on() {
-        return formatDateTime(this.created_on)
     }
 }
 
