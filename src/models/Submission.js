@@ -24,6 +24,7 @@ class Submission extends Model {
             this.answers = {}
         }
 
+        // add existing records
         if (this.records) {
             this.records.forEach((record) => {
                 if (!this.answers[record.params.part_id]) {
@@ -36,6 +37,13 @@ class Submission extends Model {
                 this.answers[record.params.part_id][record.params.group_key][record.params.question_id] = record.value
             })
         }
+
+        // add empty parts
+        this.form.parts.forEach(part => {
+            if (!part.repeatable && !this.answers[part.id]) {
+                this.extend(part)
+            }
+        })
     }
 
     async save() {
@@ -59,15 +67,17 @@ class Submission extends Model {
     }
 
     extend(part) {
-        const part_id = uuidv4()
-        this.answers[part.id][part_id] = {}
-        this.initPart(part, part_id)
-    }
+        const group_id = uuidv4()
 
-    initPart(part, part_id) {
+        if (!this.answers[part.id]) {
+            this.answers[part.id] = {}
+        }
+
+        this.answers[part.id][group_id] = {}
+
         part.fields.forEach(field => {
             if (field.type === 'select' || field.type === 'radio') {
-                this.answers[part.id][part_id][field.id] = Object.values(field.params.options)[0]
+                this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
             }
         })
     }
@@ -81,12 +91,8 @@ class Submission extends Model {
         }, form)
 
         form.parts.forEach(part => {
-            submission.answers[part.id] = {}
-
             if (!part.repeatable) {
-                const part_id = uuidv4()
-                submission.answers[part.id][part_id] = {}
-                submission.initPart(part, part_id)
+                submission.extend(part)
             }
         })
 
