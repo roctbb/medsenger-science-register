@@ -37,7 +37,7 @@
                             <div class="card"
                                  @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ submission.form.name }}</h5>
+                                    <h6 class="card-title">{{ submission.form.name }}</h6>
                                     <small class="text-muted my-0">{{ submission.readable_created_on }}</small><br>
                                     <small class="text-muted my-0">{{ submission.author }}</small>
                                 </div>
