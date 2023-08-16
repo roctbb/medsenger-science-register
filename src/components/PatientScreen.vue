@@ -30,7 +30,7 @@
             <div class="col-8">
                 <div v-for="group in project.form_groups" :key="group.id">
                     <h6 class="mb-2" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
-                    <div class="row py-2" v-if="submissions">
+                    <div class="row pt-2" v-if="submissions">
                         <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
                              v-for="submission in apply_search(submissions, group)"
                              v-bind:key="submission.id">
@@ -44,11 +44,11 @@
                             </div>
                         </div>
 
-                        <p class="m-0" v-if="!apply_search(submissions, group).length"><small>Нет данных</small></p>
+                        <p class="mb-3" v-if="!apply_search(submissions, group).length"><small>Нет данных</small></p>
                     </div>
 
                     <div class="dropdown d-inline">
-                        <button class="btn btn-primary btn-sm dropdown-toggle mt-2 mb-4" type="button"
+                        <button class="btn btn-primary btn-sm dropdown-toggle mb-4" type="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false">
                             Добавить
@@ -69,7 +69,7 @@
 
                 <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
                         comment.author
-                    }}</strong><span v-if="comment.description"> / {{ comment.description }}</span>: {{ comment.text }}</small>
+                    }}</strong><span v-if="comment.description"> / {{ comment.description }}</span>: {{ comment.text }}</small><br><small class="text-muted">{{ comment.readable_created_on }}</small>
                 </p>
                 <p class="my-3" v-if="!patient.comments.length"><small>Комментариев еще нет</small></p>
 
