@@ -83,20 +83,12 @@ class Submission extends Model {
     }
 
     static create(project, patient, form) {
-        let submission = new Submission({
+        return new Submission({
             project_id: project.id,
             patient_id: patient.id,
             form_id: form.id,
             answers: {}
         }, form)
-
-        form.parts.forEach(part => {
-            if (!part.repeatable) {
-                submission.extend(part)
-            }
-        })
-
-        return submission
     }
 
     get readable_created_on() {
