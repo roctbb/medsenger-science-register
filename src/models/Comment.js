@@ -12,7 +12,6 @@ class Comment extends Model {
         this.text = description.text
         this.description = description.description
         this.author = description.author
-        this.created_on = description.created_on
     }
 }
 

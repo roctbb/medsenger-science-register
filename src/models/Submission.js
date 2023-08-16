@@ -16,7 +16,6 @@ class Submission extends Model {
         this.answers = description.answers
         this.records = description.records
         this.author = description.author
-        this.created_on = new Date(description.created_on)
         this.form = form
 
         if (!this.answers) {

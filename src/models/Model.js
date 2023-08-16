@@ -7,6 +7,11 @@ class Model {
 
         if (description) {
             this.id = parseInt(description.id)
+
+            if (description.created_on) {
+                this.created_on = new Date(description.created_on)
+            }
+
         }
     }
 
