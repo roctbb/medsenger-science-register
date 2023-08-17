@@ -98,7 +98,7 @@ export default {
             project: undefined,
             patient: undefined,
             search_field: "",
-            submissions: [],
+            submissions: undefined,
             medsenger_host: process.env.VUE_APP_MEDSENGER_HOST,
             new_comment: ""
         }
