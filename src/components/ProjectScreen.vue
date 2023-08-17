@@ -28,7 +28,7 @@
                             <div class="hstack">
                                 <div class="me-auto"
                                      @click="$router.push({name: 'patient', params: {project_id: project.id, id: patient.id}})">
-                                    <h5 class="card-title my-1">{{ patient.name }}</h5>
+                                    <h6 class="card-title my-1">{{ patient.name }}</h6>
                                 </div>
                                 <div
                                     @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: patient.id}})">
