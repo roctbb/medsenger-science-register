@@ -2,8 +2,8 @@
     <div v-if="project && patient">
 
         <div class="hstack gap-3">
-            <div class="me-auto">
-                <h4 class="my-3">{{ patient.name }} <small class="text-muted">пациент</small></h4>
+            <div class="me-auto my-3">
+                <h4 class="my-1">{{ patient.name }} <small class="text-muted">пациент</small><small class="text-muted" v-if="patient.step"> / {{ patient.step }}</small></h4>
             </div>
             <div>
                 <button @click="$router.push({name: 'project', params: {id: this.project.id}})"
@@ -74,7 +74,7 @@
                 <p class="my-3" v-if="!patient.comments.length"><small>Комментариев еще нет</small></p>
 
                 <textarea class="form-control" v-model="new_comment"></textarea>
-                <button @click="addComment()" class="btn btn-sm btn-success my-1">Добавить</button>
+                <button @click="addComment()" class="btn btn-sm btn-success my-2">Добавить</button>
             </div>
         </div>
 
