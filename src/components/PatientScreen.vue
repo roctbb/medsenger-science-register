@@ -26,11 +26,11 @@
         <p class="text-muted my-3">{{ patient.readable_birthday }} <span
             v-if="patient.phone"> / телефон {{ patient.phone }}</span></p>
 
-        <div class="row">
+        <div class="row" v-if="submissions">
             <div class="col-8">
                 <div v-for="group in project.form_groups" :key="group.id">
                     <h6 class="mb-2" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
-                    <div class="row pt-2" v-if="submissions">
+                    <div class="row pt-2">
                         <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
                              v-for="submission in apply_search(submissions, group)"
                              v-bind:key="submission.id">
@@ -77,6 +77,7 @@
                 <button @click="addComment()" class="btn btn-sm btn-success my-2">Добавить</button>
             </div>
         </div>
+        <loading v-else></loading>
 
 
     </div>
