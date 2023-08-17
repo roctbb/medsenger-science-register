@@ -3,6 +3,7 @@ import json
 from backend.models import *
 from .exceptions import *
 from backend.helpers import *
+from .comments import *
 
 
 @transaction
@@ -39,6 +40,9 @@ def submit_form(doctor, patient, form, answers):
                                     value=answer,
                                     params=params)
                     db.session.add(record)
+
+                if field.get('export_comment', False) and answer:
+                    place_comment(form.project, patient, doctor, answer, description=f"{form.name}, {field.get('text')}")
 
     return submission
 
