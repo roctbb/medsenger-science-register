@@ -80,16 +80,18 @@
 
 
     </div>
+    <loading v-else></loading>
 </template>
 
 <script>
 
 import {empty, formatDate, formatDateTime} from "../utils/helpers";
+import Loading from "@/components/Loading.vue";
 
 export default {
     name: 'PatientScreen',
     props: ['project_id', 'id'],
-    components: {},
+    components: {Loading},
     data() {
         return {
             project: undefined,
