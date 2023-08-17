@@ -22,6 +22,7 @@ def get_patients(user, project_id):
     return patients_descriptions
 
 
+
 @projects_blueprint.route('/project/<int:project_id>/patients', methods=['post'])
 @creates_response
 @requires_user
@@ -66,5 +67,17 @@ def edit_patient(user, project_id, patient_id):
 
     if contract_id:
         save_contract(patient, project, user, contract_id)
+
+    return patient.as_dict(load_project_data(patient, project))
+
+@projects_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>', methods=['get'])
+@creates_response
+@requires_user
+def get_patient(user, project_id, patient_id):
+    project = find_project_by_id_for_user(user, project_id)
+    patient = find_patient_by_id(patient_id)
+
+    if patient not in project.patients:
+        raise NotInProject
 
     return patient.as_dict(load_project_data(patient, project))
