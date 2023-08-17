@@ -93,6 +93,18 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="row my-2">
+                        <label class="col-md-4 col-form-label col-form-label-sm">
+                            Экспорт комментария?
+                        </label>
+                        <div class="col-md-8">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" :id="'export_comment_question_setter_' + i"
+                                       v-model="question.export_comment">
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row my-2">
                         <div class="col-md-4 col-form-label col-form-label-sm">
