@@ -44,6 +44,7 @@
 
 
         </div>
+        <loading v-else></loading>
     </div>
 </template>
 
@@ -51,11 +52,12 @@
 
 
 import {empty, formatDate} from "../utils/helpers";
+import Loading from "@/components/Loading.vue";
 
 export default {
     name: 'ProjectPatientsScreen',
     props: ['id'],
-    components: {},
+    components: {Loading},
     data() {
         return {
             search_field: '',

@@ -9,14 +9,17 @@
             </div>
         </div>
     </div>
+    <loading v-else></loading>
 </template>
 
 <script>
 
 
+import Loading from "@/components/Loading.vue";
+
 export default {
     name: 'ProjectsScreen',
-    components: {},
+    components: {Loading},
     data() {
         return {}
     },
