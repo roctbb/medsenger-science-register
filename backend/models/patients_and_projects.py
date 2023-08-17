@@ -25,6 +25,7 @@ class Patient(db.Model):
 
     records = db.relationship('Record', backref=backref('patient', uselist=False), lazy=True)
     submissions = db.relationship('FormSubmission', backref=backref('patient', uselist=False), lazy=True)
+    files = db.relationship('File', backref=backref('patient', uselist=False), lazy=True)
     contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=True)
 
     def as_dict(self):

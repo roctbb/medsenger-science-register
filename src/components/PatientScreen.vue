@@ -1,6 +1,5 @@
 <template>
     <div v-if="project && patient">
-
         <div class="hstack gap-3">
             <div class="me-auto">
                 <h4 class="my-3">{{ patient.name }} <small class="text-muted">пациент</small></h4>
@@ -26,40 +25,82 @@
         <p class="text-muted my-3">{{ patient.readable_birthday }} <span
             v-if="patient.phone"> / телефон {{ patient.phone }}</span></p>
 
-        <div v-for="group in project.form_groups" :key="group.id">
+        <div class="row">
+            <div class="col-8">
+                <div v-for="group in project.form_groups" :key="group.id">
 
-            <h6 class="my-3" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
-            <div class="row py-2" v-if="submissions">
-                <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
-                     v-for="submission in apply_search(submissions, group)"
-                     v-bind:key="submission.id">
-                    <div class="card"
-                         @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ submission.form.name }}</h5>
-                            <small class="text-muted my-0">{{ submission.readable_created_on }}</small><br>
-                            <small class="text-muted my-0">{{ submission.author }}</small>
+                    <h6 class="my-3" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
+                    <div class="row py-2" v-if="submissions">
+                        <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
+                             v-for="submission in apply_search(submissions, group)"
+                             v-bind:key="submission.id">
+                            <div class="card"
+                                 @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ submission.form.name }}</h5>
+                                    <small class="text-muted my-0">{{ submission.readable_created_on }}</small><br>
+                                    <small class="text-muted my-0">{{ submission.author }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p v-if="!apply_search(submissions, group).length">Нет данных</p>
+                    </div>
+
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            Добавить
+                        </button>
+
+                        <ul class="dropdown-menu">
+                            <li v-for="form in available_forms(group)" v-bind:key="form.id"><a
+                                class="dropdown-item text-wrap"
+                                @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
+                                    form.name
+                                }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="fileName" class="form-label">Название документа</label>
+                            <input type="email" class="form-control form-control-sm" id="fileName"
+                                   placeholder="Введите название документа" v-model="new_file.name">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control form-control-sm" type="file" id="formFile" ref="formFile"
+                                   @change="change_file">
+                        </div>
+                        <button @click="upload_file"
+                                class="btn btn-primary btn-sm me-1">Загрузить документ
+                        </button>
+                        <div class="alert alert-warning" v-if="file_error">
+                            {{ file_error }}
+                        </div>
+                        <hr>
+                        <div v-if="files && files.length">
+                            <div class="row" v-for="file in files" :key="'file_' + file.id">
+                                <div class="col-9">
+                                    <button class="btn btn-link btn-sm text-left" @click="download_file(file)">
+                                        {{ file.name }} (скачать)
+                                    </button>
+                                </div>
+                                <div class="col-1" v-if="state.user.has_permission(file.doctor_id)"
+                                     @click="delete_file(file)">
+                                    <font-awesome-icon :icon="['fas', 'times']"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            Нет документов
                         </div>
                     </div>
                 </div>
-
-                <p v-if="!apply_search(submissions, group).length">Нет данных</p>
-            </div>
-
-            <div class="dropdown d-inline">
-                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                    Добавить
-                </button>
-
-                <ul class="dropdown-menu">
-                    <li v-for="form in available_forms(group)" v-bind:key="form.id"><a
-                        class="dropdown-item text-wrap"
-                        @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
-                            form.name
-                        }}</a></li>
-                </ul>
             </div>
         </div>
     </div>
@@ -67,7 +108,8 @@
 
 <script>
 
-import {empty, formatDate, formatDateTime} from "../utils/helpers";
+import {empty, formatDate, formatDateTime, toBase64} from "../utils/helpers";
+import PatientFile from "@/models/PatientFile";
 
 export default {
     name: 'PatientScreen',
@@ -79,6 +121,9 @@ export default {
             patient: undefined,
             search_field: "",
             submissions: [],
+            files: [],
+            new_file: {name: ''},
+            file_error: undefined,
             medsenger_host: process.env.VUE_APP_MEDSENGER_HOST
         }
     },
@@ -104,6 +149,39 @@ export default {
 
             filtered_submissions.sort((a, b) => a.created_on - b.created_on)
             return filtered_submissions
+        },
+        upload_file: function () {
+            let file_to_upload = PatientFile.create(this.project, this.patient, this.new_file)
+            file_to_upload.save().then(() => {
+                this.files.push(file_to_upload)
+                this.new_file = {name: ''}
+                this.$refs.formFile.value = null;
+            }).catch((e) => {
+                console.log(e)
+                this.file_error = e.message
+            })
+        },
+        download_file: function (file) {
+            file.download()
+        },
+        delete_file: function (file) {
+            file.delete().then(() => {
+                this.files = this.files.filter((f) => f.id != file.id)
+            })
+        },
+        change_file: function (event) {
+            let file = event.target.files[0]
+            if (file.size > 50 * 1024 * 1024) {
+                // this.file_states.push('<strong>' + file.name + ':</strong> Размер файла не должен превышать 50 МБ.')
+            } else {
+                this.new_file.file_name = file.name
+                this.new_file.size = file.size
+                this.new_file.type = file.type ?? 'text/plain'
+
+                toBase64(file).then((base64) => {
+                    this.new_file.base64 = base64
+                })
+            }
         }
     },
     async mounted() {
@@ -114,6 +192,7 @@ export default {
 
         this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
         this.submissions = await this.patient.submissions
+        this.files = await this.patient.files
     }
 }
 </script>
