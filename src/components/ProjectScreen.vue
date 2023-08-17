@@ -18,8 +18,8 @@
         </div>
 
         <div v-if="groups">
-            <div class="row py-2" v-for="group in groups" :key="group.title">
-                <h6 class="my-3" v-if="group.title">{{ group.title }}</h6>
+            <div class="row py-2" v-for="(group, i) in groups" :key="i">
+                <h6 class="my-3" v-if="group.title">Шаг {{ i + 1 }}. {{ group.title }}</h6>
 
                 <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="patient in sortPatients(filterPatients(group))"
                      v-bind:key="patient.id">

@@ -57,9 +57,16 @@ class Patient extends Model {
     async save() {
         if (this.id) {
             let description = await this._api.patient.edit(this.project_id, this.id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
-            this.init(this.project_id, description)
+            this.init(this.project, description)
         } else {
             let description = await this._api.patient.add(this.project_id, this.name, this.sex, this.birthday, this.medsenger_contract, this.email, this.days, this.phone)
+            this.init(this.project, description)
+        }
+    }
+
+    async refresh() {
+        if (this.id) {
+            let description = await this._api.patient.get(this.project_id, this.id)
             this.init(this.project, description)
         }
     }
