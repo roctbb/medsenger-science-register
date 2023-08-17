@@ -1,6 +1,5 @@
 import enum
 
-from .alchemy import *
 from .relation_tables import *
 from ..helpers import collect_categories
 
@@ -28,8 +27,8 @@ class Patient(db.Model):
     contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=False)
     comments = db.relationship('Comment', backref=backref('patient', uselist=False), lazy=False)
 
-    def as_dict(self):
-        return {
+    def as_dict(self, additional_data={}):
+        description = {
             "id": self.id,
             "name": self.name,
             "sex": self.sex,
@@ -39,6 +38,10 @@ class Patient(db.Model):
             "created_by": self.doctor.name if self.doctor else "",
             "birthday": self.birthday.isoformat()
         }
+
+        description.update(additional_data)
+
+        return description
 
 
 class Contract(db.Model):
@@ -64,11 +67,14 @@ class Project(db.Model):
     patients = db.relationship('Patient', secondary=project_patient, backref='projects')
     forms = db.relationship('Form', backref=backref('project', uselist=False), lazy=False)
 
+    steps = db.Column(db.JSON, nullable=True)
+
     def as_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "forms": as_dict(self.forms),
+            "steps": self.steps,
             "categories": as_dict(collect_categories(self.forms))
         }
 

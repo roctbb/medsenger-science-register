@@ -11,8 +11,10 @@ class Project extends Model {
         super.init(description);
 
         this._patients = undefined
+        this._groups = undefined
         this.name = description.name
         this.forms = description.forms
+        this.steps = description.steps
         this.categories = {}
 
         description.categories.forEach((category) => {
@@ -39,7 +41,7 @@ class Project extends Model {
         }
 
         this.form_groups = Object.values(this.categories)
-        this.form_groups.sort((a, b) =>  b.priority - a.priority)
+        this.form_groups.sort((a, b) => b.priority - a.priority)
     }
 
     get patients() {
@@ -52,6 +54,31 @@ class Project extends Model {
                     resolve(this._patients)
                 })
             }
+        })
+    }
+
+    get groups() {
+        return new Promise(resolve => {
+            (this.patients).then(patients => {
+                const create_group = (title, patients) => {
+                    return {"title": title, "patients": patients}
+                }
+
+                console.log(this)
+
+                if (!this.steps || !this.steps.length) {
+                    resolve([create_group(undefined, patients)])
+                } else {
+                    let groups = []
+
+                    this.steps.forEach(step => {
+                        console.log(patients)
+                        groups.push(create_group(step.title, patients.filter(patient => patient.step === step.title)))
+                    })
+                    console.log(groups)
+                    resolve(groups)
+                }
+            })
         })
     }
 

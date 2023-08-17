@@ -17,15 +17,7 @@ def get_projects(user):
 def get_patients(user, project_id):
     project = find_project_by_id_for_user(user, project_id)
 
-    patients_descriptions = list(sorted(as_dict(project.patients), key=lambda p: p['name']))
-
-    patients_to_contracts = {
-        contract.patient_id: contract.id for contract in
-        Contract.query.filter_by(project_id=project_id, doctor_id=user.id).all()
-    }
-
-    for patient in patients_descriptions:
-        patient['contract_id'] = patients_to_contracts.get(patient['id'])
+    patients_descriptions = list(sorted(as_dict(project.patients, load_project_data, project), key=lambda p: p['name']))
 
     return patients_descriptions
 
@@ -47,13 +39,11 @@ def add_patient(user, project_id):
         patient = find_patient_by_credentials(data.get('name'), data.get('sex'), data.get('birthday'))
 
     assign_to_project(patient, project)
-    patient_description = patient.as_dict()
 
     if contract_id:
         save_contract(patient, project, user, contract_id)
-        patient_description['contract_id'] = contract_id
 
-    return patient_description
+    return patient.as_dict(load_project_data(patient, project))
 
 
 @projects_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>', methods=['put'])
@@ -70,14 +60,11 @@ def edit_patient(user, project_id, patient_id):
 
     patient = update_patient(patient, data.get('name'), data.get('sex'), data.get('birthday'), data.get('phone'))
 
-    patient_description = patient.as_dict()
-
     contract_id = None
     if data.get('medsenger_contract') == True and not patient.contracts:
         contract_id = medsenger_create_contract(user, data, data.get('days'))
 
     if contract_id:
         save_contract(patient, project, user, contract_id)
-        patient_description['contract_id'] = contract_id
 
-    return patient_description
+    return patient.as_dict(load_project_data(patient, project))

@@ -4,5 +4,8 @@ from sqlalchemy.orm import backref
 db = SQLAlchemy()
 
 
-def as_dict(iterable):
-    return [element.as_dict() for element in iterable]
+def as_dict(iterable, extender=None, *args):
+    if not extender:
+        return [element.as_dict() for element in iterable]
+    else:
+        return [element.as_dict(extender(element, *args)) for element in iterable]

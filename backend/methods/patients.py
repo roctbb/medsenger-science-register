@@ -1,6 +1,7 @@
 from backend.models import *
 from .exceptions import *
 from backend.helpers import *
+from .projects import get_current_step
 
 
 @transaction
@@ -59,3 +60,16 @@ def save_contract(patient, project, doctor, contract_id):
     db.session.add(contract)
 
     return contract
+
+
+def get_actual_contract_id(project, patient):
+    contracts = list(filter(lambda c: c.project_id == project.id, patient.contracts))
+
+    return contracts[-1].id if contracts else None
+
+
+def load_project_data(patient, project):
+    return {
+        "contract_id": get_actual_contract_id(project, patient),
+        "step": get_current_step(project, patient)
+    }

@@ -23,6 +23,7 @@ class Patient extends Model {
             this.created_by = description.created_by
             this.phone = description.phone
             this.comments = []
+            this.step = description.step
 
             if (description.comments) {
                 description.comments.forEach(comment => {
