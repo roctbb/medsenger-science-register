@@ -38,7 +38,7 @@ def get_current_step(project, patient):
         return None
 
     last_undone_step_index = None
-    for i, step in enumerate(project.steps):
+    for i, step in enumerate(reversed(project.steps)):
         if not check_step_criteria(patient, step):
             last_undone_step_index = i
             break
