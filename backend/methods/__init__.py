@@ -6,3 +6,4 @@ from .patients import *
 from .forms import *
 from .clinics import *
 from .comments import *
+from .files import *

@@ -17,11 +17,14 @@ class NotFound(ExplainableException):
 class IncorrectPassword(ExplainableException):
     pass
 
+
 class IncorrectDays(ExplainableException):
     pass
 
+
 class IncorrectEmail(ExplainableException):
     pass
+
 
 class IncorrectBirthday(ExplainableException):
     pass
@@ -47,6 +50,7 @@ class NoToken(ExplainableException):
 class AccessDenied(ExplainableException):
     def status(self):
         return 403
+
 
 class MedsengerAlreadyExists(ExplainableException):
     pass

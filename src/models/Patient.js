@@ -2,11 +2,13 @@ import Model from "@/models/Model";
 import {formatDate} from "@/utils/helpers";
 import Submission from "@/models/Submission";
 import Comment from "@/models/Comment";
+import PatientFile from "@/models/PatientFile";
 
 class Patient extends Model {
     constructor(project, description) {
         super(description)
         this._submissions = undefined
+        this._files = undefined
         this.init(project, description)
     }
 
@@ -83,6 +85,19 @@ class Patient extends Model {
                 this._api.submission.all(this.project_id, this.id).then(submissions => {
                     this._submissions = submissions.map((submission) => new Submission(submission, this.project.forms.find(f => f.id === submission.form_id)))
                     resolve(this._submissions)
+                })
+            }
+        })
+    }
+
+    get files() {
+        return new Promise(resolve => {
+            if (this._files) {
+                resolve(this._files)
+            } else {
+                this._api.file.getAll(this.project_id, this.id).then(files => {
+                    this._files = files.map((file) => new PatientFile(file))
+                    resolve(this._files)
                 })
             }
         })
