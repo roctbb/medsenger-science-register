@@ -20,4 +20,4 @@ EDITOR_PASSWORD_HASH = os.environ.get('EDITOR_PASSWORD_HASH', 'pbkdf2:sha256:600
 MEDSENGER_KEY = os.environ.get('MEDSENGER_KEY', '')
 MEDSENGER_HOST = os.environ.get('VUE_APP_MEDSENGER_HOST', '')
 MEDSENGER_LOGIN = os.environ.get('MEDSENGER_LOGIN', False)
-STORAGE_PATH = os.environ.get('STORAGE_PATH', '')
+STORAGE_PATH = os.environ.get('STORAGE_PATH', './storage/')

@@ -47,7 +47,6 @@ class PatientFile extends Model {
 
     download() {
         this._api.file.download(this.project_id, this.patient_id, this.id).then((full_file) => {
-            console.log(full_file)
             downloadjs(`data:${full_file.type};base64,${full_file.base64}`, full_file.file_name, full_file.type);
         })
     }

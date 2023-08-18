@@ -67,7 +67,41 @@
                 </div>
             </div>
             <div class="col-4" style="border-left: 1px dotted gray;">
-                <h6 class="mb-2">Комментарии</h6>
+
+                <h6>Документы</h6>
+
+                <div v-if="files && files.length" class="my-3">
+                    <ul>
+                        <li v-for="file in files" :key="'file_' + file.id">
+                            <button class="btn btn-link btn-sm text-left" @click="download_file(file)">
+                                {{ file.name }} (скачать)
+                            </button>
+                            <font-awesome-icon v-if="state.user.has_permission(file.doctor_id)" :icon="['fas', 'times']"
+                                               @click="delete_file(file)"/>
+                        </li>
+                    </ul>
+                </div>
+                <div v-else class="my-3">
+                    <small>Нет документов</small>
+                </div>
+
+
+                <div class="mb-2">
+                    <input type="email" class="form-control form-control-sm" id="fileName"
+                           placeholder="Введите название документа" v-model="new_file.name">
+                </div>
+                <div class="mb-2">
+                    <input class="form-control form-control-sm" type="file" id="formFile" ref="formFile"
+                           @change="change_file">
+                </div>
+                <button @click="upload_file"
+                        class="btn btn-success btn-sm me-1">Загрузить документ
+                </button>
+                <div class="alert alert-warning" v-if="file_error">
+                    {{ file_error }}
+                </div>
+
+                <h6 class="mb-1 mt-3">Комментарии</h6>
 
                 <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
                         comment.author
@@ -79,44 +113,7 @@
                 <textarea class="form-control" v-model="new_comment"></textarea>
                 <button @click="addComment()" class="btn btn-sm btn-success my-2">Добавить</button>
 
-                <h6>Документы</h6>
 
-                <div class="card">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label for="fileName" class="form-label">Название документа</label>
-                            <input type="email" class="form-control form-control-sm" id="fileName"
-                                   placeholder="Введите название документа" v-model="new_file.name">
-                        </div>
-                        <div class="mb-3">
-                            <input class="form-control form-control-sm" type="file" id="formFile" ref="formFile"
-                                   @change="change_file">
-                        </div>
-                        <button @click="upload_file"
-                                class="btn btn-primary btn-sm me-1">Загрузить документ
-                        </button>
-                        <div class="alert alert-warning" v-if="file_error">
-                            {{ file_error }}
-                        </div>
-                        <hr>
-                        <div v-if="files && files.length">
-                            <div class="row" v-for="file in files" :key="'file_' + file.id">
-                                <div class="col-9">
-                                    <button class="btn btn-link btn-sm text-left" @click="download_file(file)">
-                                        {{ file.name }} (скачать)
-                                    </button>
-                                </div>
-                                <div class="col-1" v-if="state.user.has_permission(file.doctor_id)"
-                                     @click="delete_file(file)">
-                                    <font-awesome-icon :icon="['fas', 'times']"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            Нет документов
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <loading v-else></loading>
