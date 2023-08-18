@@ -26,7 +26,7 @@
         </div>
 
         <p class="text-muted my-3">{{ patient.readable_birthday }} <span
-            v-if="patient.phone"> / телефон {{ patient.phone }}</span></p>
+            v-if="patient.phone"> / телефон {{ patient.phone }}</span><span v-if="patient.created_by"> / добавлен врачом {{ patient.created_by }}</span></p>
 
         <div class="row" v-if="submissions">
             <div class="col-8">
@@ -68,7 +68,7 @@
             </div>
             <div class="col-4" style="border-left: 1px dotted gray;">
 
-                <h6>Документы</h6>
+                <h6>Дополнительные документы по пациентке</h6>
 
                 <div v-if="files && files.length" class="my-3">
                     <ul>
@@ -85,10 +85,10 @@
                     <small>Нет документов</small>
                 </div>
 
-
+                <p class="my-2"><strong><small>Добавить документ</small></strong></p>
                 <div class="mb-2">
                     <input type="email" class="form-control form-control-sm" id="fileName"
-                           placeholder="Введите название документа" v-model="new_file.name">
+                           placeholder="Название документа" v-model="new_file.name">
                 </div>
                 <div class="mb-2">
                     <input class="form-control form-control-sm" type="file" id="formFile" ref="formFile"
@@ -101,7 +101,7 @@
                     {{ file_error }}
                 </div>
 
-                <h6 class="mb-1 mt-3">Комментарии</h6>
+                <h6 class="mb-1 mt-5">Комментарии по статусу пациентки</h6>
 
                 <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
                         comment.author

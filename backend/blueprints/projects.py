@@ -35,7 +35,7 @@ def add_patient(user, project_id):
         contract_id = medsenger_create_contract(user, data, data.get('days'))
 
     try:
-        patient = create_patient(data.get('name'), data.get('sex'), data.get('birthday'), data.get('phone'))
+        patient = create_patient(user, data.get('name'), data.get('sex'), data.get('birthday'), data.get('phone'))
     except AlreadyExists:
         patient = find_patient_by_credentials(data.get('name'), data.get('sex'), data.get('birthday'))
 
