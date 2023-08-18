@@ -70,6 +70,14 @@ class HttpClient {
 
         return await this.makeRequest(action, 'GET')
     }
+
+    async delete(action, delete_params) {
+        if (!empty(delete_params)) {
+            action = action + '?' + new URLSearchParams(delete_params).toString()
+        }
+
+        return await this.makeRequest(action, 'DELETE')
+    }
 }
 
 export default HttpClient

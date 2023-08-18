@@ -3,7 +3,9 @@
 
         <div class="hstack gap-3">
             <div class="me-auto my-3">
-                <h4 class="my-1">{{ patient.name }} <small class="text-muted">пациент</small><small class="text-muted" v-if="patient.step"> / {{ patient.step }}</small></h4>
+                <h4 class="my-1">{{ patient.name }} <small class="text-muted">пациент</small><small class="text-muted"
+                                                                                                    v-if="patient.step">
+                    / {{ patient.step }}</small></h4>
             </div>
             <div>
                 <button @click="$router.push({name: 'project', params: {id: this.project.id}})"
@@ -65,16 +67,53 @@
                 </div>
             </div>
             <div class="col-4" style="border-left: 1px dotted gray;">
-                <h6 class="mb-2">Комментарии</h6>
+
+                <h6>Документы</h6>
+
+                <div v-if="files && files.length" class="my-3">
+                    <ul>
+                        <li v-for="file in files" :key="'file_' + file.id">
+                            <button class="btn btn-link btn-sm text-left" @click="download_file(file)">
+                                {{ file.name }} (скачать)
+                            </button>
+                            <font-awesome-icon v-if="state.user.has_permission(file.doctor_id)" :icon="['fas', 'times']"
+                                               @click="delete_file(file)"/>
+                        </li>
+                    </ul>
+                </div>
+                <div v-else class="my-3">
+                    <small>Нет документов</small>
+                </div>
+
+
+                <div class="mb-2">
+                    <input type="email" class="form-control form-control-sm" id="fileName"
+                           placeholder="Введите название документа" v-model="new_file.name">
+                </div>
+                <div class="mb-2">
+                    <input class="form-control form-control-sm" type="file" id="formFile" ref="formFile"
+                           @change="change_file">
+                </div>
+                <button @click="upload_file"
+                        class="btn btn-success btn-sm me-1">Загрузить документ
+                </button>
+                <div class="alert alert-warning" v-if="file_error">
+                    {{ file_error }}
+                </div>
+
+                <h6 class="mb-1 mt-3">Комментарии</h6>
 
                 <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
                         comment.author
-                    }}</strong><span v-if="comment.description"> / {{ comment.description }}</span>: {{ comment.text }}</small><br><small class="text-muted">{{ comment.readable_created_on }}</small>
+                    }}</strong><span v-if="comment.description"> / {{ comment.description }}</span>: {{ comment.text }}</small><br><small
+                    class="text-muted">{{ comment.readable_created_on }}</small>
                 </p>
                 <p class="my-3" v-if="!patient.comments.length"><small>Комментариев еще нет</small></p>
 
                 <textarea class="form-control" v-model="new_comment"></textarea>
                 <button @click="addComment()" class="btn btn-sm btn-success my-2">Добавить</button>
+
+
             </div>
         </div>
         <loading v-else></loading>
@@ -86,8 +125,9 @@
 
 <script>
 
-import {empty, formatDate, formatDateTime} from "../utils/helpers";
+import {empty, formatDate, formatDateTime, toBase64} from "../utils/helpers";
 import Loading from "@/components/Loading.vue";
+import PatientFile from "@/models/PatientFile";
 
 export default {
     name: 'PatientScreen',
@@ -100,7 +140,10 @@ export default {
             search_field: "",
             submissions: undefined,
             medsenger_host: process.env.VUE_APP_MEDSENGER_HOST,
-            new_comment: ""
+            new_comment: "",
+            files: [],
+            new_file: {name: ''},
+            file_error: undefined,
         }
     },
     methods: {
@@ -129,6 +172,39 @@ export default {
         addComment: function () {
             this.patient.add_comment(this.new_comment)
             this.new_comment = ""
+        },
+        upload_file: function () {
+            let file_to_upload = PatientFile.create(this.project, this.patient, this.new_file)
+            file_to_upload.save().then(() => {
+                this.files.push(file_to_upload)
+                this.new_file = {name: ''}
+                this.$refs.formFile.value = null;
+            }).catch((e) => {
+                console.log(e)
+                this.file_error = e.message
+            })
+        },
+        download_file: function (file) {
+            file.download()
+        },
+        delete_file: function (file) {
+            file.delete().then(() => {
+                this.files = this.files.filter((f) => f.id != file.id)
+            })
+        },
+        change_file: function (event) {
+            let file = event.target.files[0]
+            if (file.size > 50 * 1024 * 1024) {
+                // this.file_states.push('<strong>' + file.name + ':</strong> Размер файла не должен превышать 50 МБ.')
+            } else {
+                this.new_file.file_name = file.name
+                this.new_file.size = file.size
+                this.new_file.type = file.type ?? 'text/plain'
+
+                toBase64(file).then((base64) => {
+                    this.new_file.base64 = base64
+                })
+            }
         }
     },
     async mounted() {
@@ -139,6 +215,7 @@ export default {
 
         this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
         this.submissions = await this.patient.submissions
+        this.files = await this.patient.files
     }
 }
 </script>

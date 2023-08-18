@@ -5,3 +5,4 @@ from .medsenger import *
 from .editor import *
 from .activate import *
 from .comments import *
+from .files import *

@@ -1,5 +1,6 @@
 import enum
 
+from .alchemy import *
 from .relation_tables import *
 from ..helpers import collect_categories
 
@@ -26,6 +27,7 @@ class Patient(db.Model):
     submissions = db.relationship('FormSubmission', backref=backref('patient', uselist=False), lazy=True)
     contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=False)
     comments = db.relationship('Comment', backref=backref('patient', uselist=False), lazy=False)
+    files = db.relationship('File', backref=backref('patient', uselist=False), lazy=True)
 
     def as_dict(self, additional_data={}):
         description = {

@@ -30,6 +30,10 @@ class User extends Model {
         }
         return this.specialties.includes(specialty)
     }
+
+    has_permission(author_id) {
+        return this.id == author_id || this.specialties.includes('администратор')
+    }
 }
 
 export default User

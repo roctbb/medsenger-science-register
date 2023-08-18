@@ -72,6 +72,15 @@ function deleteCookie(name) {
     setCookie(name, null, {expires: -1})
 }
 
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => resolve(reader.result.split(';base64,')[1]);
+        reader.onerror = error => reject(error);
+    })
+}
+
 const api_url = (action) => external_url('/api/client') + action
 
-export {searchForArray, empty, external_url, api_url, formatDate, formatDateTime, copy, getCookie, deleteCookie}
+export {searchForArray, empty, external_url, api_url, formatDate, formatDateTime, copy, getCookie, deleteCookie, toBase64}
