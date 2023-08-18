@@ -37,12 +37,14 @@ def get_current_step(project, patient):
     if not project.steps:
         return None
 
-    last_undone_step_index = None
+    last_done_step_index = -1
     for i, step in enumerate(project.steps):
-        if not check_step_criteria(patient, step):
-            last_undone_step_index = i
+        if check_step_criteria(patient, step):
+            last_done_step_index = i
 
-    if last_undone_step_index == None:
+    last_done_step_index += 1
+
+    if last_done_step_index == len(project.steps):
         return "Завершено"
     else:
-        return project.steps[last_undone_step_index].get('title')
+        return project.steps[last_done_step_index].get('title')
