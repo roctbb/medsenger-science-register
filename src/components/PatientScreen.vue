@@ -68,7 +68,7 @@
             </div>
             <div class="col-4" style="border-left: 1px dotted gray;">
 
-                <h6>Дополнительные документы по пациентке</h6>
+                <h6>Дополнительные документы по пациенту</h6>
 
                 <div v-if="files && files.length" class="my-3">
                     <ul>
@@ -101,7 +101,7 @@
                     {{ file_error }}
                 </div>
 
-                <h6 class="mb-1 mt-5">Комментарии по статусу пациентки</h6>
+                <h6 class="mb-1 mt-5">Комментарии по статусу пациента</h6>
 
                 <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
                         comment.author
