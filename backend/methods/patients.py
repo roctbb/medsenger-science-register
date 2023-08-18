@@ -5,14 +5,14 @@ from .projects import get_current_step
 
 
 @transaction
-def create_patient(name, sex, birthday, phone=None):
+def create_patient(user, name, sex, birthday, phone=None):
     if not name or not sex or not birthday:
         raise InsufficientData
 
     if find_patient_by_credentials(name, sex, birthday):
         raise AlreadyExists
 
-    patient = Patient(name=name, sex=sex, birthday=birthday, phone=phone)
+    patient = Patient(name=name, sex=sex, birthday=birthday, phone=phone, doctor_id=user.id)
     db.session.add(patient)
 
     return patient
