@@ -22,6 +22,8 @@ def get_submissions(user, project_id, patient_id):
 def add_submission(user, project_id, patient_id):
     data = request.json
 
+    print(gts(), "Got submission", data)
+
     form_id = data.get('form_id')
     answers = data.get('answers')
 
