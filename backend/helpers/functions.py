@@ -1,4 +1,6 @@
 import hashlib
+from datetime import datetime
+
 from flask import jsonify
 import re
 
@@ -17,6 +19,10 @@ class ExplainableException(Exception):
 
 def hash(password):
     return hashlib.md5(password.encode()).hexdigest()
+
+def gts():
+    now = datetime.now()
+    return now.strftime("%Y-%m-%d %H:%M:%S - ")
 
 
 def make_error(reason='', code=422):

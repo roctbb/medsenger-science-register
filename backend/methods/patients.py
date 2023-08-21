@@ -21,7 +21,7 @@ def create_patient(user, name, sex, birthday, phone=None):
 @transaction
 def update_patient(patient, name, sex, birthday, phone=None):
     if not patient:
-        NotFound
+        raise NotFound
 
     if not name or not sex or not birthday:
         raise InsufficientData
