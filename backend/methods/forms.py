@@ -19,7 +19,8 @@ def submit_form(doctor, patient, form, answers):
     submission = create_submission(form, patient, doctor)
 
     for part in form.parts:
-        groups = answers.get(str(part.id), {})
+        groups = extract_key(answers, part.id)
+
         for group_key, group in groups.items():
             for field in part.fields:
                 answer = group.get(field.get('id'))
@@ -42,7 +43,8 @@ def submit_form(doctor, patient, form, answers):
                     db.session.add(record)
 
                 if field.get('export_comment', False) and answer:
-                    place_comment(form.project, patient, doctor, answer, description=f"{form.name}, {field.get('text')}")
+                    place_comment(form.project, patient, doctor, answer,
+                                  description=f"{form.name}, {field.get('text')}")
 
     return submission
 
@@ -78,10 +80,18 @@ def get_patient_submissions(project, patient):
     return FormSubmission.query.filter_by(is_legacy=False, project_id=project.id, patient_id=patient.id).all()
 
 
+def extract_key(data, key):
+    return data.get(key, data.get(str(key), {}))
+
+
 def validate_form(form, answers):
     details = []
+
     for part in form.parts:
-        for group_key, group in answers.get(str(part.id), {}).items():
+        if not part.repeatable and not extract_key(answers, part.id):
+            raise InsufficientData()
+
+        for group_key, group in extract_key(answers, part.id).items():
             for field in part.fields:
                 if field.get('required') and field.get('id') not in group:
                     details.append((part.id, group_key, field.get('id')))
