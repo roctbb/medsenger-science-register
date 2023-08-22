@@ -11,7 +11,7 @@
                             class="btn btn-primary btn-sm me-1">Печать
                     </button>
                     <button @click="edit()" v-if="disabled && !editing"
-                            class="btn btn-primary btn-sm me-1">Изменить
+                            class="btn btn-primary btn-sm me-1 my-1">Изменить
                     </button>
                 </div>
             </div>
