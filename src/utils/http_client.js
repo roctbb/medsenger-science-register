@@ -1,8 +1,9 @@
 import {empty} from "./helpers"
 
 class HttpClient {
-    constructor(endpoint) {
+    constructor(endpoint, emitter) {
         this.endpoint = endpoint
+        this.emitter = emitter
     }
 
     async makeRequest(action, method, body, headers) {
@@ -18,18 +19,31 @@ class HttpClient {
         }
 
         try {
+
+            this.signal('start')
+
             let result = await fetch(this.endpoint + action, requestOptions)
 
             console.log("Request done, status:", result.status)
 
             try {
+                this.signal('end')
                 return await result.json()
             } catch (e) {
+                this.signal('end')
                 return await result.text()
             }
         } catch (e) {
+            this.signal('end')
             console.log("Request failed!")
             throw e
+        }
+    }
+
+    signal(event) {
+        if (this.emitter) {
+            console.log("signaling ", 'http_' + event, "on", this.emitter)
+            this.emitter.emit('http_' + event)
         }
     }
 

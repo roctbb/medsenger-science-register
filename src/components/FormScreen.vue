@@ -152,7 +152,7 @@
     </div>
 
     <div class="my-3 no-print">
-        <button @click="save()" class="btn btn-primary" v-if="!disabled">Сохранить</button>
+        <loading-button @click="save()" class_name="btn btn-primary" v-if="!disabled">Сохранить</loading-button>
         <button @click="back()" class="btn btn-warning mx-1">Назад</button>
     </div>
 
@@ -163,10 +163,11 @@
 import VueDatePicker from "@vuepic/vue-datepicker";
 import {formatDateTime, searchForArray} from "../utils/helpers";
 import Submission from "@/models/Submission";
+import LoadingButton from "@/components/parts/common/LoadingButton.vue";
 
 export default {
     name: 'FormScreen',
-    components: {VueDatePicker},
+    components: {LoadingButton, VueDatePicker},
     props: ['project_id', 'patient_id', 'form_id', 'submission_id'],
     data() {
         return {

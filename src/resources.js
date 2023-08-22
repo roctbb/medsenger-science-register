@@ -1,13 +1,13 @@
 import {reactive} from "vue";
 import State from "@/models/State";
-import mitt from "mitt";
 import StateManager from "@/managers/state";
 import AuthManager from "@/managers/auth";
 import SubmissionManager from "@/managers/submission";
+import event_bus from "@/event_bus";
 import api from "@/api"
 
+
 const stateModel = reactive(new State())
-const event_bus = mitt()
 const state = new StateManager(stateModel, event_bus, api)
 const managers = {
     auth: new AuthManager(state, event_bus, api),

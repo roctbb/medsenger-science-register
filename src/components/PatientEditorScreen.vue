@@ -55,8 +55,8 @@
                 </select>
             </div>
 
-            <a v-if="!patient" @click="save" class="btn btn-primary">Добавить</a>
-            <a v-if="patient" @click="save" class="btn btn-primary">Сохранить</a>
+            <loading-button v-if="!patient" @click="save" class="btn btn-primary">Добавить</loading-button>
+            <loading-button v-if="patient" @click="save" class="btn btn-primary">Сохранить</loading-button>
             <a @click="back()" class="btn btn-warning ms-1">Назад</a>
         </form>
     </div>
@@ -66,10 +66,11 @@
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Patient from "@/models/Patient";
+import LoadingButton from "@/components/parts/common/LoadingButton.vue";
 
 export default {
     name: 'PatientEditorScreen',
-    components: {VueDatePicker},
+    components: {LoadingButton, VueDatePicker},
     props: ['project_id', 'id'],
     data() {
         return {
