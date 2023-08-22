@@ -44,7 +44,7 @@ def submit_form(doctor, patient, form, answers):
 
                 if field.get('export_comment', False) and answer:
                     place_comment(form.project, patient, doctor, answer,
-                                  description=f"{form.name}, {field.get('text')}", submission_id=submission)
+                                  description=f"{form.name}, {field.get('text')}", submission_id=submission.id)
 
     return submission
 
