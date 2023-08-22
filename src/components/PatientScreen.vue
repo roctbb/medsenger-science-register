@@ -8,16 +8,16 @@
                     / {{ patient.step }}</small></h4>
             </div>
             <div>
-                <button @click="$router.push({name: 'project', params: {id: this.project.id}})"
-                        class="btn btn-warning btn-sm me-1">Назад
-                </button>
-                <a target="_blank" class="btn btn-sm btn-success me-1" v-if="patient.contract_id"
+                <a @click="$router.push({name: 'project', params: {id: this.project.id}})"
+                        class="btn btn-warning btn-sm me-1 my-1">Назад
+                </a>
+                <a target="_blank" class="btn btn-sm btn-success me-1 my-1" v-if="patient.contract_id"
                    :href="medsenger_host + '/client#/?c=' + patient.contract_id">Medsenger</a>
-                <a class="btn btn-sm btn-success me-1"
+                <a class="btn btn-sm btn-success me-1 my-1"
                    @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: this.patient.id}})">Изменить
                     профиль</a>
 
-                <a v-if="state.user.is('администратор')" class="btn btn-sm btn-danger me-1"
+                <a v-if="state.user.is('администратор')" class="btn btn-sm btn-danger me-1 my-1"
                    @click="delete_patient()">Удалить пациента</a>
             </div>
         </div>
@@ -105,7 +105,7 @@
                                @change="change_file">
                     </div>
                     <button @click="upload_file"
-                            class="btn btn-success btn-sm me-1">Загрузить документ
+                            class="btn btn-success btn-sm me-1 my-1">Загрузить документ
                     </button>
                     <div class="alert alert-warning" v-if="file_error">
                         {{ file_error }}
