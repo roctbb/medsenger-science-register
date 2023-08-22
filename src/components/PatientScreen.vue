@@ -26,10 +26,13 @@
         </div>
 
         <p class="text-muted my-3">{{ patient.readable_birthday }} <span
-            v-if="patient.phone"> / телефон {{ patient.phone }}</span><span v-if="patient.created_by"> / добавлен врачом {{ patient.created_by }}</span></p>
+            v-if="patient.phone"> / телефон {{ patient.phone }}</span><span v-if="patient.created_by"> / добавлен врачом {{
+                patient.created_by
+            }}</span></p>
 
         <div class="row" v-if="submissions">
-            <div class="col-8">
+            <div class="col-8"
+                 :class="{'col-12': !project.settings.show_files && !project.settings.show_comments, 'col-8': project.settings.show_files || project.settings.show_comments}">
                 <div v-for="group in project.form_groups" :key="group.id">
                     <h6 class="mb-2" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
                     <div class="row pt-2">
@@ -66,54 +69,63 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4" style="border-left: 1px dotted gray;">
+            <div class="col-4" style="border-left: 1px dotted gray;"
+                 v-if="project.settings.show_files || project.settings.show_comments">
 
-                <h6>Дополнительные документы по пациенту</h6>
+                <div v-if="project.settings.show_files">
+                    <h6>Дополнительные документы по пациенту</h6>
 
-                <div v-if="files && files.length" class="my-3">
-                    <ul>
-                        <li v-for="file in files" :key="'file_' + file.id">
-                            <button class="btn btn-link btn-sm text-left" @click="download_file(file)">
-                                {{ file.name }} (скачать)
-                            </button>
-                            <font-awesome-icon v-if="state.user.has_permission(file.doctor_id)" :icon="['fas', 'times']"
-                                               @click="delete_file(file)"/>
-                        </li>
-                    </ul>
+                    <div v-if="files && files.length" class="my-3">
+                        <ul>
+                            <li v-for="file in files" :key="'file_' + file.id">
+                                <button class="btn btn-link btn-sm text-left" @click="download_file(file)">
+                                    {{ file.name }} (скачать)
+                                </button>
+                                <font-awesome-icon v-if="state.user.has_permission(file.doctor_id)"
+                                                   :icon="['fas', 'times']"
+                                                   @click="delete_file(file)"/>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-else class="my-3">
+                        <small>Нет документов</small>
+                    </div>
+
+
+                    <p class="my-2"><strong><small>Добавить документ</small></strong></p>
+                    <div class="mb-2">
+                        <input type="email" class="form-control form-control-sm" id="fileName"
+                               placeholder="Название документа" v-model="new_file.name">
+                    </div>
+                    <div class="mb-2">
+                        <input class="form-control form-control-sm" type="file" id="formFile" ref="formFile"
+                               @change="change_file">
+                    </div>
+                    <button @click="upload_file"
+                            class="btn btn-success btn-sm me-1">Загрузить документ
+                    </button>
+                    <div class="alert alert-warning" v-if="file_error">
+                        {{ file_error }}
+                    </div>
+
                 </div>
-                <div v-else class="my-3">
-                    <small>Нет документов</small>
+
+                <div v-if="project.settings.show_comments">
+
+                    <h6 class="mb-1 mt-5">Комментарии по статусу пациента</h6>
+
+                    <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
+                            comment.author
+                        }}</strong><span v-if="comment.description"> / {{ comment.description }}</span>: {{
+                            comment.text
+                        }}</small><br><small
+                        class="text-muted">{{ comment.readable_created_on }}</small>
+                    </p>
+                    <p class="my-3" v-if="!patient.comments.length"><small>Комментариев еще нет</small></p>
+
+                    <textarea class="form-control" v-model="new_comment"></textarea>
+                    <button @click="addComment()" class="btn btn-sm btn-success my-2">Добавить</button>
                 </div>
-
-                <p class="my-2"><strong><small>Добавить документ</small></strong></p>
-                <div class="mb-2">
-                    <input type="email" class="form-control form-control-sm" id="fileName"
-                           placeholder="Название документа" v-model="new_file.name">
-                </div>
-                <div class="mb-2">
-                    <input class="form-control form-control-sm" type="file" id="formFile" ref="formFile"
-                           @change="change_file">
-                </div>
-                <button @click="upload_file"
-                        class="btn btn-success btn-sm me-1">Загрузить документ
-                </button>
-                <div class="alert alert-warning" v-if="file_error">
-                    {{ file_error }}
-                </div>
-
-                <h6 class="mb-1 mt-5">Комментарии по статусу пациента</h6>
-
-                <p class="my-3" v-for="comment in patient.comments" :key="comment.id"><small><strong>{{
-                        comment.author
-                    }}</strong><span v-if="comment.description"> / {{ comment.description }}</span>: {{ comment.text }}</small><br><small
-                    class="text-muted">{{ comment.readable_created_on }}</small>
-                </p>
-                <p class="my-3" v-if="!patient.comments.length"><small>Комментариев еще нет</small></p>
-
-                <textarea class="form-control" v-model="new_comment"></textarea>
-                <button @click="addComment()" class="btn btn-sm btn-success my-2">Добавить</button>
-
-
             </div>
         </div>
         <loading v-else></loading>

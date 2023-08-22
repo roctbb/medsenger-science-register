@@ -11,10 +11,10 @@ class Project extends Model {
         super.init(description);
 
         this._patients = undefined
-        this._groups = undefined
         this.name = description.name
         this.forms = description.forms
         this.steps = description.steps
+        this.settings = description.settings
         this.categories = {}
 
         description.categories.forEach((category) => {

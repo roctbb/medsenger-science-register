@@ -47,7 +47,7 @@ class Record(db.Model):
             "id": self.id,
             "params": self.params,
             "category": self.category.as_dict(),
-            "created_on": self.created_on.isoformat(),
+            "created_on": self.created_on.isoformat() + 'Z',
             "value": self.formatted_value()
         }
 

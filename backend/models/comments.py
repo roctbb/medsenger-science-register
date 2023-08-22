@@ -22,6 +22,6 @@ class Comment(db.Model):
             "id": self.id,
             "text": self.text,
             "description": self.description,
-            "created_on": self.created_on.isoformat(),
+            "created_on": self.created_on.isoformat() + 'Z',
             "author": self.doctor.name if self.doctor else None
         }

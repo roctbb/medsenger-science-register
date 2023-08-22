@@ -84,6 +84,6 @@ class FormSubmission(db.Model):
             "patient_id": self.patient_id,
             "project_id": self.project_id,
             "records": as_dict(self.records),
-            "created_on": self.created_on.isoformat(),
+            "created_on": self.created_on.isoformat() + 'Z',
             "author": self.doctor.name if self.doctor else None
         }
