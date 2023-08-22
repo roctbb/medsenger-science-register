@@ -119,11 +119,11 @@ def find_category_by_code(category_code):
 @transaction
 def replace_submission(old, new):
     mark_legacy(old)
-    delete_sumission_comments(old)
+    delete_submission_comments(old)
     new.created_on = old.created_on
 
 
 @transaction
-def delete_sumission_comments(submission):
-    for comment in submission.commets:
+def delete_submission_comments(submission):
+    for comment in submission.comments:
         db.session.delete(comment)
