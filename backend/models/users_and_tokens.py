@@ -18,7 +18,7 @@ class User(db.Model):
     specialties = db.Column(db.JSON, nullable=True)
     activation_key = db.Column(db.String(256), nullable=True)
 
-    submissions = db.relationship('FormSubmission', backref=backref('doctor', uselist=False), lazy=False)
+    submissions = db.relationship('FormSubmission', backref=backref('doctor', uselist=False), lazy=True)
     patients = db.relationship('Patient', backref=backref('doctor', uselist=False), lazy=True)
     comments = db.relationship('Comment', backref=backref('doctor', uselist=False), lazy=True)
 

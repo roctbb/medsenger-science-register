@@ -70,9 +70,7 @@ def create_token(user):
 def requires_user(func):
     def wrapper(*args, **kwargs):
         token = request.args.get('api_token')
-        S = time.time()
         user = find_user_by_token(token)
-        print(f"Q took {time.time() - S}")
         result = func(user, *args, **kwargs)
         return result
 
