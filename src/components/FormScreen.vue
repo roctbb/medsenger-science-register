@@ -190,15 +190,7 @@ export default {
             try {
                 await this.submission.save()
                 await this.patient.refresh()
-
-                let submissions = (await this.patient.submissions)
-
-                if (!this.editing) {
-                    submissions.push(this.submission)
-                } else {
-                    this.editing = false
-                }
-
+                this.editing = false
                 this.back()
             } catch (e) {
                 console.log(e)
