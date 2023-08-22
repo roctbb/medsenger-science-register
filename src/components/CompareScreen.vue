@@ -119,7 +119,6 @@
         </div>
 
         <div class="my-3 no-print">
-            <button @click="save()" class="btn btn-primary" v-if="!disabled">Сохранить</button>
             <button @click="back()" class="btn btn-warning mx-1">Назад</button>
         </div>
 

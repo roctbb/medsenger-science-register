@@ -7,8 +7,8 @@ import PatientActions from "@/api/action_groups/patient";
 import FileActions from "@/api/action_groups/file";
 
 class ApiClient {
-    constructor(host, token) {
-        let client = new HttpClient(host + '/api')
+    constructor(host, emitter, token) {
+        let client = new HttpClient(host + '/api', emitter)
 
         this.account = new AccountActions(client, token)
         this.project = new ProjectActions(client, token)
