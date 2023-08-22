@@ -56,6 +56,12 @@ class Submission extends Model {
         this.init(description, this.form)
     }
 
+    async delete() {
+        if (this.id) {
+            await this._api.submission.delete(this.project_id, this.patient_id, this.id)
+        }
+    }
+
     reset() {
         this.init(this._backup, this.form)
     }

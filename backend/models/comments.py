@@ -17,6 +17,9 @@ class Comment(db.Model):
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
+    submission_id = db.Column(db.Integer, db.ForeignKey('form_submission.id', ondelete="CASCADE"), nullable=True)
+
+
     def as_dict(self):
         return {
             "id": self.id,

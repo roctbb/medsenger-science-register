@@ -4,6 +4,10 @@ from backend.helpers import *
 from .projects import get_current_step
 
 
+def get_patients_for_project(project):
+    return filter(lambda x: not x.is_legacy, project.patients)
+
+
 @transaction
 def create_patient(user, name, sex, birthday, phone=None):
     if not name or not sex or not birthday:

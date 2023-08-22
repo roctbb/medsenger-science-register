@@ -103,6 +103,25 @@ class PatientActions extends api_utils.ActionGroup {
 
     }
 
+    async delete(project_id, patient_id) {
+
+        let query = {
+            api_token: this.token,
+        }
+
+        let result;
+
+        try {
+            result = await this.client.delete('/project/' + project_id + '/patients/' + patient_id, query);
+        } catch (e) {
+            console.log(e)
+            throw new Error("Ошибка соединения с сервером.")
+        }
+
+        return result.data
+
+    }
+
     async addComment(project_id, patient_id, text, description) {
 
         let query = {

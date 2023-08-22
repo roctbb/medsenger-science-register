@@ -29,6 +29,8 @@ class Patient(db.Model):
     comments = db.relationship('Comment', backref=backref('patient', uselist=False), lazy=False)
     files = db.relationship('File', backref=backref('patient', uselist=False), lazy=True)
 
+    is_legacy = db.Column(db.Boolean, default=False)
+
     def as_dict(self, additional_data={}):
         description = {
             "id": self.id,

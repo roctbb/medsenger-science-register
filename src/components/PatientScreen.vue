@@ -16,6 +16,9 @@
                 <a class="btn btn-sm btn-success me-1"
                    @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: this.patient.id}})">Изменить
                     профиль</a>
+
+                <a v-if="state.user.is('администратор')" class="btn btn-sm btn-danger me-1"
+                   @click="delete_patient()">Удалить пациента</a>
             </div>
         </div>
 
@@ -31,8 +34,8 @@
             }}</span></p>
 
         <div class="row" v-if="submissions">
-            <div class="col-8"
-                 :class="{'col-12': !project.settings.show_files && !project.settings.show_comments, 'col-8': project.settings.show_files || project.settings.show_comments}">
+            <div
+                :class="{'col-12': !project.settings.show_files && !project.settings.show_comments, 'col-8': project.settings.show_files || project.settings.show_comments}">
                 <div v-for="group in project.form_groups" :key="group.id">
                     <h6 class="mb-2" v-if="project.form_groups.length > 1">{{ group.name }}</h6>
                     <div class="row pt-2">
@@ -200,9 +203,11 @@ export default {
             file.download()
         },
         delete_file: function (file) {
-            file.delete().then(() => {
-                this.files = this.files.filter((f) => f.id != file.id)
-            })
+            if (confirm("Удалить файл " + file.name + "?")) {
+                file.delete().then(() => {
+                    this.files = this.files.filter((f) => f.id != file.id)
+                })
+            }
         },
         change_file: function (event) {
             let file = event.target.files[0]
@@ -216,6 +221,13 @@ export default {
                 toBase64(file).then((base64) => {
                     this.new_file.base64 = base64
                 })
+            }
+        },
+        delete_patient: async function () {
+            if (confirm("Вы точно хотите удалить пациента " + this.patient.name + "?")) {
+                await this.patient.delete()
+                await this.project.refresh()
+                this.$router.push({name: 'project', params: {id: this.project.id}})
             }
         }
     },

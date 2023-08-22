@@ -24,6 +24,29 @@ class ProjectActions extends api_utils.ActionGroup {
 
     }
 
+    async get(id) {
+
+        let query = {
+            api_token: this.token
+        }
+
+        let result;
+
+        try {
+            result = await this.client.get('/project/' + id, query);
+        } catch (e) {
+            console.log(e)
+            throw new Error("Ошибка соединения с сервером.")
+        }
+
+        let expectedErrors = []
+
+        api_utils.checkForErrors(result, expectedErrors)
+
+        return result.data
+
+    }
+
     async getPatients(project_id) {
 
         let query = {

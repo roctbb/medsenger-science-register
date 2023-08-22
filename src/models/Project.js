@@ -82,6 +82,11 @@ class Project extends Model {
         })
     }
 
+    async refresh() {
+        this._patients = undefined
+        this.init(await this._api.project.get(this.id))
+    }
+
     has_groups() {
         return this.form_groups.length !== 1
     }

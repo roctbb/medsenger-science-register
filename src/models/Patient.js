@@ -68,8 +68,16 @@ class Patient extends Model {
 
     async refresh() {
         if (this.id) {
+            this._files = undefined;
+            this._submissions = undefined;
             let description = await this._api.patient.get(this.project_id, this.id)
             this.init(this.project, description)
+        }
+    }
+
+    async delete() {
+        if (this.id) {
+            await this._api.patient.delete(this.project_id, this.id)
         }
     }
 
