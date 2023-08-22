@@ -1,3 +1,5 @@
+import time
+
 from backend.models import db
 from flask import request
 from .functions import *
@@ -20,14 +22,22 @@ def transaction(func):
 
 def creates_response(func):
     def wrapper(*args, **kwargs):
+        S = time.time()
+        result = None
         try:
-            return make_result(func(*args, **kwargs))
+            result = make_result(func(*args, **kwargs))
         except ExplainableException as e:
-            return make_error(e, e.status())
+            result = make_error(e, e.status())
         except Exception as e:
             print(traceback.format_exc())
             print("ServerError", e)
-            return make_error('ServerError', 500)
+            result = make_error('ServerError', 500)
+
+        E = time.time()
+
+        print(f"Request took {E - S} secs")
+
+        return result
 
     wrapper.__name__ = func.__name__
     return wrapper
