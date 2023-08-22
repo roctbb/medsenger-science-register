@@ -67,5 +67,6 @@ def remove_submission(user, project_id, patient_id, submission_id):
     legacy_submission = find_submission_by_id(submission_id)
 
     mark_legacy(legacy_submission)
+    delete_sumission_comments(legacy_submission)
 
     return None
