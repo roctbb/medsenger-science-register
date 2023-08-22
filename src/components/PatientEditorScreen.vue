@@ -90,7 +90,7 @@ export default {
                     await this.patient.save()
                     let patients = await this.project.patients
                     patients.push(this.patient)
-                    this.$router.push({name: 'patient', params: {id: this.patient.id}})
+                    this.$router.push({name: 'patient', params: {project_id: this.project.id, id: this.patient.id}})
                 }
 
 

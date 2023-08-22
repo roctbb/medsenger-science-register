@@ -11,10 +11,10 @@ class Project extends Model {
         super.init(description);
 
         this._patients = undefined
-        this._groups = undefined
         this.name = description.name
         this.forms = description.forms
         this.steps = description.steps
+        this.settings = description.settings
         this.categories = {}
 
         description.categories.forEach((category) => {
@@ -80,6 +80,11 @@ class Project extends Model {
                 }
             })
         })
+    }
+
+    async refresh() {
+        this._patients = undefined
+        this.init(await this._api.project.get(this.id))
     }
 
     has_groups() {

@@ -108,8 +108,8 @@ def find_submission_by_id(submission_id):
 
 
 @transaction
-def mark_legacy(submission):
-    submission.is_legacy = True
+def mark_legacy(object):
+    object.is_legacy = True
 
 
 def find_category_by_code(category_code):
@@ -119,4 +119,8 @@ def find_category_by_code(category_code):
 @transaction
 def replace_submission(old, new):
     mark_legacy(old)
+
+    for comment in old.commets:
+        db.session.delete(comment)
+
     new.created_on = old.created_on

@@ -76,6 +76,7 @@ class FormSubmission(db.Model):
     is_legacy = db.Column(db.Boolean, default=False)
 
     records = db.relationship('Record', backref=backref('submission', uselist=False, lazy=True), lazy=False)
+    comments = db.relationship('Comment', backref=backref('submission', uselist=False), lazy=True)
 
     def as_dict(self):
         return {
@@ -84,6 +85,6 @@ class FormSubmission(db.Model):
             "patient_id": self.patient_id,
             "project_id": self.project_id,
             "records": as_dict(self.records),
-            "created_on": self.created_on.isoformat(),
+            "created_on": self.created_on.isoformat() + 'Z',
             "author": self.doctor.name if self.doctor else None
         }

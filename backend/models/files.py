@@ -31,5 +31,5 @@ class File(db.Model):
             "doctor_id": self.doctor_id,
             "patient_id": self.patient_id,
             "project_id": self.project_id,
-            "created_on": self.created_on.isoformat()
+            "created_on": self.created_on.isoformat() + 'Z'
         }

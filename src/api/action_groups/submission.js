@@ -83,6 +83,25 @@ class SubmissionActions extends api_utils.ActionGroup {
         return result.data
 
     }
+
+    async delete(project_id, patient_id, submission_id) {
+
+        let query = {
+            api_token: this.token,
+        }
+
+        let result;
+
+        try {
+            result = await this.client.delete('/project/' + project_id + '/patients/' + patient_id + '/submissions/' + submission_id, query);
+        } catch (e) {
+            console.log(e)
+            throw new Error("Ошибка соединения с сервером.")
+        }
+
+        return result.data
+
+    }
 }
 
 export default SubmissionActions

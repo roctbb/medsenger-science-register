@@ -56,3 +56,16 @@ def edit_submission(user, project_id, patient_id, submission_id):
     replace_submission(legacy_submission, new_submission)
 
     return new_submission.as_dict()
+
+
+@submission_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>/submissions/<int:submission_id>',
+                            methods=['delete'])
+@creates_response
+@requires_user
+def remove_submission(user, project_id, patient_id, submission_id):
+    project = find_project_by_id_for_user(user, project_id)
+    legacy_submission = find_submission_by_id(submission_id)
+
+    mark_legacy(legacy_submission)
+
+    return None

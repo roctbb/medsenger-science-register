@@ -13,12 +13,17 @@
                     <button onclick="window.print()"
                             class="btn btn-primary btn-sm me-1">Печать
                     </button>
-                    <button @click="$router.push({name: 'form_compare', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})"
-                            class="btn btn-primary btn-sm me-1">Сравнение
+                    <button
+                        @click="$router.push({name: 'form_compare', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})"
+                        class="btn btn-primary btn-sm me-1">Сравнение
                     </button>
                     <button @click="edit()" v-if="disabled && !editing"
                             class="btn btn-primary btn-sm me-1">Изменить
                     </button>
+
+                    <a v-if="state.user.is('администратор') && disabled" class="btn btn-sm btn-danger me-1"
+                       @click="delete_submission()">Удалить форму</a>
+
                     <button @click="back()" class="btn btn-warning btn-sm me-1">Назад</button>
                 </div>
             </div>
@@ -226,6 +231,13 @@ export default {
                 this.submission.reset()
             }
             this.$router.back()
+        },
+        delete_submission: async function () {
+            if (confirm("Вы точно хотите удалить форму " + this.form.name + " для пациента " + this.patient.name + "?")) {
+                await this.submission.delete()
+                await this.patient.refresh()
+                this.$router.push({name: 'patient', params: {project_id: this.project.id, id: this.patient.id}})
+            }
         }
     },
     computed: {

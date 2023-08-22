@@ -29,6 +29,8 @@ class Patient(db.Model):
     comments = db.relationship('Comment', backref=backref('patient', uselist=False), lazy=False)
     files = db.relationship('File', backref=backref('patient', uselist=False), lazy=True)
 
+    is_legacy = db.Column(db.Boolean, default=False)
+
     def as_dict(self, additional_data={}):
         description = {
             "id": self.id,
@@ -71,13 +73,20 @@ class Project(db.Model):
 
     steps = db.Column(db.JSON, nullable=True)
 
+    show_files = db.Column(db.Boolean, default=False)
+    show_comments = db.Column(db.Boolean, default=False)
+
     def as_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "forms": as_dict(self.forms),
             "steps": self.steps,
-            "categories": as_dict(collect_categories(self.forms))
+            "categories": as_dict(collect_categories(self.forms)),
+            "settings": {
+                "show_files": self.show_files,
+                "show_comments": self.show_comments
+            }
         }
 
 
