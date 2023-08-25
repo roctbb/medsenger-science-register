@@ -3,7 +3,7 @@
 
         <div class="hstack gap-3">
             <div class="me-auto my-3">
-                <h4 class="my-1">{{ patient.name }} <small class="text-muted">пациент</small><small class="text-muted"
+                <h4 class="my-1">{{ patient.name }} <small class="text-muted">пациент ID {{ patient.id }}</small><small class="text-muted"
                                                                                                     v-if="patient.step">
                     / {{ patient.step }}</small></h4>
             </div>
