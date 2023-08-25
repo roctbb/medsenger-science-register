@@ -3,6 +3,7 @@
         <div class="hstack gap-3">
             <div class="me-auto">
                 <h4 class="my-3">Список пациентов в проекте "{{ project.name }}"</h4>
+                <p v-if="patients" class="my-2 text-muted">Пациентов в проекте: {{ patients.length }}</p>
             </div>
             <div>
                 <button @click="$router.push({name: 'create_patient', params: {project_id: project.id}})"
@@ -36,7 +37,9 @@
                                 </div>
                             </div>
 
-                            <p class="text-muted my-0">{{ patient.readable_birthday }}<br>{{ patient.created_by }}</p>
+                            <p class="text-muted my-0">ID {{ patient.id }} / {{
+                                    patient.readable_birthday
+                                }}<br>{{ patient.created_by }}</p>
                         </div>
                     </div>
                 </div>
@@ -81,7 +84,9 @@ export default {
             console.log(project);
             return project.id === parseInt(this.id)
         })
+        this.patients = await this.project.patients
         this.groups = await this.project.groups
+
     }
 }
 </script>
