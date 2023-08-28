@@ -96,7 +96,7 @@ class Submission extends Model {
                              this.answers[part.id][group_id][field.id] = answers[field.text]
                          }
 
-                         if (field.params && field.params.external_title && answer[field.params.external_title]) {
+                         if (field.params && field.params.external_title && answers[field.params.external_title]) {
                              this.answers[part.id][group_id][field.id] = answers[field.params.external_title]
                          }
                     })
