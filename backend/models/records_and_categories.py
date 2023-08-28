@@ -36,7 +36,7 @@ class Record(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('record_category.id', ondelete="SET null"), nullable=True)
     submission_id = db.Column(db.Integer, db.ForeignKey('form_submission.id', ondelete="SET null"), nullable=True)
 
-    value = db.Column(db.String(256), nullable=True)
+    value = db.Column(db.Text, nullable=True)
     params = db.Column(db.JSON, nullable=True)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())

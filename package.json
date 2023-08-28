@@ -22,7 +22,8 @@
     "mitt": "^3.0.0",
     "uuid": "^9.0.0",
     "vue": "^3.2.13",
-    "vue-router": "^4.2.4"
+    "vue-router": "^4.2.4",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
