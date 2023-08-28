@@ -86,6 +86,25 @@ class Submission extends Model {
         })
     }
 
+    import(answers) {
+        this.form.parts.forEach(part => {
+            if (this.answers[part.id]) {
+                Object.keys(this.answers[part.id]).forEach((group_id) => {
+                    part.fields.forEach(field => {
+                        console.log(field, answers[field.text])
+                         if (answers[field.text]) {
+                             this.answers[part.id][group_id][field.id] = answers[field.text]
+                         }
+
+                         if (field.params && field.params.external_title && answer[field.params.external_title]) {
+                             this.answers[part.id][group_id][field.id] = answers[field.params.external_title]
+                         }
+                    })
+                })
+            }
+        })
+    }
+
     static create(project, patient, form) {
         return new Submission({
             project_id: project.id,
