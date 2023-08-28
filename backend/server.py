@@ -17,7 +17,18 @@ app.register_blueprint(activate_blueprint, url_prefix='/activate')
 def index():
     return send_file(os.path.join(os.path.dirname(__file__), '../dist/index.html'))
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_file(os.path.join(os.path.dirname(__file__), '../dist/favicon.ico'))
 
-@app.route('/<path:path>')
-def static_path(path):
-    return send_file(os.path.join(os.path.dirname(__file__), '../dist/' + path))
+@app.route('/css/<path:path>')
+def css(path):
+    return send_file(os.path.join(os.path.dirname(__file__), '../dist/css/' + path))
+
+@app.route('/ico/<path:path>')
+def ico(path):
+    return send_file(os.path.join(os.path.dirname(__file__), '../dist/ico/' + path))
+
+@app.route('/js/<path:path>')
+def js(path):
+    return send_file(os.path.join(os.path.dirname(__file__), '../dist/js/' + path))
