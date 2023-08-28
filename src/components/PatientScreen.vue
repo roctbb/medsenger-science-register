@@ -3,13 +3,14 @@
 
         <div class="hstack gap-3">
             <div class="me-auto my-3">
-                <h4 class="my-1">{{ patient.name }} <small class="text-muted">пациент ID {{ patient.id }}</small><small class="text-muted"
-                                                                                                    v-if="patient.step">
+                <h4 class="my-1">{{ patient.name }} <small class="text-muted">пациент ID {{ patient.id }}</small><small
+                    class="text-muted"
+                    v-if="patient.step">
                     / {{ patient.step }}</small></h4>
             </div>
             <div>
                 <a @click="$router.push({name: 'project', params: {id: this.project.id}})"
-                        class="btn btn-warning btn-sm me-1 my-1">Назад
+                   class="btn btn-warning btn-sm me-1 my-1">Назад
                 </a>
                 <a target="_blank" class="btn btn-sm btn-success me-1 my-1" v-if="patient.contract_id"
                    :href="medsenger_host + '/client#/?c=' + patient.contract_id">Medsenger</a>
@@ -55,20 +56,36 @@
                         <p class="mb-3" v-if="!apply_search(submissions, group).length"><small>Нет данных</small></p>
                     </div>
 
-                    <div class="dropdown d-inline">
-                        <button class="btn btn-primary btn-sm dropdown-toggle mb-4" type="button"
-                                data-bs-toggle="dropdown"
+                    <div>
+                        <button class="btn btn-primary btn-sm mb-4" type="button"
+                                data-bs-toggle="modal" :data-bs-target="`#group_${group.id}`"
                                 aria-expanded="false">
                             Добавить
                         </button>
 
-                        <ul class="dropdown-menu">
-                            <li v-for="form in available_forms(group)" v-bind:key="form.id"><a
-                                class="dropdown-item text-wrap"
-                                @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">{{
-                                    form.name
-                                }}</a></li>
-                        </ul>
+                        <div class="modal fade" :id="`group_${group.id}`" tabindex="-1"
+                             :aria-labelledby="`group_${group.id}Label`" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" :id="`group_${group.id}Label`">{{ group.name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Закрыть"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="d-grid gap-2">
+                                            <button v-for="form in available_forms(group)" v-bind:key="form.id"
+                                                    class="btn btn-light text-start" data-bs-dismiss="modal"
+                                                    @click="$router.push({name: 'form', params: {project_id: project.id, patient_id: patient.id, form_id: form.id}})">
+                                                {{
+                                                    form.name
+                                                }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

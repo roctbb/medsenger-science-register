@@ -34,3 +34,13 @@
 .btn-success:active {
     border: 1px solid #24a8b4 !important;
 }
+
+.btn-light {
+    background-image: none;
+    background-color: transparent;
+}
+
+.btn-light:active, .btn-light:hover, .btn-light:focus, .btn-light:disabled {
+    background-image: none;
+    background-color: lightgray !important;
+}
