@@ -36,3 +36,7 @@ def js(path):
 @app.route('/images/<path:path>')
 def images(path):
     return send_file(os.path.join(os.path.dirname(__file__), '../dist/images/' + path))
+
+@app.route('/img/<path:path>')
+def img(path):
+    return send_file(os.path.join(os.path.dirname(__file__), '../dist/img/' + path))
