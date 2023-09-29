@@ -27,8 +27,12 @@ def create_file(file_dict, patient, doctor, project):
     if not path:
         raise InsufficientData
 
+    name = file_dict.get('name')
+    if not name:
+        name = file_dict.get('file_name')
+
     file = File(patient_id=patient.id, doctor_id=doctor.id, project_id=project.id,
-                name=file_dict.get('name'), file_name=file_dict.get('file_name'),
+                name=name, file_name=file_dict.get('file_name'),
                 type=file_dict.get('type', 'plain/text'), path=path)
 
     db.session.add(file)

@@ -86,21 +86,41 @@ class Submission extends Model {
         })
     }
 
-    import(answers) {
+    _iterate_fields(F) {
         this.form.parts.forEach(part => {
             if (this.answers[part.id]) {
                 Object.keys(this.answers[part.id]).forEach((group_id) => {
                     part.fields.forEach(field => {
-                        console.log(field, answers[field.text])
-                         if (answers[field.text]) {
-                             this.answers[part.id][group_id][field.id] = answers[field.text]
-                         }
-
-                         if (field.params && field.params.external_title && answers[field.params.external_title]) {
-                             this.answers[part.id][group_id][field.id] = answers[field.params.external_title]
-                         }
+                        F(part, group_id, field)
                     })
                 })
+            }
+        })
+    }
+
+    show_off_fields() {
+        let fields = []
+
+        this._iterate_fields((part, group_id, field) => {
+            if (field.params.show_off) {
+                fields.push({
+                    "title": field.params.show_off_title,
+                    "value": this.answers[part.id][group_id][field.id]
+                })
+            }
+        })
+
+        return fields
+    }
+
+    import(answers) {
+        this._iterate_fields((part, group_id, field) => {
+            if (answers[field.text]) {
+                this.answers[part.id][group_id][field.id] = answers[field.text]
+            }
+
+            if (field.params && field.params.external_title && answers[field.params.external_title]) {
+                this.answers[part.id][group_id][field.id] = answers[field.params.external_title]
             }
         })
     }
