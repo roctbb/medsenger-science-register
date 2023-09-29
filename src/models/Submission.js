@@ -1,5 +1,6 @@
 import Model from "@/models/Model";
 import {v4 as uuidv4} from 'uuid';
+import {formatDate} from "@/utils/helpers";
 
 class Submission extends Model {
     constructor(description, form) {
@@ -105,11 +106,17 @@ class Submission extends Model {
         let fields = []
 
         this._iterate_fields((part, group_id, field) => {
-            if (field.params.show_off) {
-                fields.push({
+            if (field.params.show_off && this.answers[part.id][group_id][field.id]) {
+                let description = {
                     "title": field.params.show_off_title,
                     "value": this.answers[part.id][group_id][field.id]
-                })
+                }
+
+                if (fields.params.show_off_transform === "date") {
+                    description["value"] = formatDate(new Date(description["value"]))
+                }
+
+                fields.push(description)
             }
         })
 
