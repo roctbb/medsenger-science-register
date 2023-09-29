@@ -22,7 +22,7 @@ def get_projects_for_user(user):
 
 
 def check_has_submission(patient, form_id):
-    return len(list(filter(lambda submission: submission.form_id == form_id, patient.submissions))) > 0
+    return len(list(filter(lambda submission: submission.form_id == form_id, patient.actual_submissions()))) > 0
 
 
 def check_step_criteria(patient, step):
