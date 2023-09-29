@@ -70,12 +70,18 @@ class Project extends Model {
                     resolve([create_group(undefined, patients)])
                 } else {
                     let groups = []
+                    const titles = this.steps.map(s => s.title)
 
-                    this.steps.forEach(step => {
-                        console.log(patients)
-                        groups.push(create_group(step.title, patients.filter(patient => patient.step === step.title)))
+                    titles.forEach(title => {
+                        groups.push(create_group(title, patients.filter(patient => patient.step === title)))
                     })
-                    console.log(groups)
+
+                    const not_in_group = patients.filter(patient => !titles.includes(patient.step))
+
+                    if (not_in_group.length > 0) {
+                        groups.push(create_group("Другие пациенты", not_in_group))
+                    }
+
                     resolve(groups)
                 }
             })
