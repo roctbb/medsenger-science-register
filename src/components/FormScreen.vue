@@ -265,7 +265,7 @@ export default {
 
             raw_data.forEach(row => {
                 if (row.length > 8 && row[1] && row[8]) {
-                    answers[row[1]] = row[8]
+                    answers[row[1].trim()] = row[8].trim()
                 }
             })
 
