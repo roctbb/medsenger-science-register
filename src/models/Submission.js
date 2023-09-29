@@ -106,7 +106,7 @@ class Submission extends Model {
         let fields = []
 
         this._iterate_fields((part, group_id, field) => {
-            if (field.params.show_off && this.answers[part.id][group_id][field.id]) {
+            if (field.params && field.params.show_off && this.answers[part.id][group_id][field.id]) {
                 let description = {
                     "title": field.params.show_off_title,
                     "value": this.answers[part.id][group_id][field.id]
