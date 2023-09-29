@@ -112,7 +112,7 @@ class Submission extends Model {
                     "value": this.answers[part.id][group_id][field.id]
                 }
 
-                if (fields.params.show_off_transform === "date") {
+                if (field.params.show_off_transform === "date") {
                     description["value"] = formatDate(new Date(description["value"]))
                 }
 
