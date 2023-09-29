@@ -49,6 +49,10 @@
                                     <h6 class="card-title">{{ submission.form.name }}</h6>
                                     <small class="text-muted my-0">{{ submission.readable_created_on }}</small><br>
                                     <small class="text-muted my-0">{{ submission.author }}</small>
+
+                                    <div v-for="pair in submission.show_off_fields()" :key="pair">
+                                        <small class="text-muted my-0">{{ pair.title }}: {{ pair.value }}</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>

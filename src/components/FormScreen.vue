@@ -259,6 +259,8 @@ export default {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const raw_data = XLSX.utils.sheet_to_json(worksheet, {header: 1});
 
+            console.log(raw_data)
+
             const answers = {}
 
             raw_data.forEach(row => {
