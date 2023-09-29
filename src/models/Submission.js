@@ -79,11 +79,14 @@ class Submission extends Model {
 
         this.answers[part.id][group_id] = {}
 
-        part.fields.forEach(field => {
-            if (field.type === 'select' || field.type === 'radio') {
-                this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
-            }
-        })
+        if (!this.id) {
+            part.fields.forEach(field => {
+                if (field.type === 'select' || field.type === 'radio') {
+                    this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
+                }
+            })
+        }
+
     }
 
     _iterate_fields(F) {
