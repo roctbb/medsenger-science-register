@@ -31,6 +31,9 @@ class Patient(db.Model):
 
     is_legacy = db.Column(db.Boolean, default=False)
 
+    def actual_submissions(self):
+        return filter(lambda s: not s.form.is_legacy, self.submissions)
+
     def as_dict(self, additional_data={}):
         description = {
             "id": self.id,
