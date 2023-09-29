@@ -8,7 +8,7 @@ class StateManager extends Manager {
         super(state, bus, api);
 
         this._state = state
-        this.loaded = false;
+        this._state.loaded = false;
     }
 
     async load() {
@@ -33,7 +33,7 @@ class StateManager extends Manager {
         }
 
         console.log("Loaded")
-        this.loaded = true
+        this._state.loaded = true
     }
 
     save() {
@@ -59,6 +59,10 @@ class StateManager extends Manager {
         }
 
         this._state.user = user
+    }
+
+    get loaded() {
+        return this._state.loaded;
     }
 }
 

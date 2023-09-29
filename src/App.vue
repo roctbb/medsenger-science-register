@@ -1,17 +1,27 @@
 <template>
     <div>
-        <nav class="navbar bg-body-tertiary no-print">
-            <div class="container">
-                <a class="navbar-brand" href="#">Регистр пациентов</a>
+        <div v-if="state.loaded && auth">
+            <div v-if="auth.has_auth()">
+                <nav class="navbar bg-body-tertiary no-print">
+                    <div class="container">
 
-                <div class="d-flex" v-if="state.user">
-                    <button @click="logOut()" class="btn btn-secondary btn-sm">Выход</button>
+                        <a class="navbar-brand" href="#"><img class="mx-2" height="30" src="/images/icon_banner_repro_health.png" /> Регистр онкофертильности</a>
+
+                        <div class="d-flex" v-if="state.user">
+                            <button @click="logOut()" class="btn btn-secondary btn-sm">Выход</button>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="container">
+                    <router-view></router-view>
                 </div>
             </div>
-        </nav>
-
-        <div class="container">
-            <router-view></router-view>
+            <div v-else class="mainbg">
+                <div class="container-fluid" style="background-color: rgba(255,255,255,0.4)">
+                    <router-view></router-view>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -24,16 +34,19 @@ export default {
     name: 'App',
     components: {},
     data() {
-        return {}
+        return {
+            auth: undefined
+        }
     },
     methods: {
         logOut: function () {
-            this.managers.auth.logout()
             this.$router.push('/login')
+            this.managers.auth.logout()
+
         }
     },
     async mounted() {
-
+        this.auth = this.managers.auth
     }
 }
 </script>
@@ -54,6 +67,18 @@ export default {
 
 .accent-color {
     color: #006c88;
+}
+
+.mainbg {
+    width: 100vw;
+    height: 100vh;
+    background-image: url("../public/images/main.jpg");
+    background-size: cover;
+    background-position: bottom right;
+}
+
+.navbar-brand, .navbar-brand:hover, .navbar-brand:visited {
+    color: #029DAF;
 }
 
 </style>

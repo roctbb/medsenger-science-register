@@ -21,10 +21,25 @@ export default {
     name: 'ProjectsScreen',
     components: {Loading},
     data() {
-        return {}
+        return {
+            global_state: undefined
+        }
     },
     async mounted() {
+        this.global_state = this.state
+    },
+    watch: {
+        global_state() {
+            if (this.state.user && this.state.user.projects) {
+                if (this.state.user.projects.length === 1) {
+                    this.$router.push({name: 'project', params: {id: this.state.user.projects[0].id}})
+                }
+            }
+        }
+
     }
+
+
 }
 </script>
 

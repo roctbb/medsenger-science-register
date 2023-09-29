@@ -32,3 +32,7 @@ def ico(path):
 @app.route('/js/<path:path>')
 def js(path):
     return send_file(os.path.join(os.path.dirname(__file__), '../dist/js/' + path))
+
+@app.route('/images/<path:path>')
+def images(path):
+    return send_file(os.path.join(os.path.dirname(__file__), '../dist/images/' + path))
