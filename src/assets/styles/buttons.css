@@ -44,3 +44,7 @@
     background-image: none;
     background-color: lightgray !important;
 }
+
+.colored-link, .colored-link:hover, .colored-link:active, .colored-link:visited {
+    color: #24a8b4 !important;
+}
