@@ -7,9 +7,9 @@
             </div>
             <div>
                 <button @click="$router.push({name: 'create_patient', params: {project_id: project.id}})"
-                        class="btn btn-sm btn-primary">Добавить
+                        class="btn btn-sm btn-primary me-1">Добавить
                 </button>
-                <a target="_blank" class="btn btn-sm btn-primary" href="https://telegynecology.ru/info/pat/47#libs">Материалы
+                <a target="_blank" class="btn btn-sm btn-primary me-1" href="https://telegynecology.ru/info/pat/47#libs">Материалы
                     для пациентов</a>
             </div>
         </div>

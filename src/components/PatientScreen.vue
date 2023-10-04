@@ -15,7 +15,8 @@
                 <a target="_blank" class="btn btn-sm btn-success me-1 my-1" v-if="patient.contract_id"
                    :href="medsenger_host + '/client#/?c=' + patient.contract_id">Medsenger</a>
 
-                <a target="_blank" class="btn btn-sm btn-primary" href="https://telegynecology.ru/info/pat/47#libs">Материалы
+                <a target="_blank" class="btn btn-sm btn-primary me-1 my-1"
+                   href="https://telegynecology.ru/info/pat/47#libs">Материалы
                     для пациентов</a>
 
                 <a class="btn btn-sm btn-success me-1 my-1"
