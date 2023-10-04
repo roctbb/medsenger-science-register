@@ -25,6 +25,10 @@
                                 </div>
 
                                 <button type="submit" @click="makeLogin" class="btn btn-primary">Войти</button>
+
+                                <a target="_blank" class="my-3"
+                                   href="https://telegynecology.ru/info/pat/47#libs">Материалы
+                                    для пациентов</a>
                             </form>
                         </div>
                     </div>
