@@ -52,9 +52,12 @@ class Record(db.Model):
         }
 
     def formatted_value(self):
-        if self.category.type == RecordType.INTEGER:
-            return int(self.value)
-        if self.category.type == RecordType.FLOAT:
-            return float(self.value.replace(',', '.'))
+        try:
+            if self.category.type == RecordType.INTEGER:
+                return int(self.value)
+            if self.category.type == RecordType.FLOAT:
+                return float(self.value.replace(',', '.'))
+        except:
+            pass
 
         return self.value
