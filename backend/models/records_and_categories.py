@@ -55,6 +55,6 @@ class Record(db.Model):
         if self.category.type == RecordType.INTEGER:
             return int(self.value)
         if self.category.type == RecordType.FLOAT:
-            return float(self.value)
+            return float(self.value.replace(',', '.'))
 
         return self.value
