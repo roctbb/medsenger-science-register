@@ -27,8 +27,7 @@ class Submission extends Model {
         if (!this.answers || this.answers === {}) {
             console.log("creating reactive answers")
             this.answers = reactive({})
-        }
-        else {
+        } else {
             console.log("answers is ", this.answers)
         }
 
@@ -70,6 +69,12 @@ class Submission extends Model {
 
     async save() {
         let description = undefined
+
+        this._iterate_fields((part, group_id, field) => {
+            if (field.show_if && !this.answers[part.id][group_id][field.show_if]) {
+                this.answers[part.id][group_id][field.id] = undefined
+            }
+        })
 
         if (this.id) {
             description = await this._api.submission.update(this.project_id, this.patient_id, this.form_id, this.id, this.answers)
