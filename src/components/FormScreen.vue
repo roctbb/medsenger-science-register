@@ -3,7 +3,7 @@
 
         <div @drop="onDrop" @dragenter="dragEnter" @dragleave="dragLeave" :class="{'bordered': has_border}"
              @dragover="dragOver">
-            <div class="description">
+            <div class="description no-print">
                 <div class="hstack gap-3">
                     <div class="me-auto">
                         <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <p>{{ form.description }}</p>
+                <p class="no-print">{{ form.description }}</p>
 
             </div>
 
@@ -43,7 +43,7 @@
                     <div class="card-body">
                         <div class="hstack gap-3">
                             <div><h5 class="card-title my-0">{{ part.name }}</h5></div>
-                            <div class="text-muted"><small>{{ part.description }}</small></div>
+                            <div class="text-muted no-print"><small>{{ part.description }}</small></div>
                             <div class="ms-auto">
                                 <button class="btn btn-primary btn-sm" @click="submission.extend(part)">Добавить
                                 </button>
@@ -59,7 +59,7 @@
                             <div><h6 v-if="part.repeatable" class="card-title my-0">{{ part.name }}</h6><h5 v-else
                                                                                                             class="card-title my-0">
                                 {{ part.name }}</h5></div>
-                            <div><small v-if="!part.repeatable" class="text-muted">{{ part.description }}</small></div>
+                            <div><small v-if="!part.repeatable" class="text-muted no-print">{{ part.description }}</small></div>
                             <div class="ms-auto" v-if="part.repeatable && !disabled">
                                 <button class="btn btn-warning btn-sm" @click="submission.remove(part, group_key)">
                                     Удалить
@@ -141,7 +141,7 @@
                                                    v-bind:disabled="disabled">
                                         </div>
 
-                                        <div class="form-text" v-if="field.description">{{ field.description }}</div>
+                                        <div class="form-text no-print" v-if="field.description">{{ field.description }}</div>
                                     </div>
                                 </div>
                             </div>
