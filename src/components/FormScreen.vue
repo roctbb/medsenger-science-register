@@ -312,4 +312,16 @@ export default {
 .bordered {
     border: 1px dotted gray !important;
 }
+
+.form-control:disabled {
+    background-color: #efefef;
+}
+
+.form-select:disabled {
+    background-color: #efefef;
+}
+
+.dp__disabled {
+    background-color: #efefef;
+}
 </style>
