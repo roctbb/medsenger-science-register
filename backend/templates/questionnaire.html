@@ -56,7 +56,8 @@
                     <h6 class="bold-text">
                         Вопрос №{{ i + 1 }}
                         &nbsp;
-                        <button class="btn btn-sm btn-default change_number_button" @click="go_down(i)" v-if="i !== questions.length-1">
+                        <button class="btn btn-sm btn-default change_number_button" @click="go_down(i)"
+                                v-if="i !== questions.length-1">
                             ⬇
                         </button>
                         <button class="btn btn-sm btn-default change_number_button" @click="go_up(i)" v-if="i !== 0">
@@ -93,15 +94,29 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row my-2">
                         <label class="col-md-4 col-form-label col-form-label-sm">
                             Экспорт комментария?
                         </label>
                         <div class="col-md-8">
                             <div class="form-check form-switch">
-                                <input type="checkbox" class="form-check-input" :id="'export_comment_question_setter_' + i"
+                                <input type="checkbox" class="form-check-input"
+                                       :id="'export_comment_question_setter_' + i"
                                        v-model="question.export_comment">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <label class="col-md-4 col-form-label col-form-label-sm">
+                            Показывать прошлый ответ?
+                        </label>
+                        <div class="col-md-8">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input"
+                                       :id="'is_saved_question_setter_' + i"
+                                       v-model="question.is_saved">
                             </div>
                         </div>
                     </div>
@@ -229,13 +244,14 @@
                         }}
                     </button>
                 </div>
-            </div >
+            </div>
             <div v-else class="card">
                 <div class="card-body">
                     <h6 class="bold-text">
                         Подзаголовок
                         &nbsp;
-                        <button class="btn btn-sm btn-default change_number_button" @click="go_down(i)" v-if="i !== questions.length-1">
+                        <button class="btn btn-sm btn-default change_number_button" @click="go_down(i)"
+                                v-if="i !== questions.length-1">
                             ⬇
                         </button>
                         <button class="btn btn-sm btn-default change_number_button" @click="go_up(i)" v-if="i !== 0">

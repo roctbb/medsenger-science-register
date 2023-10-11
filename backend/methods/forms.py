@@ -4,6 +4,7 @@ from backend.models import *
 from .exceptions import *
 from backend.helpers import *
 from .comments import *
+from sqlalchemy import Text
 
 
 @transaction
@@ -97,6 +98,30 @@ def validate_form(form, answers):
                     details.append((part.id, group_key, field.get('id')))
     if details:
         raise InsufficientData(json.dumps(details))
+
+
+def get_saved_answers(form, patient):
+    fields = []
+    grouper = {}
+
+    for part in form.parts:
+        fields.extend(part.fields)
+
+    saved_fields_ids = list(map(lambda f: f.get('id'), filter(lambda f: f.get("is_saved"), fields)))
+
+    if saved_fields_ids:
+        records = Record.query.filter(Record.patient_id == patient.id).filter(
+            Record.params['question_id'].astext.in_(saved_fields_ids)).all()
+
+        for record in records:
+            qid = record.params['question_id']
+            if qid in grouper:
+                if record.created_on > grouper[qid].created_on:
+                    grouper[qid] = record
+            else:
+                grouper[qid] = record
+
+    return grouper.values()
 
 
 def find_form_by_id(form_id):

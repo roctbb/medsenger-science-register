@@ -2,13 +2,14 @@ from .alchemy import *
 from .relation_tables import *
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
+from sqlalchemy.dialects.postgresql import JSON
 
 
 class FormPart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=True)
     description = db.Column(db.Text, nullable=True)
-    fields = db.Column(db.JSON, nullable=True)
+    fields = db.Column(JSON, nullable=True)
     repeatable = db.Column(db.Boolean, default=False)
 
     def as_dict(self):

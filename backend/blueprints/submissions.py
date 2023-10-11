@@ -70,3 +70,15 @@ def remove_submission(user, project_id, patient_id, submission_id):
     delete_submission_comments(legacy_submission)
 
     return None
+
+
+@submission_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>/saved/<int:form_id>',
+                            methods=['get'])
+@creates_response
+@requires_user
+def get_latest_answers(user, project_id, patient_id, form_id):
+    project = find_project_by_id_for_user(user, project_id)
+    patient = find_patient_by_id(patient_id)
+    form = find_form_by_id(form_id)
+
+    return as_dict(get_saved_answers(form, patient))
