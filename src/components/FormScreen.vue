@@ -1,5 +1,6 @@
 <template>
     <div v-if="project && patient && form && submission">
+
         <div @drop="onDrop" @dragenter="dragEnter" @dragleave="dragLeave" :class="{'bordered': has_border}"
              @dragover="dragOver">
             <div class="description">
@@ -75,7 +76,6 @@
                                             field.text
                                         }}</label>
                                     <div class="col-sm-8">
-
                                         <input
                                             :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
                                             v-if="field.type === 'string'" type="text" class="form-control"

@@ -1,7 +1,7 @@
 from .alchemy import *
 from backend.helpers import *
 import enum
-
+from sqlalchemy.dialects.postgresql import JSON
 
 class RecordType(str, enum.Enum):
     INTEGER = 'integer'
@@ -17,7 +17,7 @@ class RecordCategory(db.Model):
     name = db.Column(db.String(256), nullable=True)
     code = db.Column(db.String(256), nullable=True)
     type = db.Column(db.Enum(RecordType))
-    params = db.Column(db.JSON, nullable=True)
+    params = db.Column(JSON, nullable=True)
 
     records = db.relationship('Record', backref=backref('category', uselist=False, lazy=False), lazy=True)
 
@@ -37,7 +37,7 @@ class Record(db.Model):
     submission_id = db.Column(db.Integer, db.ForeignKey('form_submission.id', ondelete="SET null"), nullable=True)
 
     value = db.Column(db.Text, nullable=True)
-    params = db.Column(db.JSON, nullable=True)
+    params = db.Column(JSON, nullable=True)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())

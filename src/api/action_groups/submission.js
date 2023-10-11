@@ -24,6 +24,29 @@ class SubmissionActions extends api_utils.ActionGroup {
 
     }
 
+    async get_saved_answers(project_id, patient_id, form_id) {
+
+        let query = {
+            api_token: this.token,
+        }
+
+        let result;
+
+        try {
+            result = await this.client.get('/project/' + project_id + '/patients/' + patient_id + '/saved/' + form_id, query);
+        } catch (e) {
+            console.log(e)
+            throw new Error("Ошибка соединения с сервером.")
+        }
+
+        let expectedErrors = []
+
+        api_utils.checkForErrors(result, expectedErrors)
+
+        return result.data
+
+    }
+
     async submit(project_id, patient_id, form_id, answers) {
 
         let query = {

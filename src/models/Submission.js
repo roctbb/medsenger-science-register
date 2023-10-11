@@ -1,6 +1,7 @@
 import Model from "@/models/Model";
 import {v4 as uuidv4} from 'uuid';
 import {formatDate} from "@/utils/helpers";
+import {reactive} from "vue";
 
 class Submission extends Model {
     constructor(description, form) {
@@ -11,6 +12,8 @@ class Submission extends Model {
     init(description, form) {
         super.init(description);
 
+        console.log(description)
+
         this.project_id = description.project_id
         this.patient_id = description.patient_id
         this.form_id = description.form_id
@@ -19,22 +22,19 @@ class Submission extends Model {
         this.author = description.author
         this.form = form
 
-        if (!this.answers) {
-            this.answers = {}
+        console.log("Initializing submission")
+
+        if (!this.answers || this.answers === {}) {
+            console.log("creating reactive answers")
+            this.answers = reactive({})
+        }
+        else {
+            console.log("answers is ", this.answers)
         }
 
         // add existing records
         if (this.records) {
-            this.records.forEach((record) => {
-                if (!this.answers[record.params.part_id]) {
-                    this.answers[record.params.part_id] = {}
-                }
-                if (!this.answers[record.params.part_id][record.params.group_key]) {
-                    this.answers[record.params.part_id][record.params.group_key] = {}
-                }
-
-                this.answers[record.params.part_id][record.params.group_key][record.params.question_id] = record.value
-            })
+            this._fillRecords(this.records)
         }
 
         // add empty parts
@@ -42,6 +42,29 @@ class Submission extends Model {
             if (!part.repeatable && !this.answers[part.id]) {
                 this.extend(part)
             }
+        })
+
+        if (!this.id) {
+            console.log("before", this.answers)
+            this._api.submission.get_saved_answers(this.project_id, this.patient_id, this.form_id).then(records => {
+                console.log(this.answers)
+                records.forEach((record) => {
+                    this.answers[record.params.part_id][Object.keys(this.answers[record.params.part_id])[0]][record.params.question_id] = record.value
+                })
+            })
+        }
+    }
+
+    _fillRecords(records) {
+        records.forEach((record) => {
+            if (!this.answers[record.params.part_id]) {
+                this.answers[record.params.part_id] = {}
+            }
+            if (!this.answers[record.params.part_id][record.params.group_key]) {
+                this.answers[record.params.part_id][record.params.group_key] = {}
+            }
+
+            this.answers[record.params.part_id][record.params.group_key][record.params.question_id] = record.value
         })
     }
 
@@ -140,7 +163,6 @@ class Submission extends Model {
             project_id: project.id,
             patient_id: patient.id,
             form_id: form.id,
-            answers: {}
         }, form)
     }
 }
