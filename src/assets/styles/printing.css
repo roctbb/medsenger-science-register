@@ -10,13 +10,13 @@
     }
 
     .mb-3 {
-        margin-bottom: 0.8rem !important;
+        margin-bottom: 0.5rem !important;
     }
 
     .card, .form-control, .form-control-sm {
         font-size: 0.8rem !important;
         padding: 0.275rem 0.55rem;
-        /*border: none;*/
+        border: none !important;
     }
 
     h6 {
