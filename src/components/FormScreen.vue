@@ -314,14 +314,14 @@ export default {
 }
 
 .form-control:disabled {
-    background-color: #efefef;
+    background-color: #fafafa;
 }
 
 .form-select:disabled {
-    background-color: #efefef;
+    background-color: #fafafa;
 }
 
 .dp__disabled {
-    background-color: #efefef;
+    background-color: #fafafa;
 }
 </style>
