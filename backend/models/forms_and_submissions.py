@@ -26,14 +26,13 @@ class FormCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=True)
     priority = db.Column(db.Integer, default=0)
-
     forms = db.relationship('Form', backref=backref('category', uselist=False, lazy=False), lazy=True)
 
     def as_dict(self):
         return {
             "id": self.id,
             "name": self.name,
-            "priority": self.priority,
+            "priority": self.priority
         }
 
 
@@ -50,6 +49,7 @@ class Form(db.Model):
     submissions = db.relationship('FormSubmission', backref=backref('form', uselist=False), lazy=True)
 
     specialty = db.Column(db.String(256), nullable=True)
+    is_legacy = db.Column(db.Boolean, default=False, server_default="false")
 
     def as_dict(self):
         return {
@@ -58,7 +58,8 @@ class Form(db.Model):
             "description": self.description,
             "parts": as_dict(self.parts),
             "specialty": self.specialty,
-            "category_id": self.category_id
+            "category_id": self.category_id,
+            "is_legacy": self.is_legacy
         }
 
 
