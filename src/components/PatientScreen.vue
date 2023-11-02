@@ -192,9 +192,9 @@ export default {
         formatDate,
         available_forms: function (category) {
             if (category === undefined || this.project.form_groups.length < 2) {
-                return this.project.forms.filter(form => !form.specialty || this.state.user.is(form.specialty))
+                return this.project.forms.filter(form => form.is_legacy === false).filter(form => !form.specialty || this.state.user.is(form.specialty))
             } else {
-                return this.project.forms.filter(form => form.category_id === category.id && (!form.specialty || this.state.user.is(form.specialty)))
+                return this.project.forms.filter(form => form.is_legacy === false).filter(form => form.category_id === category.id && (!form.specialty || this.state.user.is(form.specialty)))
             }
         },
         apply_search: function (submissions, group) {
