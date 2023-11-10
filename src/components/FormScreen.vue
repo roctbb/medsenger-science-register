@@ -3,7 +3,7 @@
 
         <div @drop="onDrop" @dragenter="dragEnter" @dragleave="dragLeave" :class="{'bordered': has_border}"
              @dragover="dragOver">
-            <div class="description no-print">
+            <div class="description">
                 <div class="hstack gap-3">
                     <div class="me-auto">
                         <h4 class="my-3">{{ patient.name }}: {{ form.name }} <small
@@ -11,7 +11,7 @@
                                 this.submission.author
                             }})</small></h4>
                     </div>
-                    <div>
+                    <div class="no-print">
                         <button onclick="window.print()"
                                 class="btn btn-primary btn-sm me-1 my-1">Печать
                         </button>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <p class="no-print">{{ form.description }}</p>
+                <p class="no-print" >{{ form.description }}</p>
 
             </div>
 
@@ -59,7 +59,9 @@
                             <div><h6 v-if="part.repeatable" class="card-title my-0">{{ part.name }}</h6><h5 v-else
                                                                                                             class="card-title my-0">
                                 {{ part.name }}</h5></div>
-                            <div><small v-if="!part.repeatable" class="text-muted no-print">{{ part.description }}</small></div>
+                            <div><small v-if="!part.repeatable" class="text-muted no-print">{{
+                                    part.description
+                                }}</small></div>
                             <div class="ms-auto" v-if="part.repeatable && !disabled">
                                 <button class="btn btn-warning btn-sm" @click="submission.remove(part, group_key)">
                                     Удалить
@@ -71,11 +73,13 @@
                             <div v-if="field.type === 'subheader'"><h6 class="my-3">{{ field.text }}</h6></div>
                             <div v-else>
                                 <div class="row mb-3"
-                                     v-if="!field.show_if || submission.answers[part.id][group_key][field.show_if]">
+                                     v-if="!field.show_if || submission.answers[part.id][group_key][field.show_if]"
+                                     :class="{'no-print': !submission.answers[part.id][group_key][field.id]}">
                                     <label class="col-sm-4 col-form-label" :class="{ required: field.required }">{{
                                             field.text
                                         }}</label>
-                                    <div class="col-sm-8">
+
+                                    <div class="col-sm-8 no-print">
                                         <input
                                             :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
                                             v-if="field.type === 'string'" type="text" class="form-control"
@@ -141,7 +145,14 @@
                                                    v-bind:disabled="disabled">
                                         </div>
 
-                                        <div class="form-text no-print" v-if="field.description">{{ field.description }}</div>
+                                        <div class="form-text no-print" v-if="field.description">{{
+                                                field.description
+                                            }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-8 only-print">
+                                        <p><strong>{{ submission.answers[part.id][group_key][field.id] }}</strong></p>
                                     </div>
                                 </div>
                             </div>
