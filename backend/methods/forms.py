@@ -24,6 +24,9 @@ def submit_form(doctor, patient, form, answers):
 
         for group_key, group in groups.items():
             for field in part.fields:
+                if field.get('type') in ['subheader', 'header']:
+                    continue
+
                 answer = group.get(field.get('id'))
                 category = find_category_by_code(field.get('category'))
 
@@ -93,8 +96,10 @@ def validate_form(form, answers):
             raise InsufficientData()
 
         for group_key, group in extract_key(answers, part.id).items():
+
             for field in part.fields:
-                if field.get('required') and field.get('id') not in group:
+                if field.get('required') and field.get('id') not in group and (
+                        not field.get('show_if') or group.get(field.get('show_if'))):
                     details.append((part.id, group_key, field.get('id')))
     if details:
         raise InsufficientData(json.dumps(details))
