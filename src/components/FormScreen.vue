@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <p class="no-print" >{{ form.description }}</p>
+                <p class="no-print">{{ form.description }}</p>
 
             </div>
 
@@ -79,31 +79,37 @@
                                             field.text
                                         }}</label>
 
-                                    <div class="col-sm-8 no-print">
+                                    <div class="col-sm-8">
                                         <input
                                             :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
-                                            v-if="field.type === 'string'" type="text" class="form-control"
+                                            v-if="field.type === 'string'" type="text" class="form-control no-print"
                                             v-model="submission.answers[part.id][group_key][field.id]"
                                             v-bind:required="field.required" v-bind:disabled="disabled">
 
                                         <input
                                             :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
-                                            v-if="field.type === 'integer'" type="number" step="1" class="form-control"
+                                            v-if="field.type === 'integer'" type="number" step="1"
+                                            class="form-control no-print"
                                             v-model="submission.answers[part.id][group_key][field.id]"
                                             v-bind:required="field.required" v-bind:disabled="disabled">
 
                                         <input
                                             :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
-                                            v-if="field.type === 'float'" type="number" step="0.01" class="form-control"
+                                            v-if="field.type === 'float'" type="number" step="0.01"
+                                            class="form-control no-print"
                                             v-model="submission.answers[part.id][group_key][field.id]"
                                             v-bind:required="field.required" v-bind:disabled="disabled">
 
                                         <textarea
                                             :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
-                                            v-if="field.type === 'text'" class="form-control"
+                                            v-if="field.type === 'text'" class="form-control no-print"
                                             v-model="submission.answers[part.id][group_key][field.id]"
                                             v-bind:required="field.required" v-bind:disabled="disabled"></textarea>
 
+                                        <div class="col-sm-8 only-print" v-if="['string', 'text', 'float', 'integer'].includes(field.type)">
+                                            <p><strong>{{ submission.answers[part.id][group_key][field.id] }}</strong>
+                                            </p>
+                                        </div>
 
                                         <VueDatePicker v-if="field.type === 'date'" auto-apply model-type="yyyy-MM-dd"
                                                        v-model="submission.answers[part.id][group_key][field.id]"
@@ -149,10 +155,6 @@
                                                 field.description
                                             }}
                                         </div>
-                                    </div>
-
-                                    <div class="col-sm-8 only-print">
-                                        <p><strong>{{ submission.answers[part.id][group_key][field.id] }}</strong></p>
                                     </div>
                                 </div>
                             </div>
