@@ -106,8 +106,8 @@
                                             v-model="submission.answers[part.id][group_key][field.id]"
                                             v-bind:required="field.required" v-bind:disabled="disabled"></textarea>
 
-                                        <div class="col-sm-8 only-print" v-if="['string', 'text', 'float', 'integer'].includes(field.type)">
-                                            <p><strong>{{ submission.answers[part.id][group_key][field.id] }}</strong>
+                                        <div class="col-sm-8 only-print" style="padding-top: 7px;" v-if="['string', 'text', 'float', 'integer'].includes(field.type)">
+                                            <p style=" margin-bottom: 0;">{{ submission.answers[part.id][group_key][field.id] }}
                                             </p>
                                         </div>
 
@@ -155,6 +155,7 @@
                                                 field.description
                                             }}
                                         </div>
+                                        <hr style="margin: 0.7rem 0; border-top: 1px dotted;" class="only-print">
                                     </div>
                                 </div>
                             </div>
