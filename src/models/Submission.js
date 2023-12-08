@@ -111,7 +111,13 @@ class Submission extends Model {
         if (!this.id) {
             part.fields.forEach(field => {
                 if (field.type === 'select' || field.type === 'radio') {
-                    this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
+                    if (field.params.default) {
+                        this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
+                    }
+                    else {
+                        this.answers[part.id][group_id][field.id] = field.params.default
+                    }
+
                 }
             })
         }
