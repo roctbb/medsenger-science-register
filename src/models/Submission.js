@@ -112,10 +112,10 @@ class Submission extends Model {
             part.fields.forEach(field => {
                 if (field.type === 'select' || field.type === 'radio') {
                     if (field.params.default) {
-                        this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
+                        this.answers[part.id][group_id][field.id] = field.params.default
                     }
                     else {
-                        this.answers[part.id][group_id][field.id] = field.params.default
+                        this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
                     }
 
                 }
