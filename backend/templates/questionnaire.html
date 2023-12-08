@@ -219,10 +219,10 @@
 
                         <div v-for="(variant, j) in question.variants">
                             <div class="row">
-                                <label class="col-md-2 col-form-label-sm">
+                                <label class="col-md-1 col-form-label-sm">
                                     <input type="radio" v-model="question.params.default" :value="variant.value">
                                 </label>
-                                <label class="col-md-4 col-form-label-sm">
+                                <label class="col-md-5 col-form-label-sm">
                                     <input type="text" class="form-control form-control-sm" v-model="variant.text">
                                 </label>
                                 <label class="col-md-4 col-form-label-sm">
