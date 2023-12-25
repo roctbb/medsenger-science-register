@@ -30,7 +30,9 @@ app.config['MAIL_SERVER'] = EMAIL_SERVER
 app.config['MAIL_PORT'] = EMAIL_PORT
 app.config['MAIL_USERNAME'] = EMAIL_USERNAME
 app.config['MAIL_PASSWORD'] = EMAIL_PASSWORD
-
+app.config['MAIL_USE_TLS'] = EMAIL_USE_TLS
+app.config['MAIL_USE_SSL'] = EMAIL_USE_SSL
+app.config['MAIL_DEBUG'] = True
 
 
 mail = Mail(app)
