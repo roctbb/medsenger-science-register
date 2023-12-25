@@ -49,8 +49,6 @@
                 </div>
             </div>
 
-            <p class="text-center"><img class="my-4" src="/images/logo_tele.svg" style="width: 70%; max-width: 300px;"/>
-            </p>
         </div>
         <loading v-else></loading>
     </div>

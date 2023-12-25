@@ -16,6 +16,7 @@
                 <div class="container">
                     <router-view></router-view>
                 </div>
+                <footer52></footer52>
             </div>
             <div v-else class="mainbg">
                 <div class="container-fluid" style="background-color: rgba(255,255,255,0.4)">
@@ -30,9 +31,11 @@
 <script>
 
 
+import Footer52 from "@/components/parts/common/Footer52.vue";
+
 export default {
     name: 'App',
-    components: {},
+    components: {Footer52},
     data() {
         return {
             auth: undefined
