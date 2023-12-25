@@ -15,6 +15,10 @@
             <input type="password" class="form-control" v-model="password">
         </div>
 
+        <div class="mb-3" v-if="can_reset_password">
+            <a href="/password/link">Восстановление пароля</a>
+        </div>
+
         <button type="submit" @click="makeLogin" class="btn btn-primary">Войти</button>
     </form>
 </template>
@@ -29,7 +33,8 @@ export default {
         return {
             email: "",
             password: "",
-            error: ""
+            error: "",
+            can_reset_password: !process.env.VUE_APP_MEDSENGER_LOGIN
         }
     },
     methods: {
