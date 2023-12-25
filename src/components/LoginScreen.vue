@@ -24,13 +24,12 @@
                                     <input type="password" class="form-control" v-model="password">
                                 </div>
 
-                                <div class="mb-3" v-if="can_reset_password">
-                                    <a class="colored-link" href="/password/link">Восстановление пароля</a>
-                                </div>
-
                                 <button type="submit" @click="makeLogin" class="btn btn-primary">Войти</button>
 
-                                <div class="mt-3">
+                                <div class="mt-3" v-if="can_reset_password">
+                                    <a class="colored-link" href="/password/link">Восстановление пароля</a>
+                                </div>
+                                <div class="mt-1">
                                     <a target="_blank" class="colored-link"
                                        href="https://telegynecology.ru/info/pat/47#libs">Материалы
                                         для пациентов</a>
