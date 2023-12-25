@@ -17,6 +17,7 @@ class User(db.Model):
     auth_tokens = db.relationship('UserToken', backref=backref('user', uselist=False, lazy=False), lazy=True)
     specialties = db.Column(db.JSON, nullable=True)
     activation_key = db.Column(db.String(256), nullable=True)
+    password_reset_key = db.Column(db.String(256), nullable=True)
 
     submissions = db.relationship('FormSubmission', backref=backref('doctor', uselist=False), lazy=True)
     patients = db.relationship('Patient', backref=backref('doctor', uselist=False), lazy=True)

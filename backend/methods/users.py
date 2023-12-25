@@ -1,8 +1,10 @@
+import uuid
 from secrets import token_hex
 
 from backend.models import *
 from .exceptions import *
 from backend.helpers import *
+from .emails import send_password_reset_email
 
 
 @transaction
@@ -47,8 +49,20 @@ def activate_user(user, password):
     return user
 
 
+@transaction
+def send_reset_link(user):
+    user.password_reset_key = str(uuid.uuid4())
+    send_password_reset_email(user)
+
+
 def find_user_by_email(email):
     return User.query.filter_by(email=email.lower()).first()
+
+
+def find_user_by_password_reset_key(key):
+    if not key:
+        return None
+    return User.query.filter_by(password_reset_key=key).first()
 
 
 def find_user_by_activation_key(key):
@@ -62,3 +76,4 @@ def find_user_by_id(id):
 @transaction
 def change_user_password(user, new_password):
     user.password = hash(new_password)
+    user.password_reset_key = None
