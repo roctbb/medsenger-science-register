@@ -43,7 +43,7 @@
                         <div class="col col-sm-6 col-md-4 col-lg-3 mb-3"
                              v-for="submission in apply_search(submissions, group)"
                              v-bind:key="submission.id">
-                            <div :class="{'updated': patient.updated_on > patient.last_visited_time}" class="card"
+                            <div :class="{'updated': submission.created_on > patient.last_visited_time}" class="card"
                                  @click="$router.push({name: 'submission', params: {project_id: project.id, patient_id: patient.id, submission_id: submission.id}})">
                                 <div class="card-body">
                                     <h6 class="card-title">{{ submission.form.name }}</h6>
