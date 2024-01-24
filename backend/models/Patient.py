@@ -1,5 +1,6 @@
 import enum
 from .relation_tables import *
+from sqlalchemy.dialects.postgresql import JSON
 
 
 class Sex(str, enum.Enum):
@@ -25,6 +26,7 @@ class Patient(db.Model):
     contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=False)
     comments = db.relationship('Comment', backref=backref('patient', uselist=False), lazy=False)
     files = db.relationship('File', backref=backref('patient', uselist=False), lazy=True)
+    show_off_records = db.Column(JSON, nullable=True)
 
     is_legacy = db.Column(db.Boolean, default=False)
 
@@ -41,7 +43,8 @@ class Patient(db.Model):
             "comments": list(sorted(as_dict(self.comments), key=lambda p: p['created_on'])),
             "created_by": self.doctor.name if self.doctor else "",
             "birthday": self.birthday.isoformat(),
-            "updated_on": self.updated_on.isoformat()
+            "updated_on": self.updated_on.isoformat(),
+            "show_off_records": self.show_off_records if self.show_off_records else []
         }
 
         description.update(additional_data)

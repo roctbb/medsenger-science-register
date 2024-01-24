@@ -41,9 +41,13 @@
                                 </div>
                             </div>
 
-                            <p class="text-muted my-0">ID {{ patient.id }} / {{
+                            <small class="text-muted my-0">ID {{ patient.id }} / {{
                                     patient.readable_birthday
-                                }}<br>{{ patient.created_by }}</p>
+                                }}<br>{{ patient.created_by }}</small>
+
+                            <div v-for="record in patient.show_off_records" :key="record">
+                                <small class="text-muted my-0">{{ record.title }}: {{ record.value }}</small>
+                            </div>
                         </div>
                     </div>
                 </div>
