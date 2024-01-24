@@ -23,6 +23,11 @@ def create_patient(user, name, sex, birthday, phone=None):
 
 
 @transaction
+def mark_updated(patient):
+    patient.updated_on = datetime.now()
+
+
+@transaction
 def update_patient(patient, name, sex, birthday, phone=None):
     if not patient:
         raise NotFound
@@ -38,6 +43,8 @@ def update_patient(patient, name, sex, birthday, phone=None):
     patient.sex = sex
     patient.birthday = birthday
     patient.phone = phone
+
+    mark_updated(patient)
 
     return patient
 
@@ -72,8 +79,31 @@ def get_actual_contract_id(project, patient):
     return contracts[-1].id if contracts else None
 
 
-def load_project_data(patient, project):
+def get_last_visit_time(user, project, patient):
+    request = PatientVisitedTime.query.filter_by(user_id=user.id, patient_id=patient.id, project_id=project.id).first()
+
+    if not request:
+        return None
+
+    return request.visited_on
+
+
+def load_project_data(patient, project, user):
+    last_visit_time = get_last_visit_time(user, project, patient)
+
     return {
         "contract_id": get_actual_contract_id(project, patient),
-        "step": get_current_step(project, patient)
+        "step": get_current_step(project, patient),
+        "last_visited_time": last_visit_time.isoformat() if last_visit_time else None
     }
+
+
+@transaction
+def set_last_visited_time(user, patient, project):
+    request = PatientVisitedTime.query.filter_by(user_id=user.id, patient_id=patient.id, project_id=project.id).first()
+
+    if not request:
+        request = PatientVisitedTime(user_id=user.id, patient_id=patient.id, project_id=project.id)
+        db.session.add(request)
+
+    request.visited_on = datetime.now()

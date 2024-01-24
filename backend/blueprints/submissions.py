@@ -16,6 +16,18 @@ def get_submissions(user, project_id, patient_id):
     return as_dict(submissions)
 
 
+@submission_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>/visited', methods=['get'])
+@creates_response
+@requires_user
+def mark_visited(user, project_id, patient_id):
+    project = find_project_by_id_for_user(user, project_id)
+    patient = find_patient_by_id(patient_id)
+
+    set_last_visited_time(user, patient, project)
+
+    return {}
+
+
 @submission_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>/submissions', methods=['post'])
 @creates_response
 @requires_user
@@ -32,6 +44,7 @@ def add_submission(user, project_id, patient_id):
     form = find_form_by_id(form_id)
 
     submission = submit_form(user, patient, form, answers)
+    set_last_visited_time(user, patient, project)
 
     return submission.as_dict()
 
@@ -54,6 +67,7 @@ def edit_submission(user, project_id, patient_id, submission_id):
     legacy_submission = find_submission_by_id(submission_id)
 
     replace_submission(legacy_submission, new_submission)
+    set_last_visited_time(user, patient, project)
 
     return new_submission.as_dict()
 

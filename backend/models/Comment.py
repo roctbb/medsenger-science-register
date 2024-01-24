@@ -1,8 +1,4 @@
-from .alchemy import *
 from .relation_tables import *
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
-
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

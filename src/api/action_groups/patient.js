@@ -103,6 +103,20 @@ class PatientActions extends api_utils.ActionGroup {
 
     }
 
+    async mark_visited(project_id, patient_id) {
+
+        let query = {
+            api_token: this.token,
+        }
+
+        try {
+            await this.client.get('/project/' + project_id + '/patients/' + patient_id + '/visited', query);
+        } catch (e) {
+            console.log(e)
+            throw new Error("Ошибка соединения с сервером.")
+        }
+    }
+
     async delete(project_id, patient_id) {
 
         let query = {
