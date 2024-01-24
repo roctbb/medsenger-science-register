@@ -23,7 +23,8 @@
                                 class="btn btn-primary btn-sm me-1 my-1">Изменить
                         </button>
 
-                        <a v-if="state.user && state.user.is('администратор') && disabled" class="btn btn-sm btn-danger me-1 my-1"
+                        <a v-if="state.user && state.user.is('администратор') && disabled"
+                           class="btn btn-sm btn-danger me-1 my-1"
                            @click="delete_submission()">Удалить форму</a>
 
                         <button @click="back()" class="btn btn-warning btn-sm me-1 my-1">Назад</button>
@@ -238,6 +239,7 @@ export default {
         },
         edit: function () {
             this.editing = true
+            this.enableExitWarning()
         },
         getInputType: function (field) {
             if (field.type === 'string') {
@@ -258,6 +260,7 @@ export default {
             }
         },
         back: function () {
+            this.disableExitWarning()
             if (this.submission_id && this.editing) {
                 this.submission.reset()
             }
@@ -294,6 +297,19 @@ export default {
             if (!this.id || this.editing) {
                 this.submission.import(answers)
             }
+        },
+        exitWarning: function (event) {
+            // Recommended
+            event.preventDefault();
+
+            // Included for legacy support, e.g. Chrome/Edge < 119
+            event.returnValue = true;
+        },
+        enableExitWarning: function () {
+            window.addEventListener("beforeunload", this.exitWarning);
+        },
+        disableExitWarning: function () {
+            window.removeEventListener("beforeunload", this.exitWarning);
         }
     },
     computed: {
@@ -315,6 +331,7 @@ export default {
             this.submission = (await this.patient.submissions).find(submission => submission.id === parseInt(this.submission_id))
             this.form = this.project.forms.find(form => form.id === this.submission.form_id)
         } else if (this.form_id) {
+            this.enableExitWarning()
             this.form = this.project.forms.find(form => form.id === parseInt(this.form_id))
             this.submission = Submission.create(this.project, this.patient, this.form)
         }
