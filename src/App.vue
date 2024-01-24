@@ -56,4 +56,8 @@ export default {
     color: #006c88;
 }
 
+.updated {
+    border-left: 5px solid #006c88;
+}
+
 </style>

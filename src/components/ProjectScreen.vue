@@ -98,7 +98,5 @@ export default {
 </script>
 
 <style scoped>
-.updated {
-    border-left: 5px solid #006c88;
-}
+
 </style>
