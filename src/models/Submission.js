@@ -12,8 +12,6 @@ class Submission extends Model {
     init(description, form) {
         super.init(description);
 
-        console.log(description)
-
         this.project_id = description.project_id
         this.patient_id = description.patient_id
         this.form_id = description.form_id
@@ -44,9 +42,7 @@ class Submission extends Model {
         })
 
         if (!this.id) {
-            console.log("before", this.answers)
             this._api.submission.get_saved_answers(this.project_id, this.patient_id, this.form_id).then(records => {
-                console.log(this.answers)
                 records.forEach((record) => {
                     this.answers[record.params.part_id][Object.keys(this.answers[record.params.part_id])[0]][record.params.question_id] = record.value
                 })
@@ -110,14 +106,13 @@ class Submission extends Model {
 
         if (!this.id) {
             part.fields.forEach(field => {
+                if (field.params.default) {
+                    this.answers[part.id][group_id][field.id] = field.params.default
+                }
                 if (field.type === 'select' || field.type === 'radio') {
-                    if (field.params.default) {
-                        this.answers[part.id][group_id][field.id] = field.params.default
-                    }
-                    else {
+                    if (!field.params.default) {
                         this.answers[part.id][group_id][field.id] = Object.values(field.params.options)[0]
                     }
-
                 }
             })
         }
