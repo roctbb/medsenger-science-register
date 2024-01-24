@@ -26,6 +26,14 @@ class Patient extends Model {
             this.phone = description.phone
             this.comments = []
             this.step = description.step
+            this.show_off_records = description.show_off_records
+
+            this.show_off_records.forEach(record => {
+                if (record.transform === "date") {
+                    record["value"] = formatDate(new Date(record["value"]))
+                }
+            })
+
             if (description.last_visited_time) {
                 this.last_visited_time = new Date(description.last_visited_time)
             }

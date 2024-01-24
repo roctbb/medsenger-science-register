@@ -1,5 +1,7 @@
 import json
 
+from sqlalchemy.orm.attributes import flag_modified
+
 from backend.models import *
 from .exceptions import *
 from backend.helpers import *
@@ -16,8 +18,10 @@ def submit_form(doctor, patient, form, answers):
         raise NotFound("form")
 
     validate_form(form, answers)
-
     submission = create_submission(form, patient, doctor)
+
+    if not patient.show_off_records:
+        patient.show_off_records = []
 
     for part in form.parts:
         groups = extract_key(answers, part.id)
@@ -45,6 +49,23 @@ def submit_form(doctor, patient, form, answers):
                                     value=answer,
                                     params=params)
                     db.session.add(record)
+
+                    if field.get('params', {}).get('global_show_off'):
+                        patient.show_off_records = list(
+                            filter(lambda record: record['category_id'] != category.id, patient.show_off_records))
+
+                        title = field.get('params', {}).get('global_show_off_title')
+                        if not title:
+                            title = category.name
+
+                        patient.show_off_records.append({
+                            "category_id": category.id,
+                            "title": title,
+                            "value": answer,
+                            "transform": field.get('params', {}).get('global_show_off_transform')
+                        })
+
+                        flag_modified(patient, "show_off_records")
 
                 if field.get('export_comment', False) and answer:
                     place_comment(form.project, patient, doctor, answer,
