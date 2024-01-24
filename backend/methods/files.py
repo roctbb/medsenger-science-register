@@ -4,6 +4,7 @@ import base64
 
 from backend.models import *
 from .exceptions import *
+from .patients import mark_updated
 from backend.helpers import *
 from backend.config import STORAGE_PATH
 
@@ -36,6 +37,8 @@ def create_file(file_dict, patient, doctor, project):
                 type=file_dict.get('type', 'plain/text'), path=path)
 
     db.session.add(file)
+    mark_updated(patient)
+
     return file
 
 

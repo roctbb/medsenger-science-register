@@ -26,6 +26,14 @@ class Patient extends Model {
             this.phone = description.phone
             this.comments = []
             this.step = description.step
+            if (description.last_visited_time) {
+                this.last_visited_time = new Date(description.last_visited_time)
+            }
+
+            this.has_updates = true
+            if (this.last_visited_time && this.last_visited_time > this.updated_on) {
+                this.has_updates = false
+            }
 
             if (description.comments) {
                 description.comments.forEach(comment => {
@@ -53,6 +61,11 @@ class Patient extends Model {
     async add_comment(text) {
         let comment = await this._api.patient.addComment(this.project_id, this.id, text)
         this.comments.push(new Comment(comment))
+    }
+
+    mark_visited() {
+        this._api.patient.mark_visited(this.project_id, this.id)
+        this.has_updates = false
     }
 
 

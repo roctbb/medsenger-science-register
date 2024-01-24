@@ -26,7 +26,7 @@ def get_patients(user, project_id):
     project = find_project_by_id_for_user(user, project_id)
     patients = get_patients_for_project(project)
     patients_descriptions = list(
-        sorted(as_dict(patients, load_project_data, project), key=lambda p: p['name']))
+        sorted(as_dict(patients, load_project_data, project, user), key=lambda p: p['name']))
 
     return patients_descriptions
 
@@ -52,7 +52,9 @@ def add_patient(user, project_id):
     if contract_id:
         save_contract(patient, project, user, contract_id)
 
-    return patient.as_dict(load_project_data(patient, project))
+    set_last_visited_time(user, patient, project)
+
+    return patient.as_dict(load_project_data(patient, project, user))
 
 
 @projects_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>', methods=['put'])
@@ -76,7 +78,9 @@ def edit_patient(user, project_id, patient_id):
     if contract_id:
         save_contract(patient, project, user, contract_id)
 
-    return patient.as_dict(load_project_data(patient, project))
+    set_last_visited_time(user, patient, project)
+
+    return patient.as_dict(load_project_data(patient, project. user))
 
 
 @projects_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>', methods=['get'])
@@ -89,7 +93,7 @@ def get_patient(user, project_id, patient_id):
     if patient not in project.patients:
         raise NotInProject
 
-    return patient.as_dict(load_project_data(patient, project))
+    return patient.as_dict(load_project_data(patient, project, user))
 
 
 @projects_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>', methods=['delete'])

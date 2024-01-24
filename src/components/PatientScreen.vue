@@ -23,7 +23,7 @@
                    @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: this.patient.id}})">Изменить
                     профиль</a>
 
-                <a v-if="state.user.is('администратор')" class="btn btn-sm btn-danger me-1 my-1"
+                <a v-if="state.user && state.user.is('администратор')" class="btn btn-sm btn-danger me-1 my-1"
                    @click="delete_patient()">Удалить пациента</a>
             </div>
         </div>
@@ -192,9 +192,9 @@ export default {
         formatDate,
         available_forms: function (category) {
             if (category === undefined || this.project.form_groups.length < 2) {
-                return this.project.forms.filter(form => form.is_legacy === false).filter(form => !form.specialty || this.state.user.is(form.specialty)).sort((a, b) => a.name.localeCompare(b.name))
+                return this.project.forms.filter(form => form.is_legacy === false).filter(form => !form.specialty || (this.state.user && this.state.user.is(form.specialty))).sort((a, b) => a.name.localeCompare(b.name))
             } else {
-                return this.project.forms.filter(form => form.is_legacy === false).filter(form => form.category_id === category.id && (!form.specialty || this.state.user.is(form.specialty))).sort((a, b) => a.name.localeCompare(b.name))
+                return this.project.forms.filter(form => form.is_legacy === false).filter(form => form.category_id === category.id && (!form.specialty || (this.state.user && this.state.user.is(form.specialty)))).sort((a, b) => a.name.localeCompare(b.name))
             }
         },
         apply_search: function (submissions, group) {
@@ -267,6 +267,8 @@ export default {
             this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
             this.submissions = await this.patient.submissions
             this.files = await this.patient.files
+
+            this.patient.mark_visited()
         }
 
     }
@@ -274,5 +276,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

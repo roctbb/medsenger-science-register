@@ -28,7 +28,7 @@
 
                 <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="patient in sortPatients(filterPatients(group))"
                      v-bind:key="patient.id">
-                    <div class="card">
+                    <div class="card" :class="{'updated': patient.has_updates}">
                         <div class="card-body">
                             <div class="hstack">
                                 <div class="me-auto"
@@ -98,5 +98,7 @@ export default {
 </script>
 
 <style scoped>
-
+.updated {
+    border-left: 5px solid #006c88;
+}
 </style>

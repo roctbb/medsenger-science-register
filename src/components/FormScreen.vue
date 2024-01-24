@@ -23,7 +23,7 @@
                                 class="btn btn-primary btn-sm me-1 my-1">Изменить
                         </button>
 
-                        <a v-if="state.user.is('администратор') && disabled" class="btn btn-sm btn-danger me-1 my-1"
+                        <a v-if="state.user && state.user.is('администратор') && disabled" class="btn btn-sm btn-danger me-1 my-1"
                            @click="delete_submission()">Удалить форму</a>
 
                         <button @click="back()" class="btn btn-warning btn-sm me-1 my-1">Назад</button>

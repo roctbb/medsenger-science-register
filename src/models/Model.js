@@ -12,6 +12,10 @@ class Model {
                 this.created_on = new Date(description.created_on)
             }
 
+            if (description.updated_on) {
+                this.updated_on = new Date(description.updated_on)
+            }
+
         }
     }
 

@@ -50,6 +50,8 @@ def submit_form(doctor, patient, form, answers):
                     place_comment(form.project, patient, doctor, answer,
                                   description=f"{form.name}, {field.get('text')}", submission_id=submission.id)
 
+    mark_updated(patient)
+
     return submission
 
 
@@ -74,6 +76,7 @@ def find_question_for_answer(field, answer):
 def create_submission(form, patient, doctor):
     submission = FormSubmission(form_id=form.id, patient_id=patient.id, doctor_id=doctor.id, project_id=form.project_id)
     db.session.add(submission)
+
     return submission
 
 
@@ -151,6 +154,8 @@ def replace_submission(old, new):
     mark_legacy(old)
     delete_submission_comments(old)
     new.created_on = old.created_on
+
+    mark_updated(new.patient)
 
 
 @transaction

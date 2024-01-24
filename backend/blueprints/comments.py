@@ -16,4 +16,7 @@ def add_comment(user, project_id, patient_id):
 
     data = request.json
 
-    return place_comment(project, patient, user, data.get('text')).as_dict()
+    comment = place_comment(project, patient, user, data.get('text'))
+    set_last_visited_time(user, patient, project)
+
+    return comment.as_dict()
