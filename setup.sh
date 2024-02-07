@@ -8,4 +8,6 @@ sudo cp telegynecology_register_nginx.conf /etc/nginx/sites-enabled/
 sudo supervisorctl update
 sudo systemctl restart nginx
 sudo certbot --nginx -d register.telegynecology.ru
-cp .env.example .env
+if [ ! -f ./.env ]; then
+  cp .env.example .env
+fi
