@@ -8,4 +8,6 @@ sudo cp science_register_nginx.conf /etc/nginx/sites-enabled/
 sudo supervisorctl update
 sudo systemctl restart nginx
 sudo certbot --nginx -d research.medsenger.ru
-cp .env.example .env
+if [ ! -f ./.env ]; then
+  cp .env.example .env
+fi
