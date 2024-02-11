@@ -15,6 +15,8 @@ def medsenger_login_user(login, password):
 
     answer = requests.post(MEDSENGER_HOST + "/api/research/auth", json=data).json()
 
+    print(answer)
+
     if answer['state'] == 'success':
         return answer['data']
     else:
