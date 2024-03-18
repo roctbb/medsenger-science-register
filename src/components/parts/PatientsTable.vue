@@ -1,7 +1,7 @@
 <template>
     <div v-if="groups">
         <div>
-            <table class="table table-striped">
+            <table class="table table-striped table-hover">
                 <thead>
                 <tr>
                     <th scope="col" v-for="(column_title, i) in column_titles" :key="i"><a
