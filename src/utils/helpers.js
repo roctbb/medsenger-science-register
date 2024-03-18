@@ -18,6 +18,10 @@ const copy = function (obj) {
     return JSON.parse(JSON.stringify(obj))
 }
 
+const isString = function (value) {
+    return typeof value === 'string' || value instanceof String;
+}
+
 const searchForArray = function (haystack, needle) {
     var i, j, current;
     for (i = 0; i < haystack.length; ++i) {
@@ -83,4 +87,15 @@ function toBase64(file) {
 
 const api_url = (action) => external_url('/api/client') + action
 
-export {searchForArray, empty, external_url, api_url, formatDate, formatDateTime, copy, getCookie, deleteCookie, toBase64}
+export {
+    searchForArray,
+    empty,
+    external_url,
+    api_url,
+    formatDate,
+    formatDateTime,
+    copy,
+    getCookie,
+    deleteCookie,
+    toBase64, isString
+}

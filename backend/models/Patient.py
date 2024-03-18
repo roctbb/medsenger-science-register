@@ -16,8 +16,8 @@ class Patient(db.Model):
     email = db.Column(db.String(256), nullable=True)
     phone = db.Column(db.String(12), nullable=True)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_on = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     doctor_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
 
@@ -43,7 +43,7 @@ class Patient(db.Model):
             "comments": list(sorted(as_dict(self.comments), key=lambda p: p['created_on'])),
             "created_by": self.doctor.name if self.doctor else "",
             "birthday": self.birthday.isoformat(),
-            "updated_on": self.updated_on.isoformat(),
+            "updated_on": self.updated_on.isoformat() + "Z" if self.updated_on else None,
             "show_off_records": self.show_off_records if self.show_off_records else []
         }
 

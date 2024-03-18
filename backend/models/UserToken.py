@@ -8,11 +8,11 @@ class UserToken(db.Model):
     token = db.Column(db.String(256), nullable=False)
 
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    created_on = db.Column(db.DateTime, default=datetime.utcnow)
     expire_on = db.Column(db.DateTime, nullable=True)
 
     def as_dict(self):
         return {
             "api_token": self.token,
-            "expire_on": self.expire_on.isoformat(),
+            "expire_on": self.expire_on.isoformat() + "Z",
         }

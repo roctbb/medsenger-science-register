@@ -24,7 +24,7 @@ def create_patient(user, name, sex, birthday, phone=None):
 
 @transaction
 def mark_updated(patient):
-    patient.updated_on = datetime.now()
+    patient.updated_on = datetime.utcnow()
 
 
 @transaction
@@ -94,7 +94,7 @@ def load_project_data(patient, project, user):
     return {
         "contract_id": get_actual_contract_id(project, patient),
         "step": get_current_step(project, patient),
-        "last_visited_time": last_visit_time.isoformat() if last_visit_time else None
+        "last_visited_time": last_visit_time.isoformat() + "Z" if last_visit_time else None
     }
 
 
@@ -106,4 +106,4 @@ def set_last_visited_time(user, patient, project):
         request = PatientVisitedTime(user_id=user.id, patient_id=patient.id, project_id=project.id)
         db.session.add(request)
 
-    request.visited_on = datetime.now()
+    request.visited_on = datetime.utcnow()

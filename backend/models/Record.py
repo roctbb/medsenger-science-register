@@ -12,8 +12,8 @@ class Record(db.Model):
     value = db.Column(db.Text, nullable=True)
     params = db.Column(JSON, nullable=True)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_on = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def as_dict(self):
         return {

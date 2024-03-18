@@ -14,45 +14,20 @@
             </div>
         </div>
 
-        <div class="row my-2" v-if="groups">
+        <div class="row my-2">
             <div class="col">
                 <input type="text" placeholder="Поиск..." v-model="search_field" class="form-control"/>
+
+                <div class="form-check form-switch my-2">
+                    <input class="form-check-input" type="checkbox" role="switch" v-model="table_enabled">
+                    <label class="form-check-label">Таблица</label>
+                </div>
             </div>
         </div>
 
         <div v-if="groups">
-            <div class="row py-2" v-for="(group, i) in groups" :key="i">
-                <h6 class="my-3" v-if="group.title"><span v-if="i !== groups.length - 1">Шаг {{
-                        i + 1
-                    }}. </span>{{ group.title }}</h6>
-
-                <div class="col col-sm-6 col-md-4 col-lg-3 mb-3" v-for="patient in sortPatients(filterPatients(group))"
-                     v-bind:key="patient.id">
-                    <div class="card" :class="{'updated': patient.has_updates}">
-                        <div class="card-body">
-                            <div class="hstack">
-                                <div class="me-auto"
-                                     @click="$router.push({name: 'patient', params: {project_id: project.id, id: patient.id}})">
-                                    <h6 class="card-title my-1">{{ patient.name }}</h6>
-                                </div>
-                                <div
-                                    @click="$router.push({name: 'edit_patient', params: {project_id: this.project.id, id: patient.id}})">
-                                    <font-awesome-icon :icon="['fas', 'pen']"/>
-                                </div>
-                            </div>
-
-                            <small class="text-muted my-0">ID {{ patient.id }} / {{
-                                    patient.readable_birthday
-                                }}<br>{{ patient.created_by }}</small>
-
-                            <div v-for="record in patient.show_off_records" :key="record">
-                                <small class="text-muted my-0">{{ record.title }}: {{ record.value }}</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <PatientsCards :project="project" :search_field="search_field" :groups="groups" v-if="!table_enabled"></PatientsCards>
+            <PatientsTable :project="project" :search_field="search_field" :groups="groups" v-if="table_enabled"></PatientsTable>
         </div>
         <loading v-else></loading>
     </div>
@@ -61,30 +36,26 @@
 <script>
 
 
-import {empty, formatDate} from "../utils/helpers";
+import {formatDate} from "@/utils/helpers";
 import Loading from "@/components/Loading.vue";
+import PatientsCards from "@/components/parts/PatientsCards.vue";
+import PatientsTable from "@/components/parts/PatientsTable.vue";
 
 export default {
     name: 'ProjectPatientsScreen',
     props: ['id'],
-    components: {Loading},
+    components: {PatientsCards, Loading, PatientsTable},
     data() {
         return {
             search_field: '',
+            table_enabled: false,
             patients: undefined,
             project: undefined,
             groups: undefined
         }
     },
     methods: {
-        formatDate,
-        sortPatients: function (patients) {
-            patients.sort((a, b) => a.name.localeCompare(b.name))
-            return patients
-        },
-        filterPatients: function (group) {
-            return group.patients.filter((patient) => empty(this.search_field) || patient.name.toLowerCase().includes(this.search_field.toLowerCase()))
-        }
+        formatDate
     },
     async mounted() {
         if (this.state.user) {

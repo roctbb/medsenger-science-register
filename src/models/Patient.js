@@ -28,6 +28,10 @@ class Patient extends Model {
             this.step = description.step
             this.show_off_records = description.show_off_records
 
+            if (!this.show_off_records) {
+                this.show_off_records = [];
+            }
+
             this.show_off_records.forEach(record => {
                 if (record.transform === "date") {
                     record["value"] = formatDate(new Date(record["value"]))
