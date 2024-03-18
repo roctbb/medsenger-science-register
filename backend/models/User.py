@@ -10,8 +10,8 @@ class User(db.Model):
 
     clinic_id = db.Column(db.Integer, db.ForeignKey('clinic.id', ondelete="set null"), nullable=True)
 
-    created_on = db.Column(db.DateTime, server_default=db.func.now())
-    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    created_on = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_on = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     auth_tokens = db.relationship('UserToken', backref=backref('user', uselist=False, lazy=False), lazy=True)
     specialties = db.Column(db.JSON, nullable=True)

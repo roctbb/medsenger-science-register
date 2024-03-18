@@ -25,7 +25,6 @@ def submit_form(doctor, patient, form, answers):
 
     for part in form.parts:
         groups = extract_key(answers, part.id)
-
         for group_key, group in groups.items():
             for field in part.fields:
                 if field.get('type') in ['subheader', 'header']:

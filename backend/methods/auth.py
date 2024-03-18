@@ -23,6 +23,7 @@ def authorize_by_credentials(email, password):
             clinic = find_clinic_by_id(medsenger_clinic['id'])
             user = create_user(email, medsenger_user['name'], clinic, password=password)
     else:
+        print("Bypass mesenger login")
         user = find_user_by_email(email)
         if not user:
             raise NotFound
@@ -50,7 +51,7 @@ def find_user_by_token(token):
     if not token:
         raise IncorrectToken
 
-    if token.expire_on < datetime.now():
+    if token.expire_on < datetime.utcnow():
         raise ExpiredToken
 
     return token.user
@@ -59,7 +60,7 @@ def find_user_by_token(token):
 @transaction
 def create_token(user):
     token = UserToken(user_id=user.id)
-    token.expire_on = datetime.now() + timedelta(days=7)
+    token.expire_on = datetime.utcnow() + timedelta(days=7)
     token.token = token_hex(16)
 
     db.session.add(token)

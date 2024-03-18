@@ -21,7 +21,7 @@ def hash(password):
     return hashlib.md5(password.encode()).hexdigest()
 
 def gts():
-    now = datetime.now()
+    now = datetime.utcnow()
     return now.strftime("%Y-%m-%d %H:%M:%S - ")
 
 
