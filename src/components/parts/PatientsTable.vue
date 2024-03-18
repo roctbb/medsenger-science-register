@@ -1,7 +1,7 @@
 <template>
     <div v-if="groups">
         <div>
-            <table class="table table-striped">
+            <table class="table table-striped table-hover">
                 <thead>
                 <tr>
                     <th scope="col" v-for="(column_title, i) in column_titles" :key="i"><a
@@ -9,7 +9,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(row, i) in sortPatients(filterPatients(rows))" :key="i">
+                <tr v-for="(row, i) in sortPatients(filterPatients(rows))" :key="i" @click="$router.push({name: 'patient', params: {project_id: project.id, id: row[0]}})">
                     <td v-for="(value, j) in row" :key="j">{{ value }}</td>
                 </tr>
                 </tbody>
