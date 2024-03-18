@@ -9,7 +9,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(row, i) in sortPatients(filterPatients(rows))" :key="i">
+                <tr v-for="(row, i) in sortPatients(filterPatients(rows))" :key="i" @click="$router.push({name: 'patient', params: {project_id: project.id, id: row[0]}})">
                     <td v-for="(value, j) in row" :key="j">{{ value }}</td>
                 </tr>
                 </tbody>
