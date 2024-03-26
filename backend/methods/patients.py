@@ -28,7 +28,7 @@ def mark_updated(patient):
 
 
 @transaction
-def update_patient(patient, name, sex, birthday, phone=None):
+def update_patient(patient, name, sex, birthday, phone=None, email=None):
     if not patient:
         raise NotFound
 
@@ -43,6 +43,7 @@ def update_patient(patient, name, sex, birthday, phone=None):
     patient.sex = sex
     patient.birthday = birthday
     patient.phone = phone
+    patient.email = email
 
     mark_updated(patient)
 
