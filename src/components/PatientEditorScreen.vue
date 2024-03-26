@@ -34,6 +34,11 @@
                 <input type="text" class="form-control" v-model="patient.phone">
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" v-model="patient.email">
+            </div>
+
             <div class="mb-3" v-if="can_create_medsenger_contract">
                 <div class="form-check form-switch">
                     <input class="form-check-input" role="switch" type="checkbox"
@@ -41,11 +46,6 @@
                            :disabled="patient && patient.contract_id != null">
                     <label class="form-label">Создать контракт в Medsenger</label>
                 </div>
-            </div>
-
-            <div class="mb-3" v-if="patient.medsenger_contract && (!patient || patient.contract_id == null)">
-                <label class="form-label">Email</label>
-                <input type="text" class="form-control" v-model="patient.email">
             </div>
 
             <div class="mb-3" v-if="patient.medsenger_contract && (!patient || patient.contract_id == null)">
