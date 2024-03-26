@@ -80,7 +80,7 @@ def edit_patient(user, project_id, patient_id):
 
     set_last_visited_time(user, patient, project)
 
-    return patient.as_dict(load_project_data(patient, project. user))
+    return patient.as_dict(load_project_data(patient, project, user))
 
 
 @projects_blueprint.route('/project/<int:project_id>/patients/<int:patient_id>', methods=['get'])
