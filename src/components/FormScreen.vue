@@ -287,7 +287,7 @@ export default {
             const answers = {}
 
             raw_data.forEach(row => {
-                if (row.length > 8 && row[1] && row[8]) {
+                if (row.length > 8 && row[1] && row[8] !== undefined) {
                     answers[row[1].trim()] = row[8]
                 }
             })
