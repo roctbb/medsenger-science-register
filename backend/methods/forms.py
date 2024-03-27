@@ -41,7 +41,7 @@ def submit_form(doctor, patient, form, answers):
                     "question_text": field.get('text')
                 }
 
-                if answer and category:
+                if answer != None and category:
                     record = Record(patient_id=patient.id,
                                     category_id=category.id,
                                     submission_id=submission.id,
