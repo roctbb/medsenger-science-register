@@ -19,27 +19,31 @@
 <div class="card my-2">
     <div class="card-body">
         <h5 class="card-title mt-1 mb-3">{{ form.name }}</h5>
+        <div class="row">
+            {% for part in form.parts %}
 
-        {% for part in form.parts %}
-        <div class="col-sm-6 col-md-6 col-lg-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <a href="/editor/parts/{{ part.id }}" style="text-decoration: none; color: black">
-                        <h5 class="card-title mt-1 mb-3">{{ part.name }}</h5>
-                        <small class="my-0 text-muted">
-                            id: {{ part.id }}
-                        </small>
-                    </a>
-                    <div class="mt-2">
-                        <a href="/editor/forms/{{ form.id }}/detach/{{ part.id }}"
-                           class="hover-danger-href" style="font-size: 8pt; text-decoration: none">
-                            Отключить
+            <div class="col-sm-6 col-md-6 col-lg-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="/editor/parts/{{ part.id }}" style="text-decoration: none; color: black">
+                            <h5 class="card-title mt-1 mb-3">{{ part.name }}</h5>
+                            <small class="my-0 text-muted">
+                                id: {{ part.id }}
+                            </small>
                         </a>
+                        <div class="mt-2">
+                            <a href="/editor/forms/{{ form.id }}/detach/{{ part.id }}"
+                               class="hover-danger-href" style="font-size: 8pt; text-decoration: none">
+                                Отключить
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
+            {% endfor %}
         </div>
-        {% endfor %}
 
     </div>
 </div>
