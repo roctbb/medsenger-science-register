@@ -154,7 +154,7 @@ class Submission extends Model {
 
     import(answers) {
         this._iterate_fields((part, group_id, field) => {
-            if (answers[field.text]) {
+            if (answers[field.text] !== undefined) {
                 this.answers[part.id][group_id][field.id] = answers[field.text]
             }
 
