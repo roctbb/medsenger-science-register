@@ -80,7 +80,7 @@
                                             field.text
                                         }}</label>
 
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-8" :ref="part.id + '_' + group_key + '_' + field.id">
                                         <input
                                             :class="{'is-invalid': searchForArray(error_fields, [part.id, group_key, field.id])}"
                                             v-if="field.type === 'string'" type="text" class="form-control no-print"
@@ -235,6 +235,11 @@ export default {
                 console.log(e)
                 this.error = e.message
                 this.error_fields = e.details
+
+                if (this.error_fields.length > 0) {
+                    let first_error = this.error_fields[0]
+                    this.$refs[first_error[0] + '_' + first_error[1] + '_' + first_error[2]][0].scrollIntoView({ behavior: 'smooth' });
+                }
             }
         },
         edit: function () {
