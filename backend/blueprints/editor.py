@@ -29,6 +29,13 @@ def create_part_page():
     return render_template('questionnaire.html')
 
 
+@editor_blueprint.route('/full_report/<project_id>', methods=['get'])
+@auth.login_required
+def full_report_page(project_id):
+    project = Project.query.get_or_404(project_id)
+    return render_template('project_report.html', reports=generate_report_for_project(project))
+
+
 @editor_blueprint.route('/create', methods=['post'])
 @auth.login_required
 def save_part_page():
@@ -52,6 +59,7 @@ def edit_part_page(part_id):
     form_part = FormPart.query.get(part_id)
 
     return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()))
+
 
 @editor_blueprint.route('/parts/<int:part_id>', methods=['post'])
 @auth.login_required

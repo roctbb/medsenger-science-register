@@ -1,0 +1,24 @@
+{% extends 'base_bootstrap.html' %}
+
+{% block title %}Список анкет{% endblock %}
+{% block page_title %}Список анкет{% endblock %}
+
+
+{% block content %}
+
+{% for report in reports %}
+<h3>{{ report.title }}</h3>
+
+<table class="table table-stripped">
+    <tbody>
+    {% for row in report.report %}
+    <tr>
+        {% for cell in row %}
+        <td>{{ cell }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor%}
+    </tbody>
+</table>
+{% endfor %}
+{% endblock %}
