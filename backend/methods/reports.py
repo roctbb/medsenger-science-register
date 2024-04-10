@@ -121,6 +121,7 @@ def generate_additional_reports(patients, forms):
     form_reports = []
 
     for form in forms:
+        print(form.name)
         parts = list(filter(lambda part: part.repeatable, form.parts))
         all_form_submissions = list(sorted(form.submissions, key=lambda f: f.created_on))
 
@@ -129,13 +130,15 @@ def generate_additional_reports(patients, forms):
             report = [header]
 
             for patient in patients:
+                print(patient.name)
+
                 patient_submissions = list(
                     filter(lambda s: not s.is_legacy and s.patient_id == patient.id, all_form_submissions))
                 print(patient_submissions)
 
                 part_submissions = get_part_submissions(patient_submissions, part)
 
-                print(patient_submissions)
+                print(part_submissions)
 
                 for submission in part_submissions.values():
                     row = [patient.name, submission['created_on']]
