@@ -11,7 +11,7 @@ def find_answer_for_question(field, submission):
     return None
 
 def get_answer_from_options(options, answer):
-    for key, value in options:
+    for key, value in options.items():
         if answer == value:
             return key
 
