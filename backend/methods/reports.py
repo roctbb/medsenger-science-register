@@ -10,6 +10,13 @@ def find_answer_for_question(field, submission):
 
     return None
 
+def get_answer_from_options(options, answer):
+    for key, value in options:
+        if answer == value:
+            return key
+
+    return answer
+
 
 def get_header(form_parts):
     header = ["Пациент"]
@@ -21,22 +28,6 @@ def get_header(form_parts):
             header.append(field['text'])
 
     return header
-
-
-def get_subheader(form_parts):
-    subheader = [""]
-
-    for part in form_parts:
-        for field in part.fields:
-            if field['type'] in ('header', 'subheader'):
-                continue
-            if "options" in field['params']:
-                subheader.append('\n'.join(map(lambda v: v[0] + ": " + str(v[1]), field['params']['options'].items())))
-            else:
-                subheader.append(None)
-
-    return subheader
-
 
 def generate_report_for_project(project):
     form_reports = []
@@ -50,7 +41,6 @@ def generate_report_for_project(project):
 
         header = get_header(parts)
         report.append(header)
-        report.append(get_subheader(parts))
 
         for patient in patients:
             row = [patient.name]
@@ -68,6 +58,9 @@ def generate_report_for_project(project):
             for part in parts:
                 for field in part.fields:
                     answer = find_answer_for_question(field, last_submission)
+
+                    if 'options' in field['params']:
+                        answer = get_answer_from_options(field['params']['options'], answer)
 
                     if answer:
                         row.append(answer)
