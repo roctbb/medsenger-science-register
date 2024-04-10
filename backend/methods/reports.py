@@ -39,9 +39,6 @@ def get_header(form_parts):
 
 
 def save_to_excel(reports):
-    for report in reports:
-        print(report['title'], len(report['report']))
-
     reports = list(map(lambda report: {
         "title": report['title'],
         "dataframe": pd.DataFrame(report['report'][1:], columns=report['report'][0])
@@ -156,7 +153,7 @@ def generate_additional_reports(patients, forms):
                     report.append(row)
 
             form_reports.append({
-                "title": form.name,
+                "title": part.name,
                 "report": report
             })
 
