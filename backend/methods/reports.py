@@ -33,7 +33,6 @@ def get_header(form_parts):
 
 
 def save_to_excel(reports):
-    print(reports)
     reports = list(map(lambda report: {
         "title": report['title'],
         "dataframe": pd.DataFrame(report['report'][1:], columns=report['report'][0])
