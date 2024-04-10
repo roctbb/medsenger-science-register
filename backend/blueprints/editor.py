@@ -38,6 +38,8 @@ def full_report_page(project_id):
 
     return send_file(filename)
 
+    #return render_template('project_report.html', reports=generate_report_for_project(project))
+
 
 @editor_blueprint.route('/create', methods=['post'])
 @auth.login_required

@@ -20,14 +20,20 @@ def get_answer_from_options(options, answer):
     return answer
 
 
+def get_header_for_part(part):
+    header = []
+    for field in part.fields:
+        if field['type'] in ('header', 'subheader'):
+            continue
+        header.append(field['text'])
+    return header
+
+
 def get_header(form_parts):
-    header = ["Пациент", "Дата заполнения"]
+    header = []
 
     for part in form_parts:
-        for field in part.fields:
-            if field['type'] in ('header', 'subheader'):
-                continue
-            header.append(field['text'])
+        header += get_header_for_part(part)
 
     return header
 
@@ -45,17 +51,14 @@ def save_to_excel(reports):
     return "report.xlsx"
 
 
-def generate_report_for_project(project):
+def generate_common_reports(patients, forms):
     form_reports = []
-
-    patients = list(sorted(project.patients, key=lambda p: p.name))
-    forms = Form.query.filter_by(project_id=project.id, is_legacy=False).all()
 
     for form in forms:
         report = []
         parts = list(filter(lambda part: not part.repeatable, form.parts))
 
-        header = get_header(parts)
+        header = ["Пациент", "Дата заполнения"] + get_header(parts)
         report.append(header)
 
         for patient in patients:
@@ -94,3 +97,71 @@ def generate_report_for_project(project):
         })
 
     return form_reports
+
+
+def get_part_submissions(submissions, part):
+    part_submissions = {}
+
+    for submission in submissions:
+        for record in submission.records:
+            if record.params.get('part_id') == part.id:
+                group_key = record.params.get('group_key')
+                question_id = record.params.get('question_id')
+                answer = record.value
+
+                if group_key not in part_submissions:
+                    part_submissions[group_key] = {'created_on': submission.created_on}
+
+                part_submissions[group_key][question_id] = answer
+
+    return part_submissions
+
+
+def generate_additional_reports(patients, forms):
+    form_reports = []
+
+    for form in forms:
+        parts = list(filter(lambda part: part.repeatable, form.parts))
+        print(parts)
+        all_form_submissions = list(sorted(form.submissions, key=lambda f: f.created_on))
+
+        for part in parts:
+            header = ["Пациент", "Дата заполнения"] + get_header_for_part(part)
+            report = [header]
+
+            for patient in patients:
+                patient_submissions = list(
+                    filter(lambda s: not s.is_legacy and s.patient_id == patient.id, all_form_submissions))
+
+                part_submissions = get_part_submissions(patient_submissions, part)
+
+                for submission in part_submissions.values():
+                    row = [patient.name, submission['created_on']]
+
+                    for field in part.fields:
+                        if field['type'] in ('header', 'subheader'):
+                            continue
+
+                        answer = submission.get(field['id'])
+
+                        if answer:
+                            if 'options' in field['params']:
+                                answer = get_answer_from_options(field['params']['options'], answer)
+                            row.append(answer)
+                        else:
+                            row.append(None)
+                    report.append(row)
+
+            form_reports.append({
+                "title": form.name,
+                "report": report
+            })
+
+    return form_reports
+
+
+def generate_report_for_project(project):
+    patients = list(sorted(project.patients, key=lambda p: p.name))
+    forms = Form.query.filter_by(project_id=project.id, is_legacy=False).all()
+
+    return generate_common_reports(patients, forms) + generate_additional_reports(patients, forms)
