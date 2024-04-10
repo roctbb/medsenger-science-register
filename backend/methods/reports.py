@@ -1,4 +1,5 @@
 from backend.models import *
+import pandas as pd
 
 
 def find_answer_for_question(field, submission):
@@ -10,6 +11,7 @@ def find_answer_for_question(field, submission):
 
     return None
 
+
 def get_answer_from_options(options, answer):
     for key, value in options.items():
         if answer == value:
@@ -19,7 +21,7 @@ def get_answer_from_options(options, answer):
 
 
 def get_header(form_parts):
-    header = ["Пациент"]
+    header = ["Пациент", "Дата заполнения"]
 
     for part in form_parts:
         for field in part.fields:
@@ -29,10 +31,25 @@ def get_header(form_parts):
 
     return header
 
+
+def save_to_excel(reports):
+    print(reports)
+    reports = list(map(lambda report: {
+        "title": report['title'],
+        "dataframe": pd.DataFrame(report['report'][1:], columns=report['report'][0])
+    }, reports))
+
+    with pd.ExcelWriter("backend/report.xlsx") as writer:
+        for report in reports:
+            report["dataframe"].to_excel(writer, sheet_name=report['title'], index=False)
+
+    return "report.xlsx"
+
+
 def generate_report_for_project(project):
     form_reports = []
 
-    patients = project.patients
+    patients = list(sorted(project.patients, key=lambda p: p.name))
     forms = Form.query.filter_by(project_id=project.id, is_legacy=False).all()
 
     for form in forms:
@@ -54,9 +71,13 @@ def generate_report_for_project(project):
                 continue
 
             last_submission = patient_submissions[-1]
+            row.append(last_submission.created_on)
 
             for part in parts:
                 for field in part.fields:
+                    if field['type'] in ('header', 'subheader'):
+                        continue
+
                     answer = find_answer_for_question(field, last_submission)
 
                     if 'options' in field['params']:

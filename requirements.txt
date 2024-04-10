@@ -9,3 +9,5 @@ requests
 flask_httpauth
 sentry-sdk[flask]
 Flask-Mail
+pandas
+OpenPyXL
