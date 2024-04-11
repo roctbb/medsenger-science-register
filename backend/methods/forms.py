@@ -119,9 +119,8 @@ def validate_form(form, answers):
             raise InsufficientData()
 
         for group_key, group in extract_key(answers, part.id).items():
-
             for field in part.fields:
-                if field.get('required') and field.get('id') not in group and (
+                if field.get('required') and (field.get('id') not in group or (not group[field['id']] and group[field['id']] != 0)) and (
                         not field.get('show_if') or group.get(field.get('show_if'))):
                     details.append((part.id, group_key, field.get('id')))
     if details:
