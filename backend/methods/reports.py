@@ -1,5 +1,6 @@
 from backend.models import *
 import pandas as pd
+from openpyxl.workbook.child import INVALID_TITLE_REGEX
 
 
 def find_answer_for_question(field, submission):
@@ -40,7 +41,7 @@ def get_header(form_parts):
 
 def save_to_excel(reports):
     reports = list(map(lambda report: {
-        "title": report['title'],
+        "title": INVALID_TITLE_REGEX.sub(' ', report['title']),
         "dataframe": pd.DataFrame(report['report'][1:], columns=report['report'][0])
     }, reports))
 
