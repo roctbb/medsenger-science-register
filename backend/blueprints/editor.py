@@ -19,8 +19,9 @@ def verify_password(username, password):
 @auth.login_required
 def get_form_parts():
     form_parts = FormPart.query.all()
+    forms = Form.query.all()
 
-    return render_template('form_parts.html', parts=form_parts)
+    return render_template('form_parts.html', parts=form_parts, forms=forms)
 
 
 @editor_blueprint.route('/create', methods=['get'])
