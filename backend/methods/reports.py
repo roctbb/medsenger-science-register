@@ -38,10 +38,14 @@ def get_header(form_parts):
 
     return header
 
+def prepare_sheet_title(title):
+    title = INVALID_TITLE_REGEX.sub(' ', title)
+
+    return title.replace('.', '')
 
 def save_to_excel(reports):
     reports = list(map(lambda report: {
-        "title": INVALID_TITLE_REGEX.sub(' ', report['title']),
+        "title": prepare_sheet_title(report['title']),
         "dataframe": pd.DataFrame(report['report'][1:], columns=report['report'][0])
     }, reports))
 
