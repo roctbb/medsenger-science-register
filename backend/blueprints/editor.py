@@ -64,7 +64,7 @@ def save_part_page():
 def edit_part_page(part_id):
     form_part = FormPart.query.get(part_id)
 
-    return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()).replace("'", r"\'"))
+    return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()).replace("\\", "\\\\").replace("'", r"\'"))
 
 
 @editor_blueprint.route('/parts/<int:part_id>', methods=['post'])
