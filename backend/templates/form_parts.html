@@ -5,33 +5,73 @@
 
 
 {% block content %}
-    <div class="hstack gap-3">
-        <div class="me-auto"><h4 class="my-3">Вы можете выбрать анкету для редактирования или создать новую</h4></div>
-        <div>
-            <a href="/editor/create" class="btn btn-sm btn-primary">Создать</a>
-        </div>
+<div class="hstack gap-3">
+    <div class="me-auto"><h4 class="my-3">Вы можете выбрать анкету для редактирования или создать новую</h4></div>
+    <div>
+        <a href="/editor/create" class="btn btn-sm btn-primary">Создать</a>
     </div>
+</div>
 
-    <div class="row py-2">
-        {% for part in parts %}
-        <div class="col-sm-6 col-md-6 col-lg-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <a href="/editor/parts/{{ part.id }}" style="text-decoration: none; color: black">
-                        <h5 class="card-title mt-1 mb-3">{{ part.name }}</h5>
-                        <small class="my-0 text-muted">
-                            id: {{ part.id }}
-                        </small>
-                    </a>
-                    <div class="mt-2">
-                        <a href="javascript:if(confirm('Вы уверены, что хотите удалить анкету &#34;{{ part.name }}&#34;?')){window.location.href='/editor/delete/{{ part.id }}'}"
-                           class="hover-danger-href" style="font-size: 8pt; text-decoration: none">
-                            Удалить
+<h4 class="my-3">Опросники</h4>
+
+{% for form in forms %}
+
+<div class="card my-2">
+    <div class="card-body">
+        <h5 class="card-title mt-1 mb-3">{{ form.name }}</h5>
+        <div class="row">
+            {% for part in form.parts %}
+
+            <div class="col-sm-6 col-md-6 col-lg-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="/editor/parts/{{ part.id }}" style="text-decoration: none; color: black">
+                            <h5 class="card-title mt-1 mb-3">{{ part.name }}</h5>
+                            <small class="my-0 text-muted">
+                                id: {{ part.id }}
+                            </small>
                         </a>
+                        <div class="mt-2">
+                            <a href="/editor/forms/{{ form.id }}/detach/{{ part.id }}"
+                               class="hover-danger-href" style="font-size: 8pt; text-decoration: none">
+                                Отключить
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
+            {% endfor %}
         </div>
-        {% endfor %}
+
     </div>
+</div>
+
+{% endfor %}
+
+<h4 class="my-3">Части</h4>
+
+<div class="row py-2">
+    {% for part in parts %}
+    <div class="col-sm-6 col-md-6 col-lg-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <a href="/editor/parts/{{ part.id }}" style="text-decoration: none; color: black">
+                    <h5 class="card-title mt-1 mb-3">{{ part.name }}</h5>
+                    <small class="my-0 text-muted">
+                        id: {{ part.id }}
+                    </small>
+                </a>
+                <div class="mt-2">
+                    <a href="javascript:if(confirm('Вы уверены, что хотите удалить анкету &#34;{{ part.name }}&#34;?')){window.location.href='/editor/delete/{{ part.id }}'}"
+                       class="hover-danger-href" style="font-size: 8pt; text-decoration: none">
+                        Удалить
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
