@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect
+from flask import Blueprint, request, render_template, redirect, send_file
 from backend.methods import *
 from backend.models import *
 from flask_httpauth import HTTPBasicAuth
@@ -30,6 +30,18 @@ def create_part_page():
     return render_template('questionnaire.html')
 
 
+@editor_blueprint.route('/full_report/<project_id>', methods=['get'])
+@auth.login_required
+def full_report_page(project_id):
+    project = Project.query.get_or_404(project_id)
+
+    filename = save_to_excel(generate_report_for_project(project))
+
+    return send_file(filename)
+
+    #return render_template('project_report.html', reports=generate_report_for_project(project))
+
+
 @editor_blueprint.route('/create', methods=['post'])
 @auth.login_required
 def save_part_page():
@@ -52,7 +64,8 @@ def save_part_page():
 def edit_part_page(part_id):
     form_part = FormPart.query.get(part_id)
 
-    return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()))
+    return render_template('questionnaire.html', form_json=json.dumps(form_part.as_dict()).replace("'", r"\'"))
+
 
 @editor_blueprint.route('/forms/<int:form_id>/parts/<int:part_id>', methods=['get'])
 @auth.login_required

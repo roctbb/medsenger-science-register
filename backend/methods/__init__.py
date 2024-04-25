@@ -8,3 +8,4 @@ from .clinics import *
 from .comments import *
 from .files import *
 from .emails import *
+from .reports import *
