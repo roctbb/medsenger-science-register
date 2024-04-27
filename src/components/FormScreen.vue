@@ -132,7 +132,7 @@
                                                        v-model="submission.answers[part.id][group_key][field.id]"
                                                        v-bind:disabled="disabled">
                                                 <label class="form-check-label">
-                                                    {{ option }}
+                                                    {{ fillPatientData(option, this.patient) }}
                                                 </label>
                                             </div>
                                         </div>
