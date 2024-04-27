@@ -128,7 +128,7 @@
                                                  v-bind:key='option'
                                                  class="form-check">
                                                 <input class="form-check-input" type="radio"
-                                                       :value="value"
+                                                       :value="fillPatientData(value, this.patient)"
                                                        v-model="submission.answers[part.id][group_key][field.id]"
                                                        v-bind:disabled="disabled">
                                                 <label class="form-check-label">
@@ -186,7 +186,7 @@
 <script>
 
 import VueDatePicker from "@vuepic/vue-datepicker";
-import {formatDateTime, searchForArray} from "../utils/helpers";
+import {fillPatientData, formatDateTime, searchForArray} from "../utils/helpers";
 import Submission from "@/models/Submission";
 import LoadingButton from "@/components/parts/common/LoadingButton.vue";
 import * as XLSX from "xlsx";
@@ -209,6 +209,7 @@ export default {
         }
     },
     methods: {
+        fillPatientData,
         searchForArray,
         formatDateTime,
         dragEnter: function () {

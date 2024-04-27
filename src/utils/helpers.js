@@ -85,6 +85,13 @@ function toBase64(file) {
     })
 }
 
+function fillPatientData(text, patient) {
+    if (isString(text)) {
+        text = text.replace('<PATIENT_NAME>', patient.name)
+    }
+    return text
+}
+
 const api_url = (action) => external_url('/api/client') + action
 
 export {
@@ -97,5 +104,5 @@ export {
     copy,
     getCookie,
     deleteCookie,
-    toBase64, isString
+    toBase64, isString, fillPatientData
 }
