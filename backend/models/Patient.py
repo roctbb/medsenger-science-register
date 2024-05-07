@@ -22,8 +22,8 @@ class Patient(db.Model):
     doctor_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=True)
 
     records = db.relationship('Record', backref=backref('patient', uselist=False), lazy=True)
-    submissions = db.relationship('FormSubmission', backref=backref('patient', uselist=False, lazy=True), lazy=False)
-    contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=False)
+    submissions = db.relationship('FormSubmission', backref=backref('patient', uselist=False, lazy=True), lazy=True)
+    contracts = db.relationship('Contract', backref=backref('patient', uselist=False), lazy=True)
     comments = db.relationship('Comment', backref=backref('patient', uselist=False), lazy=False)
     files = db.relationship('File', backref=backref('patient', uselist=False), lazy=True)
     show_off_records = db.Column(JSON, nullable=True)
