@@ -123,8 +123,8 @@
                                                        v-bind:required="field.required"
                                                        v-bind:disabled="disabled"/>
 
-                                        <div v-if="['radio', 'select'].includes(field.type) && disabled && !Object.keys(field.params.options).includes(submission.answers[part.id][group_key][field.id])">
-                                            <p>123{{ submission.answers[part.id][group_key][field.id] }}</p>
+                                        <div v-if="['radio', 'select'].includes(field.type) && disabled && !Object.values(field.params.options).includes(submission.answers[part.id][group_key][field.id])">
+                                            <p>{{ submission.answers[part.id][group_key][field.id] }}</p>
                                         </div>
                                         <div v-else>
                                             <div v-if="field.type === 'radio'">
