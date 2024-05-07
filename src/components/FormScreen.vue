@@ -123,7 +123,11 @@
                                                        v-bind:required="field.required"
                                                        v-bind:disabled="disabled"/>
 
-                                        <div v-if="field.type === 'radio'">
+                                        <div v-if="['radio', 'select'].includes(field.type) && disabled && !field.params.options.includes(submission.answers[part.id][group_key][field.id])">
+                                            <p>{{ submission.answers[part.id][group_key][field.id] }}</p>
+                                        </div>
+                                        <div v-else>
+                                            <div v-if="field.type === 'radio'">
                                             <div v-for="(value, option) in field.params.options"
                                                  v-bind:key='option'
                                                  class="form-check">
@@ -147,6 +151,8 @@
                                                 </option>
                                             </select>
                                         </div>
+                                        </div>
+
 
                                         <div class="form-check" v-if="field.type === 'checkbox'">
                                             <input class="form-check-input" type="checkbox"
