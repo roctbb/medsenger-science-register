@@ -123,7 +123,7 @@
                                                        v-bind:required="field.required"
                                                        v-bind:disabled="disabled"/>
 
-                                        <div v-if="['radio', 'select'].includes(field.type) && disabled && field.params.options.filter(o => o[0] == submission.answers[part.id][group_key][field.id]).length === 0">
+                                        <div v-if="['radio', 'select'].includes(field.type) && disabled && !Object.values(field.params.options).includes(submission.answers[part.id][group_key][field.id])">
                                             <p>{{ submission.answers[part.id][group_key][field.id] }}</p>
                                         </div>
                                         <div v-else>
@@ -299,7 +299,7 @@ export default {
             const answers = {}
 
             raw_data.forEach(row => {
-                if (row.length > 8 && row[1] && row[8]) {
+                if (row.length > 8 && row[1] && row[8] !== undefined) {
                     answers[row[1].trim()] = row[8]
                 }
             })
