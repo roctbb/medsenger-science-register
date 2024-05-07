@@ -10,7 +10,7 @@ class Project(db.Model):
     updated_on = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     patients = db.relationship('Patient', secondary=project_patient, backref='projects')
-    forms = db.relationship('Form', backref=backref('project', uselist=False), lazy=False)
+    forms = db.relationship('Form', backref=backref('project', uselist=False, lazy=True), lazy=True)
 
     steps = db.Column(db.JSON, nullable=True)
 
