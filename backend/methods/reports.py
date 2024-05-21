@@ -38,10 +38,12 @@ def get_header(form_parts):
 
     return header
 
+
 def prepare_sheet_title(title):
     title = INVALID_TITLE_REGEX.sub(' ', title)
 
     return title.replace('.', '')
+
 
 def save_to_excel(reports):
     reports = list(map(lambda report: {
@@ -67,34 +69,32 @@ def generate_common_reports(patients, forms):
         report.append(header)
 
         for patient in patients:
-            row = [patient.name]
-
             all_form_submissions = list(sorted(form.submissions, key=lambda f: f.created_on))
             patient_submissions = list(
                 filter(lambda s: not s.is_legacy and s.patient_id == patient.id, all_form_submissions))
 
             if not patient_submissions:
-                report.append(row + [None] * (len(header) - 1))
+                report.append([patient.name] + [None] * (len(header) - 1))
                 continue
 
-            last_submission = patient_submissions[-1]
-            row.append(last_submission.created_on)
+            for current_submission in patient_submissions:
+                row = [patient.name, current_submission.created_on]
 
-            for part in parts:
-                for field in part.fields:
-                    if field['type'] in ('header', 'subheader'):
-                        continue
+                for part in parts:
+                    for field in part.fields:
+                        if field['type'] in ('header', 'subheader'):
+                            continue
 
-                    answer = find_answer_for_question(field, last_submission)
+                        answer = find_answer_for_question(field, current_submission)
 
-                    if 'options' in field['params']:
-                        answer = get_answer_from_options(field['params']['options'], answer)
+                        if 'options' in field['params']:
+                            answer = get_answer_from_options(field['params']['options'], answer)
 
-                    if answer:
-                        row.append(answer)
-                    else:
-                        row.append(None)
-            report.append(row)
+                        if answer:
+                            row.append(answer)
+                        else:
+                            row.append(None)
+                report.append(row)
 
         form_reports.append({
             "title": form.name,
