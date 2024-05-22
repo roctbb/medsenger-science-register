@@ -31,6 +31,10 @@ class Model {
     get readable_created_on() {
         return formatDateTime(this.created_on)
     }
+
+    get readable_real_created_on() {
+        return formatDateTime(this.original_created_on)
+    }
 }
 
 Model.prototype._api = api
