@@ -33,7 +33,7 @@
                         <tr>
                             <th>{{ part.name }}</th>
                             <td v-for="submission in submissions" :key="submission.id">{{
-                                    submission.readable_created_on
+                                    submission.readable_real_created_on
                                 }}
                             </td>
                         </tr>
@@ -204,7 +204,7 @@ export default {
 
         this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.patient_id))
         this.form = this.project.forms.find(form => form.id === parseInt(this.form_id))
-        this.submissions = (await this.patient.submissions).filter(s => s.form_id === parseInt(this.form_id))
+        this.submissions = (await this.patient.submissions).filter(s => s.form_id === parseInt(this.form_id)).sort((a, b) => new Date(a.created_on) - new Date(b.created_on));
     }
 }
 </script>
