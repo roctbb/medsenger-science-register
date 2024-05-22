@@ -260,7 +260,7 @@ export default {
             })
 
             this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
-            this.submissions = await this.patient.submissions.sort((a, b) => new Date(a.created_on) - new Date(b.created_on));
+            this.submissions = (await this.patient.submissions).sort((a, b) => new Date(a.created_on) - new Date(b.created_on));
             this.files = await this.patient.files
             this.patient.mark_visited()
         }
