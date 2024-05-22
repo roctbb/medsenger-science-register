@@ -10,6 +10,7 @@ class Model {
 
             if (description.created_on) {
                 this.created_on = new Date(description.created_on)
+                this.original_created_on = new Date(description.created_on)
             }
 
             if (description.updated_on) {

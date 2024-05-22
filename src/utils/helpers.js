@@ -2,6 +2,10 @@ let empty = function (obj) {
     return !obj || Object.keys(obj).length === 0
 }
 
+const hasTimePart = (d) => {
+    return (d.getHours() !== 0 || d.getMinutes() !== 0);
+}
+
 const external_url = (path) => {
     return process.env.VUE_APP_MAINHOST + path
 }
@@ -11,7 +15,12 @@ const formatDate = (d) => {
 }
 
 const formatDateTime = (d) => {
-    return d.getDate() + "." + ('0' + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear() + " " + d.getHours() + ":" + ('0' + d.getMinutes()).slice(-2)
+    if (hasTimePart(d)) {
+        return d.getDate() + "." + ('0' + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear() + " " + d.getHours() + ":" + ('0' + d.getMinutes()).slice(-2)
+    }
+    else {
+        return d.getDate() + "." + ('0' + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear()
+    }
 }
 
 const copy = function (obj) {
