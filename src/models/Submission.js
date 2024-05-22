@@ -32,6 +32,12 @@ class Submission extends Model {
         // add existing records
         if (this.records) {
             this._fillRecords(this.records)
+            if (this.form.date_category) {
+                let records = this.records.filter(record => record.category.code == this.form.date_category)
+                if (records.length > 0) {
+                    this.created_on = new Date(new Date(records[0].value).toDateString())
+                }
+            }
         }
 
         // add empty parts

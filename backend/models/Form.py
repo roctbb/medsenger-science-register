@@ -16,6 +16,8 @@ class Form(db.Model):
     specialty = db.Column(db.String(256), nullable=True)
     is_legacy = db.Column(db.Boolean, default=False, server_default="false")
 
+    date_category = db.Column(db.String(256), nullable=True)
+
     def as_dict(self):
         return {
             "id": self.id,
@@ -24,5 +26,6 @@ class Form(db.Model):
             "parts": as_dict(self.parts),
             "specialty": self.specialty,
             "category_id": self.category_id,
-            "is_legacy": self.is_legacy
+            "is_legacy": self.is_legacy,
+            "date_category": self.date_category
         }
