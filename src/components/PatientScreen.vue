@@ -253,15 +253,17 @@ export default {
         }
     },
     async mounted() {
-        this.project = this.state.user.projects.find(project => {
-            console.log(project);
-            return project.id === parseInt(this.project_id)
-        })
+        if (this.state.user) {
+            this.project = this.state.user.projects.find(project => {
+                console.log(project);
+                return project.id === parseInt(this.project_id)
+            })
 
-        this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
-        this.submissions = await this.patient.submissions.sort((a, b) => new Date(a.created_on) - new Date(b.created_on));
-        this.files = await this.patient.files
-        this.patient.mark_visited()
+            this.patient = (await this.project.patients).find(patient => patient.id === parseInt(this.id))
+            this.submissions = await this.patient.submissions.sort((a, b) => new Date(a.created_on) - new Date(b.created_on));
+            this.files = await this.patient.files
+            this.patient.mark_visited()
+        }
     }
 }
 </script>
