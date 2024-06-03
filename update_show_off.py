@@ -52,4 +52,3 @@ with app.app_context():
         mark_updated(patient)
     db.session.commit()
 print('all patients are updated')
-ls
