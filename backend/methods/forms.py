@@ -57,10 +57,14 @@ def submit_form(doctor, patient, form, answers):
                         if not title:
                             title = category.name
 
+                        show_off_value = answer
+                        if field.get('params', {}).get('global_show_off_transform') == 'checkbox':
+                            show_off_value = field.get('params', {}).get('options', {}).get(answer)
+
                         patient.show_off_records.append({
                             "category_id": category.id,
                             "title": title,
-                            "value": answer,
+                            "value": show_off_value,
                             "transform": field.get('params', {}).get('global_show_off_transform')
                         })
 

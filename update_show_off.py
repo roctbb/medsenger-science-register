@@ -22,7 +22,8 @@ with app.app_context():
                 show_off_fields += [{
                     'id': field['id'],
                     'title': field.get('params', {}).get('global_show_off_title'),
-                    'transform': field.get('params', {}).get('global_show_off_transform', None)
+                    'transform': field.get('params', {}).get('global_show_off_transform', None),
+                    'params': field.get('params', {})
                 } for field in part.fields if field.get('params', {}).get('global_show_off')]
 
     show_off_field_ids = [f['id'] for f in show_off_fields]
@@ -40,12 +41,18 @@ with app.app_context():
             for record in submission.records:
                 if record.params.get('question_id') in show_off_field_ids and record.category_id not in except_categories:
                     patient.show_off_records = list(filter(lambda rec: rec['category_id'] != record.category_id, patient.show_off_records))
-                    show_off = [f for f in show_off_fields if f['id'] == record.params.get('question_id')]
+                    show_off = [f for f in show_off_fields if f['id'] == record.params.get('question_id')][0]
+
+                    value = record.value
+
+                    if show_off['transform'] == 'checkbox':
+                        value = show_off['params'].get('options', {}).get(value)
+
                     patient.show_off_records.append({
                             "category_id": record.category_id,
-                            "title": show_off[0]['title'],
-                            "value": record.value,
-                            "transform": show_off[0]['transform']
+                            "title": show_off['title'],
+                            "value": value,
+                            "transform": show_off['transform']
                         })
                     flag_modified(patient, "show_off_records")
 
