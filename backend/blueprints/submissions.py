@@ -1,3 +1,4 @@
+from flask import abort
 from flask import Blueprint, request
 from backend.methods import *
 
@@ -54,6 +55,7 @@ def add_submission(user, project_id, patient_id):
 @creates_response
 @requires_user
 def edit_submission(user, project_id, patient_id, submission_id):
+    abort(404)
     data = request.json
 
     form_id = data.get('form_id')
