@@ -17,7 +17,7 @@ def submit_form(doctor, patient, form, answers):
     if not form:
         raise NotFound("form")
 
-    validate_form(form, answers)
+    # validate_form(form, answers)
     submission = create_submission(form, patient, doctor)
 
     if not patient.show_off_records:
